@@ -4,6 +4,17 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
 from .forms import CustomUserCreationForm
 
+
+@login_required
+def profile(request):
+    user = request.user
+    context = {
+        'user': user,
+        'is_student': user.user_type in ['aluno', 'representante']
+    }
+    return render(request, 'core/profile.html', context)
+
+
 def register(request):
     if request.method == 'POST':
         form = CustomUserCreationForm(request.POST, request.FILES)

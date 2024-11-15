@@ -11,4 +11,5 @@ urlpatterns = [
     path('eventos/', views.eventos, name='eventos'),
     path('notificacoes/', views.notificacoes, name='notificacoes'),
     path('grade-horaria/', views.grade_horaria, name='grade_horaria'),
+    path('profile/', views.profile, name='profile'),
 ]
