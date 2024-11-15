@@ -1,6 +1,6 @@
 {% extends 'core/base.html' %}
 
-{% block title %}Login{% endblock %}
+{% block title %}Login - Locus{% endblock %}
 
 {% block content %}
     <h2>Login</h2>
@@ -17,4 +17,5 @@
         <br>
         <button type="submit">Login</button>
     </form>
+    <p>Não tem uma conta? <a href="{% url 'register' %}">Cadastre-se</a></p>
 {% endblock %}
