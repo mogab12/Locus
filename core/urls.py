@@ -12,4 +12,5 @@ urlpatterns = [
     path('notificacoes/', views.notificacoes, name='notificacoes'),
     path('grade-horaria/', views.grade_horaria, name='grade_horaria'),
     path('profile/', views.profile, name='profile'),
+    path('profile/edit/', views.edit_profile, name='edit_profile'),
 ]

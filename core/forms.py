@@ -2,6 +2,17 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from .models import CustomUser, CustomEmailValidator
 
+class UserProfileForm(forms.ModelForm):
+    class Meta:
+        model = CustomUser
+        fields = ['first_name', 'last_name', 'user_type', 'curso', 'semestre', 'foto']
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if self.instance.user_type not in ['aluno', 'representante']:
+            del self.fields['curso']
+            del self.fields['semestre']
+
 class CustomUserCreationForm(UserCreationForm):
     first_name = forms.CharField(max_length=30, required=True, label='Nome')
     last_name = forms.CharField(max_length=30, required=True, label='Sobrenome')

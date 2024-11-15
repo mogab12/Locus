@@ -19,6 +19,7 @@
                 <p><strong>Curso:</strong> {{ user.curso }}</p>
                 <p><strong>Semestre:</strong> {{ user.semestre }}</p>
             {% endif %}
+            <a href="{% url 'edit_profile' %}" class="btn btn-primary mt-3">Editar Perfil</a>
         </div>
     </div>
 </div>
