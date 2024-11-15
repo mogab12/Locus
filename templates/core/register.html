@@ -4,9 +4,19 @@
 
 {% block content %}
 <h2>Cadastro</h2>
-<form method="post" id="registerForm">
+<form method="post" id="registerForm" enctype="multipart/form-data">
     {% csrf_token %}
     {{ form.non_field_errors }}
+    <div>
+        {{ form.first_name.label_tag }}
+        {{ form.first_name }}
+        {{ form.first_name.errors }}
+    </div>
+    <div>
+        {{ form.last_name.label_tag }}
+        {{ form.last_name }}
+        {{ form.last_name.errors }}
+    </div>
     <div>
         {{ form.username.label_tag }}
         {{ form.username }}
@@ -44,9 +54,13 @@
             {{ form.semestre.errors }}
         </div>
     </div>
+    <div>
+        {{ form.foto.label_tag }}
+        {{ form.foto }}
+        {{ form.foto.errors }}
+    </div>
     <button type="submit">Cadastrar</button>
 </form>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     var userTypeSelect = document.getElementById('id_user_type');

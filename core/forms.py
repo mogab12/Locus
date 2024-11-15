@@ -1,19 +1,21 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
-from .models import CustomUser
+from .models import CustomUser, CustomEmailValidator
 
 class CustomUserCreationForm(UserCreationForm):
+    first_name = forms.CharField(max_length=30, required=True, label='Nome')
+    last_name = forms.CharField(max_length=30, required=True, label='Sobrenome')
     curso = forms.CharField(max_length=100, required=False)
     semestre = forms.IntegerField(required=False)
+    foto = forms.ImageField(required=False)
 
     class Meta(UserCreationForm.Meta):
         model = CustomUser
-        fields = UserCreationForm.Meta.fields + ('user_type', 'curso', 'semestre')
+        fields = ('username', 'email', 'first_name', 'last_name', 'user_type', 'curso', 'semestre', 'foto')
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['curso'].widget.attrs.update({'class': 'form-control'})
-        self.fields['semestre'].widget.attrs.update({'class': 'form-control'})
+        self.fields['email'].validators = [CustomEmailValidator()]
 
     def clean(self):
         cleaned_data = super().clean()

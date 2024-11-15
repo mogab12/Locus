@@ -6,7 +6,7 @@ from .forms import CustomUserCreationForm
 
 def register(request):
     if request.method == 'POST':
-        form = CustomUserCreationForm(request.POST)
+        form = CustomUserCreationForm(request.POST, request.FILES)
         if form.is_valid():
             user = form.save()
             login(request, user)
@@ -14,7 +14,6 @@ def register(request):
     else:
         form = CustomUserCreationForm()
     return render(request, 'core/register.html', {'form': form})
-
 def login_view(request):
     if request.user.is_authenticated:
         return redirect('home')
