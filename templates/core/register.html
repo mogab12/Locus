@@ -3,11 +3,68 @@
 {% block title %}Cadastro - Locus{% endblock %}
 
 {% block content %}
-    <h2>Cadastro</h2>
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Cadastrar</button>
-    </form>
-    <p>Já tem uma conta? <a href="{% url 'login' %}">Faça login</a></p>
+<h2>Cadastro</h2>
+<form method="post" id="registerForm">
+    {% csrf_token %}
+    {{ form.non_field_errors }}
+    <div>
+        {{ form.username.label_tag }}
+        {{ form.username }}
+        {{ form.username.errors }}
+    </div>
+    <div>
+        {{ form.email.label_tag }}
+        {{ form.email }}
+        {{ form.email.errors }}
+    </div>
+    <div>
+        {{ form.password1.label_tag }}
+        {{ form.password1 }}
+        {{ form.password1.errors }}
+    </div>
+    <div>
+        {{ form.password2.label_tag }}
+        {{ form.password2 }}
+        {{ form.password2.errors }}
+    </div>
+    <div>
+        {{ form.user_type.label_tag }}
+        {{ form.user_type }}
+        {{ form.user_type.errors }}
+    </div>
+    <div id="curso_semestre_fields" style="display: none;">
+        <div>
+            {{ form.curso.label_tag }}
+            {{ form.curso }}
+            {{ form.curso.errors }}
+        </div>
+        <div>
+            {{ form.semestre.label_tag }}
+            {{ form.semestre }}
+            {{ form.semestre.errors }}
+        </div>
+    </div>
+    <button type="submit">Cadastrar</button>
+</form>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    var userTypeSelect = document.getElementById('id_user_type');
+    var cursoSemestreFields = document.getElementById('curso_semestre_fields');
+
+    function toggleCursoSemestreFields() {
+        var selectedType = userTypeSelect.value;
+        if (selectedType === 'aluno' || selectedType === 'representante') {
+            cursoSemestreFields.style.display = 'block';
+        } else {
+            cursoSemestreFields.style.display = 'none';
+        }
+    }
+
+    userTypeSelect.addEventListener('change', toggleCursoSemestreFields);
+    toggleCursoSemestreFields();  // Call once to set initial state
+});
+</script>
+
+<p>Já tem uma conta? <a href="{% url 'login' %}">Faça login</a></p>
 {% endblock %}
