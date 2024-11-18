@@ -3,6 +3,14 @@ from django.contrib.auth.forms import UserCreationForm
 from .models import CustomUser, CustomEmailValidator
 import sqlite3
 
+def get_departments():
+    conn = sqlite3.connect('departments.db')
+    cursor = conn.cursor()
+    cursor.execute("SELECT code, name FROM departments ORDER BY code")
+    departments = [(f"{code} - {name}", f"{code} - {name}") for code, name in cursor.fetchall()]
+    conn.close()
+    return departments
+
 def get_cursos_e_semestres():
     conn = sqlite3.connect('disciplinas_engenharia_poli_usp.db')
     cursor = conn.cursor()
@@ -38,12 +46,12 @@ class CustomUserCreationForm(UserCreationForm):
     last_name = forms.CharField(max_length=30, required=True, label='Sobrenome')
     curso = forms.ChoiceField(choices=[], required=False)
     semestre = forms.ChoiceField(choices=[], required=False)
-    departamento = forms.CharField(max_length=100, required=False)
+    departamento = forms.ChoiceField(choices=[], required=False)
     foto = forms.ImageField(required=False)
 
     class Meta(UserCreationForm.Meta):
         model = CustomUser
-        fields = ('username', 'email', 'first_name', 'last_name', 'user_type', 'curso', 'semestre', 'foto')
+        fields = ('username', 'email', 'first_name', 'last_name', 'user_type', 'curso', 'semestre', 'departamento', 'foto')
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -52,9 +60,10 @@ class CustomUserCreationForm(UserCreationForm):
         cursos, semestres_por_curso = get_cursos_e_semestres()
         self.fields['curso'].choices = [('', 'Selecione um curso')] + [(curso, curso) for curso in cursos]
         
-        # Usar o primeiro curso para definir as opções de semestre iniciais
         semestres = semestres_por_curso[cursos[0]] if cursos else []
         self.fields['semestre'].choices = [('', 'Selecione um semestre')] + [(sem, sem) for sem in semestres]
+        
+        self.fields['departamento'].choices = [('', 'Selecione um departamento')] + get_departments()
         
         self.semestres_por_curso = semestres_por_curso
 
@@ -71,7 +80,6 @@ class CustomUserCreationForm(UserCreationForm):
             if not semestre:
                 self.add_error('semestre', 'Este campo é obrigatório para alunos e representantes.')
             elif curso and semestre:
-                # Verificar se o semestre é válido para o curso selecionado
                 if semestre not in self.semestres_por_curso.get(curso, []):
                     self.add_error('semestre', 'Semestre inválido para o curso selecionado.')
         elif user_type == 'professor':

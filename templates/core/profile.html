@@ -15,9 +15,11 @@
         <div class="col-md-9">
             <h2 class="mb-4"><strong>Nome:</strong> {{ user.get_full_name }}</h2>
             <p><strong>Tipo de usuário:</strong> {{ user.get_user_type_display }}</p>
-            {% if is_student %}
+            {% if user.user_type == 'aluno' or user.user_type == 'representante' %}
                 <p><strong>Curso:</strong> {{ user.curso }}</p>
                 <p><strong>Semestre:</strong> {{ user.semestre }}</p>
+            {% elif user.user_type == 'professor' %}
+                <p><strong>Departamento:</strong> {{ user.departamento }}</p>
             {% endif %}
             <a href="{% url 'edit_profile' %}" class="btn btn-primary mt-3">Editar Perfil</a>
         </div>

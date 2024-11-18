@@ -21,10 +21,8 @@ def profile(request):
     user = request.user
     context = {
         'user': user,
-        'is_student': user.user_type in ['aluno', 'representante']
     }
     return render(request, 'core/profile.html', context)
-
 
 def register(request):
     if request.method == 'POST':
