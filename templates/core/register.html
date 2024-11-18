@@ -70,29 +70,55 @@
 </form>
 
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    var userTypeSelect = document.getElementById('id_user_type');
-    var cursoSemestreFields = document.getElementById('curso_semestre_fields');
-    var departamentoField = document.getElementById('departamento_field');
-
-    function toggleFields() {
-        var selectedType = userTypeSelect.value;
-        if (selectedType === 'aluno' || selectedType === 'representante') {
-            cursoSemestreFields.style.display = 'block';
-            departamentoField.style.display = 'none';
-        } else if (selectedType === 'professor') {
-            cursoSemestreFields.style.display = 'none';
-            departamentoField.style.display = 'block';
-        } else {
-            cursoSemestreFields.style.display = 'none';
-            departamentoField.style.display = 'none';
+    document.addEventListener('DOMContentLoaded', function() {
+        var userTypeSelect = document.getElementById('id_user_type');
+        var cursoSemestreFields = document.getElementById('curso_semestre_fields');
+        var departamentoField = document.getElementById('departamento_field');
+        var cursoSelect = document.getElementById('id_curso');
+        var semestreSelect = document.getElementById('id_semestre');
+    
+        const semestres_por_curso = JSON.parse(document.getElementById('semestres-data').textContent);
+    
+        function toggleFields() {
+            var selectedType = userTypeSelect.value;
+            if (selectedType === 'aluno' || selectedType === 'representante') {
+                cursoSemestreFields.style.display = 'block';
+                departamentoField.style.display = 'none';
+            } else if (selectedType === 'professor') {
+                cursoSemestreFields.style.display = 'none';
+                departamentoField.style.display = 'block';
+            } else {
+                cursoSemestreFields.style.display = 'none';
+                departamentoField.style.display = 'none';
+            }
         }
-    }
-
-    userTypeSelect.addEventListener('change', toggleFields);
-    toggleFields();  // Call once to set initial state
-});
-</script>
+    
+        function updateSemestres() {
+            const selectedCurso = cursoSelect.value;
+            
+            // Limpar opções atuais
+            semestreSelect.innerHTML = '<option value="">Selecione um semestre</option>';
+            
+            // Adicionar novos semestres baseados no curso selecionado
+            if (selectedCurso in semestres_por_curso) {
+                semestres_por_curso[selectedCurso].forEach(semestre => {
+                    const option = document.createElement('option');
+                    option.value = semestre;
+                    option.textContent = semestre;
+                    semestreSelect.appendChild(option);
+                });
+            }
+        }
+    
+        userTypeSelect.addEventListener('change', toggleFields);
+        cursoSelect.addEventListener('change', updateSemestres);
+    
+        toggleFields();  // Call once to set initial state
+        updateSemestres();  // Call once to set initial semestre options
+    });
+    </script>
 
 <p>Já tem uma conta? <a href="{% url 'login' %}">Faça login</a></p>
+
+{{ form.semestres_por_curso|json_script:"semestres-data" }}
 {% endblock %}
