@@ -54,6 +54,13 @@
             {{ form.semestre.errors }}
         </div>
     </div>
+    <div id="departamento_field" style="display: none;">
+        <div>
+            {{ form.departamento.label_tag }}
+            {{ form.departamento }}
+            {{ form.departamento.errors }}
+        </div>
+    </div>
     <div>
         {{ form.foto.label_tag }}
         {{ form.foto }}
@@ -61,22 +68,29 @@
     </div>
     <button type="submit">Cadastrar</button>
 </form>
+
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     var userTypeSelect = document.getElementById('id_user_type');
     var cursoSemestreFields = document.getElementById('curso_semestre_fields');
+    var departamentoField = document.getElementById('departamento_field');
 
-    function toggleCursoSemestreFields() {
+    function toggleFields() {
         var selectedType = userTypeSelect.value;
         if (selectedType === 'aluno' || selectedType === 'representante') {
             cursoSemestreFields.style.display = 'block';
+            departamentoField.style.display = 'none';
+        } else if (selectedType === 'professor') {
+            cursoSemestreFields.style.display = 'none';
+            departamentoField.style.display = 'block';
         } else {
             cursoSemestreFields.style.display = 'none';
+            departamentoField.style.display = 'none';
         }
     }
 
-    userTypeSelect.addEventListener('change', toggleCursoSemestreFields);
-    toggleCursoSemestreFields();  // Call once to set initial state
+    userTypeSelect.addEventListener('change', toggleFields);
+    toggleFields();  // Call once to set initial state
 });
 </script>
 
