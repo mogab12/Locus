@@ -1,0 +1,136 @@
+@media only screen and (max-width: 768px){
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #888; 
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .logo {
+        width: 100%;
+        height: 80vw;
+        display: flex;
+        align-items: center;
+    }
+    
+    .logo img {
+        margin: 0 auto;
+        width: 40vw;
+    }
+    
+    .container {
+        background-color: white;
+        height: 1000vh;
+        width: 100vw;
+        border-radius: 12vw 12vw 0 0;
+        box-shadow: 0 0 6vw rgba(0, 0, 0, 0.5);
+        overflow: hidden;
+        text-align: center;
+        text-align: left;
+    }
+    .container p{
+        text-align: center;
+    }
+    .tabs {
+        display: flex;
+        justify-content: space-around;
+        margin-bottom: 8vw;
+        margin-top: 3vw;
+        margin-left: 2vw;
+        margin-right: 2vw;
+    }
+    .tab {
+        font-size: 6vw;
+        padding: 3vw 0;
+        font-weight: bold;
+        cursor: pointer;
+    }
+    .tab.active {
+        border-bottom: 2px solid #000000;
+        color: #000000;
+    }
+
+    .container form {
+        display: flex;
+        flex-direction: column;
+        gap: 6vw;
+        width: 80%; 
+        margin: 0 auto; 
+    }
+    input {
+        font-size: 5vw;
+        padding: 2vw;
+        height: 6vw;
+        border: 1px solid #000000;
+        border-radius: 1.5vw;
+    }
+    input::placeholder {
+        font-size: 5vw; 
+        color: #888; 
+    }
+    .container form button {
+        width: 80%;
+        margin:auto;
+        margin-top: 10vw;
+        padding: 3vw;
+        background-color: black;
+        color: white;
+        border: none;
+        border-radius: 5vw;
+        cursor: pointer;
+        font-size: 5vw;
+    }
+    .container form button:hover {
+        background-color: #333;
+    }
+    a {
+        text-decoration: none;
+        color: #000000;
+    }
+
+    .container form input,
+    .container form select,
+    .container form textarea {
+        width: 100%; 
+        height: 12vw;
+        padding-left: 2vw;
+        margin: 0 auto; 
+        border: 1px solid #949494; 
+        border-radius: 2vw;
+        font-size: 6vw;
+        box-sizing: border-box; 
+        text-align: left;
+        color: rgb(135, 135, 135);
+    }
+
+    .container form input:focus,
+    .container form select:focus,
+    .container form textarea:focus {
+        border-color: #000000;  
+        outline: none;
+        
+    }
+
+    .container form .errorlist {
+        list-style: none;
+        padding-left: 0;
+        color: red;
+        margin-top: 2vw;
+        font-size: 4vw;
+    }
+
+    .container form br{
+        display: block;
+        margin-top: 10vw;
+        margin-bottom: 2vw;
+    }
+
+
+    .container form label{
+        font-size: 4vw;
+    }
+    
+
+
+}

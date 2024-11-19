@@ -1,0 +1,36 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Locus{% endblock %}</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}?v={{ timestamp }}">
+</head>
+<body>
+    <header>
+        {% if user.is_authenticated %}
+        <nav>
+            <ul>
+                <li><a href="{% url 'home' %}">Home</a></li>
+                <li><a href="{% url 'profile' %}">Perfil</a></li>
+                <li><a href="{% url 'disciplinas' %}">Disciplinas</a></li>
+                <li><a href="{% url 'eventos' %}">Eventos</a></li>
+                <li><a href="{% url 'notificacoes' %}">Notificações</a></li>
+                <li><a href="{% url 'grade_horaria' %}">Grade Horária</a></li>
+                <li><a href="{% url 'logout' %}">Logout</a></li>
+            </ul>
+        </nav>
+        {% endif %}
+    </header>
+    
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
+    
+    <footer>
+
+    </footer>
+</body>
+</html>
