@@ -3,14 +3,45 @@
 {% block title %}Editar Perfil{% endblock %}
 
 {% block content %}
+{% load static %}
+<div class="logo">
+    <img src="{% static 'Logo.png' %}" alt="Logo">
+</div>
 <div class="container mt-5">
-    <h2>Editar Perfil</h2>
+    <h2 class="editprofile">Editar Perfil</h2>
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
         {% for field in form %}
             <div class="mb-3">
-                {{ field.label_tag }}
-                {{ field }}
+                <!-- Lida especificamente com o campo "foto" -->
+                {% if field.name == "foto" %}
+                    <label for="id_foto">Foto de Perfil</label>
+                    {% if field.value %}
+                        <!-- Exibe a foto atual, se houver -->
+                        <div class="current-photo">
+                            <img src="{{ field.value.url }}" class="FotoAtual">
+                        </div>
+                    {% endif %}
+                    <!-- Opção para remover a foto atual -->
+                    {% if field.value %}
+                    <div class="remove-photo">
+                        <label for="clear_{{ field.name }}">
+                            <input type="checkbox" name="clear_{{ field.name }}" id="clear_{{ field.name }}">
+                            Remover Foto
+                        </label>
+                    </div>
+                    {% endif %}
+                    <!-- Campo para alterar a foto -->
+                    <label for="id_foto">Nova foto:</label>
+                    <input type="file" name="foto" id="id_foto" class="custom-file-input">
+                
+                {% else %}
+                    <!-- Renderiza os outros campos normalmente -->
+                    {{ field.label_tag }}
+                    {{ field }}
+                {% endif %}
+    
+                <!-- Exibe erros, se existirem -->
                 {% if field.errors %}
                     <div class="alert alert-danger">
                         {{ field.errors }}
@@ -18,7 +49,10 @@
                 {% endif %}
             </div>
         {% endfor %}
+        <!-- Botão para salvar alterações -->
         <button type="submit" class="btn btn-primary">Salvar Alterações</button>
     </form>
+    
+    
 </div>
 {% endblock %}

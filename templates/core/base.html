@@ -1,24 +1,36 @@
-<!DOCTYPE html>
+{% load static %}
+<!DOCTYPE html> 
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Locus{% endblock %}</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}?v={{ timestamp }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 </head>
 <body>
     <header>
         {% if user.is_authenticated %}
-        <nav>
-            <ul>
-                <li><a href="{% url 'home' %}">Home</a></li>
-                <li><a href="{% url 'profile' %}">Perfil</a></li>
-                <li><a href="{% url 'disciplinas' %}">Disciplinas</a></li>
-                <li><a href="{% url 'eventos' %}">Eventos</a></li>
-                <li><a href="{% url 'notificacoes' %}">Notificações</a></li>
-                <li><a href="{% url 'grade_horaria' %}">Grade Horária</a></li>
-                <li><a href="{% url 'logout' %}">Logout</a></li>
+        <div class="side-menu" id="sideMenu">
+            <div class="menu-header">
+                <img src="{{ user.foto.url }}" alt="Profile Picture" class="profile-pic">
+                <h3>{{ user.first_name }} {{ user.last_name }}</h3>
+                <p>{{ user.curso }}</p>
+            </div>
+            <ul class="menu-items">
+                <li><a href="{% url 'disciplinas' %}"><i class="fa fa-book"></i> Disciplinas</a></li>
+                <li><a href="{% url 'eventos' %}"><i class="fa fa-calendar"></i> Eventos</a></li>
+                <li><a href="{% url 'notificacoes' %}"><i class="fa fa-bell"></i> Notificações</a></li>
+                <li><a href="{% url 'grade_horaria' %}"><i class="fa fa-clock"></i> Grade Horária</a></li>
+                <form method="post" action="{% url 'logout' %}" style="display: inline;">
+                    {% csrf_token %}
+                    <button type="submit" class="logout-btn">
+                        <i class="fa fa-sign-out-alt"></i> Logout
+                    </button>
+                </form>
             </ul>
-        </nav>
+        </div>
+        <div class="menu-overlay"></div>
         {% endif %}
     </header>
     
@@ -27,8 +39,97 @@
         {% endblock %}
     </main>
     
+    {% if user.is_authenticated %}
+    <div class="bottom-nav">
+        <a href="#menu" class="nav-item menu-toggle">
+            <img src="{% static 'menu.png' %}" alt="Menu">
+        </a>
+        <a href="{% url 'home' %}" class="nav-item">
+            <img src="{% static 'home-2.png' %}" alt="Home">
+        </a>
+        <a href="#search" class="nav-item">
+            <img src="{% static 'search.png' %}" alt="Search">
+        </a>
+        <a href="#profile" class="nav-item">
+            <img src="{% static 'profile.png' %}" alt="Profile">
+        </a>
+    </div>
+
+    <div id="profile-modal" class="modal-profile">
+        <div class="modal-content">
+            <div class="modal-header">
+                {% if user.foto %}
+                    <img src="{{ user.foto.url }}" alt="{{ user.get_full_name }}" class="img-fluid rounded-circle">
+                {% else %}
+                    <img src="https://via.placeholder.com/150" alt="Foto de perfil padrão" class="img-fluid rounded-circle" style="width: 80px; height: 80px; object-fit: cover;">
+                {% endif %}
+                <h3>{{ user.get_full_name }}</h3>
+                <p>{{ user.get_user_type_display }}</p>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                {% if user.user_type == 'aluno' or user.user_type == 'representante' %}
+                    <p><strong>Curso:</strong> {{ user.curso }}</p>
+                    <p><strong>Semestre:</strong> {{ user.semestre }}</p>
+                {% elif user.user_type == 'professor' %}
+                    <p><strong>Departamento:</strong> {{ user.departamento }}</p>
+                {% endif %}
+            </div>
+            <div class="modal-footer">
+                <a href="{% url 'edit_profile' %}" class="btn btn-primary">Editar Perfil</a>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
     <footer>
-        <p>&copy; 2024 Locus</p>
     </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const menuToggle = document.querySelector('.menu-toggle');
+            const sideMenu = document.getElementById('sideMenu');
+
+            // Abre/fecha o menu ao clicar no botão
+            menuToggle.addEventListener('click', function (event) {
+                event.stopPropagation(); // Impede que o clique no botão feche o menu
+                sideMenu.classList.toggle('open');
+            });
+
+            // Fecha o menu ao clicar fora dele
+            document.addEventListener('click', function (event) {
+                const isClickInsideMenu = sideMenu.contains(event.target);
+                const isClickOnToggle = menuToggle.contains(event.target);
+
+                // Fecha o menu se o clique não for no menu nem no botão de abrir
+                if (!isClickInsideMenu && !isClickOnToggle) {
+                    sideMenu.classList.remove('open');
+                }
+            });
+        });
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const profileModal = document.getElementById('profile-modal');
+            const profileBtn = document.querySelector('.nav-item img[src*="profile.png"]'); // Botão do perfil
+            const closeModal = document.querySelector('.close-modal');
+
+            // Abrir o modal ao clicar no ícone de perfil
+            profileBtn.addEventListener('click', function () {
+                profileModal.classList.add('active');
+            });
+
+            // Fechar o modal ao clicar no botão de fechar
+            closeModal.addEventListener('click', function () {
+                profileModal.classList.remove('active');
+            });
+
+            // Fechar o modal ao clicar fora do conteúdo
+            profileModal.addEventListener('click', function (event) {
+                if (event.target === profileModal) {
+                    profileModal.classList.remove('active');
+                }
+            });
+        });
+    </script>
 </body>
 </html>

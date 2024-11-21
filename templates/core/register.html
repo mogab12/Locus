@@ -3,71 +3,91 @@
 {% block title %}Cadastro - Locus{% endblock %}
 
 {% block content %}
-<h2>Cadastro</h2>
-<form method="post" id="registerForm" enctype="multipart/form-data">
-    {% csrf_token %}
-    {{ form.non_field_errors }}
-    <div>
-        {{ form.first_name.label_tag }}
-        {{ form.first_name }}
-        {{ form.first_name.errors }}
+{% load static %}
+<div class="logo">
+    <img src="{% static 'Logo.png' %}" alt="Logo">
+</div>
+<div class="container">
+    <div class="tabs">
+        <a href="{% url 'login' %}"><div class="tab">Login</div></a>
+        <div class="tab active">Sign Up</div>
     </div>
-    <div>
-        {{ form.last_name.label_tag }}
-        {{ form.last_name }}
-        {{ form.last_name.errors }}
-    </div>
-    <div>
-        {{ form.username.label_tag }}
-        {{ form.username }}
-        {{ form.username.errors }}
-    </div>
-    <div>
-        {{ form.email.label_tag }}
-        {{ form.email }}
-        {{ form.email.errors }}
-    </div>
-    <div>
-        {{ form.password1.label_tag }}
-        {{ form.password1 }}
-        {{ form.password1.errors }}
-    </div>
-    <div>
-        {{ form.password2.label_tag }}
-        {{ form.password2 }}
-        {{ form.password2.errors }}
-    </div>
-    <div>
-        {{ form.user_type.label_tag }}
-        {{ form.user_type }}
-        {{ form.user_type.errors }}
-    </div>
-    <div id="curso_semestre_fields" style="display: none;">
+
+    <form method="post" id="registerForm" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.non_field_errors }}
         <div>
-            {{ form.curso.label_tag }}
-            {{ form.curso }}
-            {{ form.curso.errors }}
+            {{ form.first_name.label_tag }}
+            <span style="display: block; height: 1vw;"></span>
+            {{ form.first_name }}
+            {{ form.first_name.errors }}
         </div>
         <div>
-            {{ form.semestre.label_tag }}
-            {{ form.semestre }}
-            {{ form.semestre.errors }}
+            {{ form.last_name.label_tag }} 
+            <span style="display: block; height: 1vw;"></span>
+            {{ form.last_name }}
+            {{ form.last_name.errors }}
         </div>
-    </div>
-    <div id="departamento_field" style="display: none;">
         <div>
-            {{ form.departamento.label_tag }}
-            {{ form.departamento }}
-            {{ form.departamento.errors }}
+            {{ form.username.label_tag }}
+            {{ form.username }}
+            {{ form.username.errors }}
         </div>
-    </div>
-    <div>
-        {{ form.foto.label_tag }}
-        {{ form.foto }}
-        {{ form.foto.errors }}
-    </div>
-    <button type="submit">Cadastrar</button>
-</form>
+        <div>
+            {{ form.email.label_tag }} 
+            <span style="display: block; height: 1vw;"></span>
+            {{ form.email }}
+            {{ form.email.errors }}
+        </div>
+        <div>
+            {{ form.password1.label_tag }} 
+            <span style="display: block; height: 1vw;"></span>
+            {{ form.password1 }}
+            {{ form.password1.errors }}
+        </div>
+        <div>
+            {{ form.password2.label_tag }} 
+            <span style="display: block; height: 1vw;"></span>
+            {{ form.password2 }}
+            {{ form.password2.errors }}
+        </div>
+        <div>
+            {{ form.user_type.label_tag }}
+            <span style="display: block; height: 1vw;"></span>
+            {{ form.user_type }}
+            {{ form.user_type.errors }}
+        </div>
+
+        <div id="curso_semestre_fields" style="display: none;">
+            <div>
+                {{ form.curso.label_tag }}
+                {{ form.curso }}
+                {{ form.curso.errors }}
+            </div>
+            <span style="display: block; height: 8vw;"></span>
+            <div>
+                {{ form.semestre.label_tag }}
+                {{ form.semestre }}
+                {{ form.semestre.errors }}
+            </div>
+        </div>
+
+        <div id="departamento_field" style="display: none;">
+            <div>
+                {{ form.departamento.label_tag }}
+                <span style="display: block; height: 1vw;"></span>
+                {{ form.departamento }}
+                {{ form.departamento.errors }}
+            </div>
+        </div>
+        <div class="foto_field">
+            <label for="id_foto">Escolher foto:</label>
+            <input type="file" name="foto" id="id_foto" class="custom-file-input">
+            {{ form.foto.errors }}
+        </div>
+        <button type="submit">Cadastrar</button>
+    </form>
+</div>
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
@@ -116,9 +136,7 @@
         toggleFields();  // Call once to set initial state
         updateSemestres();  // Call once to set initial semestre options
     });
-    </script>
-
-<p>Já tem uma conta? <a href="{% url 'login' %}">Faça login</a></p>
+</script>
 
 {{ form.semestres_por_curso|json_script:"semestres-data" }}
 {% endblock %}
