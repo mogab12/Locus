@@ -3,8 +3,12 @@
 {% block title %}Editar Perfil{% endblock %}
 
 {% block content %}
+{% load static %}
+<div class="logo">
+    <img src="{% static 'Logo.png' %}" alt="Logo">
+</div>
 <div class="container mt-5">
-    <h2>Editar Perfil</h2>
+    <h2 class="editprofile">Editar Perfil</h2>
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
         {% for field in form %}

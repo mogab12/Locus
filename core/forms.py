@@ -31,8 +31,8 @@ def get_cursos_e_semestres():
 class UserProfileForm(forms.ModelForm):
     class Meta:
         model = CustomUser
-        fields = ['first_name', 'last_name', 'user_type', 'curso', 'semestre', 'foto']
-
+        fields = ['first_name', 'last_name', 'user_type', 'curso', 'semestre', 'departamento', 'foto']
+        
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         if self.instance.user_type not in ['aluno', 'representante']:

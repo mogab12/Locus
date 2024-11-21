@@ -29,6 +29,11 @@
             {{ form.last_name.errors }}
         </div>
         <div>
+            {{ form.username.label_tag }}
+            {{ form.username }}
+            {{ form.username.errors }}
+        </div>
+        <div>
             {{ form.email.label_tag }} 
             <span style="display: block; height: 1vw;"></span>
             {{ form.email }}
@@ -53,18 +58,18 @@
             {{ form.user_type.errors }}
         </div>
 
-        <div>
-            {{ form.curso.label_tag }}
-            <span style="display: block; height: 1vw;"></span>
-            {{ form.curso }}
-            {{ form.curso.errors }}
-        </div>
-
-        <div>
-            {{ form.semestre.label_tag }}
-            <span style="display: block; height: 1vw;"></span>
-            {{ form.semestre }}
-            {{ form.semestre.errors }}
+        <div id="curso_semestre_fields" style="display: none;">
+            <div>
+                {{ form.curso.label_tag }}
+                {{ form.curso }}
+                {{ form.curso.errors }}
+            </div>
+            <span style="display: block; height: 8vw;"></span>
+            <div>
+                {{ form.semestre.label_tag }}
+                {{ form.semestre }}
+                {{ form.semestre.errors }}
+            </div>
         </div>
 
         <div id="departamento_field" style="display: none;">

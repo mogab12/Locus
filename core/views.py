@@ -22,7 +22,7 @@ def profile(request):
     context = {
         'user': user,
     }
-    return render(request, 'core/profile.html', context)
+    return render(request, 'core/home.html', context)
 
 def register(request):
     if request.method == 'POST':
