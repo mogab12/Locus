@@ -386,5 +386,70 @@
         margin-left: 10vw;
         font-size: 6vw;
     }
+    .custom-file-input {
+        display: block;
+        width: 100%;
+        padding: 1vw;
+        font-size: 6vw;
+        color: #495057;
+        background-color: #fff;
+        border: 1px solid #ced4da;
+        border-radius: 5px;
+        transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    }
+
+    .mb-3 img {
+        border-radius: 5px;
+        margin-top: 10px;
+    }
     
+    .mb-3 label {
+        font-weight: bold;
+        margin-bottom: 5px;
+        display: block;
+    }
+    .FotoAtual{
+        width: 25vw;
+         height: 25vw; 
+         object-fit: cover; 
+         border-radius: 6vw;
+         margin-bottom: 10vw;
+    }
+    .current-photo {
+        display: flex;
+        justify-content: center;
+    }
+
+    .remove-photo {
+        display: flex;
+        align-items: center;
+        flex-direction: row;
+        margin-bottom:6vw ;
+    }
+
+    .remove-photo input[type="checkbox"] {
+        width: 6vw; 
+        height: 6vw;
+        cursor: pointer;
+        margin-right: 2vw;
+    }
+
+    .remove-photo label {
+        display: flex;
+        align-items: center;
+        font-weight:normal;
+        color: #333;
+    }
+    .custom-file-input::-webkit-file-upload-button {
+        background-color: #000000;
+        color: #ffffff;  
+        font-size: 5vw;  
+        padding: 2vw 4vw;  
+        border: none;  
+        border-radius: 2vw; 
+        cursor: pointer;  
+        transition: background-color 0.3s ease;
+    }
+
+
 }

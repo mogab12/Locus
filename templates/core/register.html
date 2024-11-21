@@ -81,9 +81,8 @@
             </div>
         </div>
         <div class="foto_field">
-            {{ form.foto.label_tag }}
-            <span style="display: block; height: 1vw;"></span>
-            {{ form.foto }}
+            <label for="id_foto">Escolher foto:</label>
+            <input type="file" name="foto" id="id_foto" class="custom-file-input">
             {{ form.foto.errors }}
         </div>
         <button type="submit">Cadastrar</button>
