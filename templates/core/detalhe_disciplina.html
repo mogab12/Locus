@@ -11,5 +11,9 @@
     <p><strong>Semestre:</strong> {{ disciplina.semestre }}</p>
     <p><strong>Tipo:</strong> {{ disciplina.tipo }}</p>
 
-    <a href="{% url 'disciplinas' %}">Voltar para Minhas Disciplinas</a>
+    <a href="{% url 'disciplinas' %}">Voltar para Minhas Disciplinas</a><br>
+    <a href="{% url 'lista_topicos' disciplina.id %}">
+        <button>Fórum da Disciplina</button>
+    </a>
+
 {% endblock %}

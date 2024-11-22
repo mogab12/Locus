@@ -1,7 +1,17 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
-from .models import CustomUser, CustomEmailValidator
+from .models import CustomUser, CustomEmailValidator, Topico, Postagem
 import sqlite3
+
+class NovoTopicoForm(forms.ModelForm):
+    class Meta:
+        model = Topico
+        fields = ['titulo', 'descricao']
+
+class NovaPostagemForm(forms.ModelForm):
+    class Meta:
+        model = Postagem
+        fields = ['conteudo']
 
 def get_departments():
     conn = sqlite3.connect('departments.db')

@@ -1,0 +1,22 @@
+<!-- lista_topicos.html -->
+{% extends 'core/base.html' %}
+
+{% block title %}Tópicos de {{ disciplina.nome }}{% endblock %}
+
+{% block content %}
+<h1>Fórum de {{ disciplina.nome }}</h1>
+
+<ul>
+  {% for topico in topicos %}
+  <li>
+    <a href="{% url 'detalhe_topico' topico.id %}">{{ topico.titulo }}</a> - Criado por {{ topico.criado_por.username }}
+  </li>
+  {% empty %}
+  <li>Não há tópicos para esta disciplina ainda.</li>
+  {% endfor %}
+</ul>
+
+<a href="{% url 'novo_topico' disciplina.id %}">Criar Novo Tópico</a>
+<a href="{% url 'detalhe_disciplina' disciplina.id %}">Voltar para Detalhes da Disciplina</a>
+
+{% endblock %}

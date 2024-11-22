@@ -1,0 +1,13 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Fórum da Disciplina - {{ disciplina.nome }}{% endblock %}
+
+{% block content %}
+    <h1>Fórum da Disciplina: {{ disciplina.nome }}</h1>
+
+    <!-- Aqui você pode adicionar elementos do fórum, como tópicos, formulário para novas postagens, etc. -->
+    <p>Bem-vindo ao fórum para discutir tópicos relacionados à disciplina {{ disciplina.nome }}.</p>
+
+    <a href="{% url 'detalhe_disciplina' disciplina.id %}">Voltar para Detalhes da Disciplina</a>
+
+{% endblock %}

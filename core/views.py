@@ -4,9 +4,10 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login
 from django.db.models import Q
 from django.contrib import messages
-from .forms import CustomUserCreationForm, UserProfileForm
+from .forms import CustomUserCreationForm, UserProfileForm, NovoTopicoForm, NovaPostagemForm
 from django.http import HttpResponseForbidden
-from .models import Disciplina, UserDiscipline
+from .models import Disciplina, UserDiscipline, Topico
+
 
 
 
@@ -141,6 +142,41 @@ def adicionar_disciplinas(request):
 def detalhe_disciplina(request, disciplina_id):
     disciplina = get_object_or_404(Disciplina, id=disciplina_id)
     return render(request, 'core/detalhe_disciplina.html', {'disciplina': disciplina})
+
+@login_required
+def lista_topicos(request, disciplina_id):
+    disciplina = get_object_or_404(Disciplina, id=disciplina_id)
+    topicos = Topico.objects.filter(disciplina=disciplina).order_by('-data_criacao')
+    return render(request, 'core/lista_topicos.html', {'disciplina': disciplina, 'topicos': topicos})
+
+@login_required
+def detalhe_topico(request, topico_id):
+    topico = get_object_or_404(Topico, id=topico_id)
+    if request.method == 'POST':
+        form = NovaPostagemForm(request.POST)
+        if form.is_valid():
+            postagem = form.save(commit=False)
+            postagem.topico = topico
+            postagem.criado_por = request.user
+            postagem.save()
+            return redirect('detalhe_topico', topico_id=topico.id)
+    else:
+        form = NovaPostagemForm()
+    return render(request, 'core/detalhe_topico.html', {'topico': topico, 'form': form})
+@login_required
+def novo_topico(request, disciplina_id):
+    disciplina = get_object_or_404(Disciplina, id=disciplina_id)
+    if request.method == 'POST':
+        form = NovoTopicoForm(request.POST)
+        if form.is_valid():
+            topico = form.save(commit=False)
+            topico.disciplina = disciplina
+            topico.criado_por = request.user
+            topico.save()
+            return redirect('lista_topicos', disciplina_id=disciplina.id)
+    else:
+        form = NovoTopicoForm()
+    return render(request, 'core/novo_topico.html', {'disciplina': disciplina, 'form': form})
 
 @login_required
 def eventos(request):

@@ -46,4 +46,17 @@ class UserDiscipline(models.Model):
     added_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        unique_together = ('user', 'disciplina') 
+        unique_together = ('user', 'disciplina')
+
+class Topico(models.Model):
+    titulo = models.CharField(max_length=255)
+    descricao = models.TextField()
+    disciplina = models.ForeignKey(Disciplina, related_name='topicos', on_delete=models.CASCADE)
+    criado_por = models.ForeignKey(User, on_delete=models.CASCADE)
+    data_criacao = models.DateTimeField(auto_now_add=True)
+
+class Postagem(models.Model):
+    conteudo = models.TextField()
+    topico = models.ForeignKey(Topico, related_name='postagens', on_delete=models.CASCADE)
+    criado_por = models.ForeignKey(User, on_delete=models.CASCADE)
+    data_criacao = models.DateTimeField(auto_now_add=True)
