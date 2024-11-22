@@ -1,7 +1,13 @@
+import os
+import django
 import requests
 from bs4 import BeautifulSoup
-import sqlite3
-import os
+
+# Configurar o ambiente Django
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings')
+django.setup()
+
+from core.models import Disciplina
 
 def extrair_disciplinas(url, nome_curso):
     response = requests.get(url)
@@ -45,30 +51,35 @@ def extrair_disciplinas(url, nome_curso):
 
     return nome_curso, disciplinas_obrigatorias, disciplinas_optativas
 
-def criar_banco_dados():
-    conn = sqlite3.connect('disciplinas_engenharia_poli_usp.db')
-    cursor = conn.cursor()
+def inserir_disciplinas(nome_curso, disciplinas_obrigatorias, disciplinas_optativas):
+    disciplinas_para_inserir = []
 
-    cursor.execute('''
-    CREATE TABLE IF NOT EXISTS disciplinas (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        nome TEXT,
-        codigo TEXT,
-        semestre TEXT,
-        curso TEXT,
-        tipo TEXT
-    )
-    ''')
+    for semestre, disciplinas in disciplinas_obrigatorias.items():
+        for disciplina in disciplinas:
+            disciplinas_para_inserir.append(
+                Disciplina(
+                    nome=disciplina['nome'],
+                    codigo=disciplina['codigo'],
+                    semestre=semestre,
+                    curso=nome_curso,
+                    tipo='Obrigatória'
+                )
+            )
 
-    conn.commit()
-    return conn, cursor
-
-def inserir_disciplinas(conn, cursor, disciplinas):
-    cursor.executemany('''
-    INSERT INTO disciplinas (nome, codigo, semestre, curso, tipo)
-    VALUES (?, ?, ?, ?, ?)
-    ''', disciplinas)
-    conn.commit()
+    for semestre, disciplinas in disciplinas_optativas.items():
+        for disciplina in disciplinas:
+            disciplinas_para_inserir.append(
+                Disciplina(
+                    nome=disciplina['nome'],
+                    codigo=disciplina['codigo'],
+                    semestre=semestre,
+                    curso=nome_curso,
+                    tipo='Optativa'
+                )
+            )
+    
+    # Usar o Django ORM para salvar em massa
+    Disciplina.objects.bulk_create(disciplinas_para_inserir)
 
 def obter_todas_disciplinas():
     cursos = [
@@ -93,66 +104,13 @@ def obter_todas_disciplinas():
 
     base_url = "https://uspdigital.usp.br/jupiterweb/listarGradeCurricular"
 
-    conn, cursor = criar_banco_dados()
-
     for nome_curso, codcur, codhab in cursos:
         url = f"{base_url}?codcg=3&codcur={codcur}&codhab={codhab}&tipo=N"
         print(f"Processando: {nome_curso}")
 
-        _, disciplinas_obrigatorias, disciplinas_optativas = extrair_disciplinas(url, nome_curso)
+        nome_curso, disciplinas_obrigatorias, disciplinas_optativas = extrair_disciplinas(url, nome_curso)
 
-        disciplinas_para_inserir = []
+        inserir_disciplinas(nome_curso, disciplinas_obrigatorias, disciplinas_optativas)
 
-        for semestre, disciplinas in disciplinas_obrigatorias.items():
-            for disciplina in disciplinas:
-                disciplinas_para_inserir.append((
-                    disciplina['nome'],
-                    disciplina['codigo'],
-                    semestre,
-                    nome_curso,
-                    'Obrigatória'
-                ))
-
-        for semestre, disciplinas in disciplinas_optativas.items():
-            for disciplina in disciplinas:
-                disciplinas_para_inserir.append((
-                    disciplina['nome'],
-                    disciplina['codigo'],
-                    semestre,
-                    nome_curso,
-                    'Optativa'
-                ))
-
-        inserir_disciplinas(conn, cursor, disciplinas_para_inserir)
-
-    return conn, cursor
-
-# Criar o banco de dados e inserir as disciplinas
-conn, cursor = obter_todas_disciplinas()
-
-# Exibir as primeiras 20 linhas da tabela
-print("\nPrimeiras 20 linhas da tabela:")
-cursor.execute("SELECT * FROM disciplinas LIMIT 20")
-for row in cursor.fetchall():
-    print(row)
-
-# Algumas estatísticas básicas
-print("\nEstatísticas:")
-cursor.execute("SELECT COUNT(*) FROM disciplinas")
-total_disciplinas = cursor.fetchone()[0]
-print(f"Total de disciplinas: {total_disciplinas}")
-
-print("\nDisciplinas por tipo:")
-cursor.execute("SELECT tipo, COUNT(*) FROM disciplinas GROUP BY tipo")
-for tipo, count in cursor.fetchall():
-    print(f"{tipo}: {count}")
-
-print("\nDisciplinas por curso:")
-cursor.execute("SELECT curso, COUNT(*) FROM disciplinas GROUP BY curso")
-for curso, count in cursor.fetchall():
-    print(f"{curso}: {count}")
-
-# Fechar a conexão com o banco de dados
-conn.close()
-
-print(f"\nBanco de dados criado: {os.path.abspath('disciplinas_engenharia_poli_usp.db')}")
+# Executar o script para salvar disciplinas
+obter_todas_disciplinas()

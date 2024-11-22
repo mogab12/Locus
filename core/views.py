@@ -2,7 +2,11 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
+from django.db.models import Q
 from .forms import CustomUserCreationForm, UserProfileForm
+from django.http import HttpResponseForbidden
+from .models import Disciplina, UserDiscipline
+
 
 
 @login_required
@@ -61,7 +65,44 @@ def home(request):
 
 @login_required
 def disciplinas(request):
-    return render(request, 'core/disciplinas.html')
+    if request.user.user_type not in ['aluno', 'representante']:
+        return HttpResponseForbidden("Você não tem permissão para acessar esta página.")
+
+    # Recuperar disciplinas salvas para o usuário
+    user_disciplines = UserDiscipline.objects.filter(user=request.user).select_related('disciplina')
+
+    search_results = []
+    query = request.GET.get('q', '')  # Get the search query
+
+    if request.method == 'POST':
+        if 'add' in request.POST:
+            # Adicionar disciplina selecionada ao usuário
+            disciplina_id = request.POST.get('disciplina_id')
+            disciplina = Disciplina.objects.get(id=disciplina_id)
+            UserDiscipline.objects.get_or_create(user=request.user, disciplina=disciplina)
+
+        elif 'remove' in request.POST:
+            # Remover disciplina do usuário
+            disciplina_id = request.POST.get('disciplina_id')
+            UserDiscipline.objects.filter(user=request.user, disciplina_id=disciplina_id).delete()
+
+    if query:
+        all_results = Disciplina.objects.filter(
+            Q(nome__icontains=query) | Q(codigo__icontains=query)
+        )
+
+        # Remover duplicatas com base no 'codigo'
+        seen_codes = set()
+        for disciplina in all_results:
+            if disciplina.codigo not in seen_codes:
+                search_results.append(disciplina)
+                seen_codes.add(disciplina.codigo)
+
+    return render(request, 'core/disciplinas.html', {
+        'user_disciplines': user_disciplines,
+        'search_results': search_results,
+        'query': query,
+    })
 
 @login_required
 def eventos(request):

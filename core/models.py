@@ -1,6 +1,7 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.core.validators import EmailValidator
+from django.contrib.auth import get_user_model
 
 class CustomEmailValidator(EmailValidator):
     def validate_domain_part(self, domain_part):
@@ -26,3 +27,23 @@ class CustomUser(AbstractUser):
     class Meta:
         verbose_name = 'Usuário'
         verbose_name_plural = 'Usuários'
+
+class Disciplina(models.Model):
+    nome = models.CharField(max_length=255)
+    codigo = models.CharField(max_length=50)
+    semestre = models.CharField(max_length=50)
+    curso = models.CharField(max_length=255)
+    tipo = models.CharField(max_length=50)
+
+    def __str__(self):
+        return f"{self.nome} ({self.codigo})"
+    
+User = get_user_model()
+
+class UserDiscipline(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_disciplines')
+    disciplina = models.ForeignKey(Disciplina, on_delete=models.CASCADE)
+    added_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('user', 'disciplina') 
