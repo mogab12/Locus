@@ -2,7 +2,48 @@
 
 {% block title %}Bem-vindo ao Localizador de Salas{% endblock %}
 
+{% block head %}
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+    crossorigin=""/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+    crossorigin=""></script>
+{% endblock %}
+
 {% block content %}
-    <h1>Bem-vindo ao Locus</h1>
-    <p>Escolha uma opção no menu acima para começar.</p>
+<div id="map"></div>
+
+<script>
+    // Inicializa o mapa com a posição inicial e zoom
+    const map = L.map('map', {
+        center: [-23.555299, -46.729696], // Coordenadas centrais
+        zoom: 16.5, // Nível inicial de zoom
+        maxBounds: [
+            [-23.561, -46.735], // Coordenadas do canto sudoeste (mínimo)
+            [-23.549, -46.724]  // Coordenadas do canto nordeste (máximo)
+        ],
+        maxBoundsViscosity: 1.0, // Evita que o usuário mova fora dos limites
+        minZoom: 15, // Zoom mínimo permitido
+        maxZoom: 20  // Zoom máximo permitido
+    });
+
+    // Adiciona a camada de base do mapa
+    const layer = L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager_labels_under/{z}/{x}/{y}{r}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+        subdomains: 'abcd',
+        maxZoom: 20
+    });
+    const marker = L.marker([-23.553273761874635, -46.729336977565005]).addTo(map);
+
+    // Define o texto do popup
+    marker.bindPopup(`
+        <b>Departamento de Engenharia</b><br>
+        Mecatrônica, Mecânica e Naval.<br>
+        <i>Coordenadas:</i> -23.55327, -46.72933
+    `);
+    // Adiciona a camada ao mapa
+    layer.addTo(map);
+</script>
+
 {% endblock %}
