@@ -34,6 +34,7 @@ def register(request):
     else:
         form = CustomUserCreationForm()
     return render(request, 'core/register.html', {'form': form})
+
 def login_view(request):
     if request.user.is_authenticated:
         return redirect('home')

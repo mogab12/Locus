@@ -17,7 +17,7 @@ class CustomUser(AbstractUser):
     curso = models.CharField(max_length=100, blank=True, null=True)
     semestre = models.CharField(max_length=3, blank=True, null=True)
     departamento = models.CharField(max_length=100, blank=True, null=True)
-    foto = models.ImageField(upload_to='user_photos/', blank=True, null=True)
+    foto = models.ImageField(upload_to='user_photos/', blank=True, null=True, default='defaultphoto.jpg')
     email = models.EmailField(unique=True, validators=[CustomEmailValidator()])
     
     def __str__(self):
