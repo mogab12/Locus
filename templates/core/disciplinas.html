@@ -6,6 +6,14 @@
     <h1>Disciplinas</h1>
     <p>Aqui você encontrará informações sobre as disciplinas disponíveis.</p>
 
+    {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
     <h2>Adicionar Nova Disciplina</h2>
     <form method="get">
         <label for="search">Buscar Disciplina:</label>
@@ -45,4 +53,16 @@
         {% endfor %}
     </ul>
 
-{% endblock %}  
+    <form method="post" class="import-form">
+        {% csrf_token %}
+        <button type="submit" name="importar_obrigatorias">Importar Disciplinas Obrigatórias</button>
+    </form>
+
+    <form method="post" class="remove-all-form">
+        {% csrf_token %}
+        <label for="confirm-remove">Digite "yes" para confirmar a remoção de todas as disciplinas:</label>
+        <input type="text" name="confirm_remove" id="confirm-remove" placeholder="Digite 'yes' para confirmar">
+        <button type="submit" name="remover_todas">Remover Todas as Disciplinas</button>
+    </form>
+
+{% endblock %}

@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
 from django.db.models import Q
+from django.contrib import messages
 from .forms import CustomUserCreationForm, UserProfileForm
 from django.http import HttpResponseForbidden
 from .models import Disciplina, UserDiscipline
@@ -70,7 +71,7 @@ def disciplinas(request):
 
     # Recuperar disciplinas salvas para o usuário
     user_disciplines = UserDiscipline.objects.filter(user=request.user).select_related('disciplina')
-
+    
     search_results = []
     query = request.GET.get('q', '')  # Get the search query
 
@@ -85,6 +86,24 @@ def disciplinas(request):
             # Remover disciplina do usuário
             disciplina_id = request.POST.get('disciplina_id')
             UserDiscipline.objects.filter(user=request.user, disciplina_id=disciplina_id).delete()
+
+        elif 'importar_obrigatorias' in request.POST:
+            # Importar disciplinas obrigatórias
+            curso = request.user.curso
+            semestre = request.user.semestre
+            obrigatorias = Disciplina.objects.filter(curso=curso, semestre=semestre, tipo='Obrigatória')
+            for disciplina in obrigatorias:
+                UserDiscipline.objects.get_or_create(user=request.user, disciplina=disciplina)
+            messages.success(request, 'Disciplinas obrigatórias importadas com sucesso!')
+
+        elif 'remover_todas' in request.POST:
+            # Verificação de duas etapas para remover todas
+            confirm_remove = request.POST.get('confirm_remove')
+            if confirm_remove == 'yes':
+                UserDiscipline.objects.filter(user=request.user).delete()
+                messages.success(request, 'Todas as disciplinas foram removidas.')
+            else:
+                messages.error(request, 'Confirmação necessária para remover todas as disciplinas.')
 
     if query:
         all_results = Disciplina.objects.filter(
