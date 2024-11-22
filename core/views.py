@@ -6,7 +6,7 @@ from django.db.models import Q
 from django.contrib import messages
 from .forms import CustomUserCreationForm, UserProfileForm, NovoTopicoForm, NovaPostagemForm
 from django.http import HttpResponseForbidden
-from .models import Disciplina, UserDiscipline, Topico, Postagem
+from .models import Disciplina, UserDiscipline, Topico, Postagem, CustomUser
 from django.core.exceptions import PermissionDenied
 from django.contrib.auth.models import User
 from .forms import TopicoForm
@@ -220,7 +220,7 @@ def remover_topico(request, topico_id):
         topico.delete()
         return redirect('lista_topicos', disciplina_id=topico.disciplina.id)
 
-    return render(request, 'core/remover_topico_confirmacao.html', {'postagem': postagem, 'topico': topico})
+    return render(request, 'core/remover_topico_confirmacao.html', {'topico': topico})
 
 @login_required
 def remover_postagem(request, postagem_id):
@@ -248,3 +248,21 @@ def notificacoes(request):
 @login_required
 def grade_horaria(request):
     return render(request, 'core/grade_horaria.html')
+
+@login_required
+def view_profile(request, user_id):
+    user = get_object_or_404(CustomUser, id=user_id)
+    
+    # Filtrar disciplinas de acordo com o tipo de usuário
+    if user.user_type in ['aluno', 'representante', 'professor']:
+        # Utilize a relação UserDiscipline para obter as disciplinas do aluno/representante
+        disciplinas = Disciplina.objects.filter(userdiscipline__user=user)
+    else:
+        disciplinas = []  # Ou qualquer lógica que faça sentido para outros tipos de usuário
+
+    context = {
+        'profile_user': user,
+        'disciplinas': disciplinas,
+    }
+    
+    return render(request, 'core/view_profile.html', context)

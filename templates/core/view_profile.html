@@ -1,0 +1,35 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block title %}Perfil de {{ profile_user.get_full_name }}{% endblock %}
+
+{% block content %}
+<div class="profile">
+    <div class="profile-header">
+        {% if profile_user.foto %}
+            <img src="{{ profile_user.foto.url }}" alt="{{ profile_user.get_full_name }}" class="img-fluid rounded-circle" style="width: 150px; height: 150px; object-fit: cover;">
+        {% else %}
+            <img src="{% static 'defaultphoto.jpg' %}" alt="Foto de perfil padrão" class="img-fluid rounded-circle" style="width: 150px; height: 150px; object-fit: cover;">
+        {% endif %}
+        <h3>{{ profile_user.get_full_name }}</h3>
+        <p>{{ profile_user.get_user_type_display }}</p>
+    </div>
+    <div class="profile-body">
+        {% if profile_user.user_type == 'aluno' or profile_user.user_type == 'representante' %}
+            <p><strong>Curso:</strong> {{ profile_user.curso }}</p>
+            <p><strong>Semestre:</strong> {{ profile_user.semestre }}</p>
+        {% elif profile_user.user_type == 'professor' %}
+            <p><strong>Departamento:</strong> {{ profile_user.departamento }}</p>
+        {% endif %}
+
+        <h4>Disciplinas</h4>
+        <ul>
+            {% for disciplina in disciplinas %}
+                <li>{{ disciplina.nome }} - {{ disciplina.codigo }}</li>
+            {% empty %}
+                <li>Sem disciplinas associadas.</li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+{% endblock %}

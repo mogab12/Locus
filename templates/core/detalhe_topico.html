@@ -5,7 +5,10 @@
 {% block content %}
 <h1>{{ topico.titulo }}</h1>
 <p><strong>Descrição:</strong> {{ topico.descricao }}</p>
-<p><strong>Criado por:</strong> {{ topico.criado_por.username }} em {{ topico.data_criacao }}</p>
+<p><strong>Criado por:</strong> {{ topico.criado_por.username }}
+    <a href="{% url 'view_profile' topico.criado_por.id %}" class="btn btn-secondary">Ver Perfil</a>
+</p>
+<p><strong>Data de Criação:</strong> {{ topico.data_criacao }}</p>
 
 {% if request.user.user_type == 'representante' or request.user.user_type == 'professor' %}
     <a href="{% url 'editar_topico' topico.id %}">Editar Tópico</a>
@@ -17,7 +20,10 @@
   {% for postagem in topico.postagens.all %}
   <li>
     <p>{{ postagem.conteudo }}</p>
-    <p><strong>Por:</strong> {{ postagem.criado_por.username }} em {{ postagem.data_criacao }}</p>
+    <p><strong>Por:</strong> {{ postagem.criado_por.username }}
+        <a href="{% url 'view_profile' postagem.criado_por.id %}" class="btn btn-secondary">Ver Perfil</a>
+    </p>
+    <p><strong>Data de Criação:</strong> {{ postagem.data_criacao }}</p>
 
     {% if request.user.user_type == 'representante' or request.user.user_type == 'professor' %}
         <a href="{% url 'remover_postagem' postagem.id %}">Remover Postagem</a>

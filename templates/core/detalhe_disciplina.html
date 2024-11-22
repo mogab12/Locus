@@ -14,7 +14,10 @@
 <h3>Professores Associados:</h3>
 <ul>
     {% for professor in professores %}
-    <li>{{ professor.username }}</li>
+    <li>
+        {{ professor.username }}
+        <a href="{% url 'view_profile' professor.id %}" class="btn btn-secondary">Ver Perfil</a>
+    </li>
     {% empty %}
     <li>Nenhum professor associado.</li>
     {% endfor %}

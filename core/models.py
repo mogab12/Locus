@@ -67,3 +67,4 @@ class Postagem(models.Model):
     topico = models.ForeignKey(Topico, related_name='postagens', on_delete=models.CASCADE)
     criado_por = models.ForeignKey(User, on_delete=models.CASCADE)
     data_criacao = models.DateTimeField(auto_now_add=True)
+
