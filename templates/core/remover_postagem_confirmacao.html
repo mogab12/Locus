@@ -1,0 +1,16 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Confirmar Remoção de Postagem{% endblock %}
+
+{% block content %}
+<h1>Remover Postagem</h1>
+
+<p>Tem certeza de que deseja remover esta postagem? Esta ação não pode ser desfeita.</p>
+
+<form method="post">
+    {% csrf_token %}
+    <button type="submit">Sim, remover</button>
+</form>
+
+<a href="{% url 'detalhe_topico' topico_id=topico.id %}">Cancelar</a>
+{% endblock %}

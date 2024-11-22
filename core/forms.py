@@ -13,6 +13,14 @@ class NovaPostagemForm(forms.ModelForm):
         model = Postagem
         fields = ['conteudo']
 
+class TopicoForm(forms.ModelForm):
+    class Meta:
+        model = Topico
+        fields = ['titulo', 'descricao']
+        widgets = {
+            'titulo': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Título do Tópico'}),
+            'descricao': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Descrição do Tópico'}),
+        }
 def get_departments():
     conn = sqlite3.connect('departments.db')
     cursor = conn.cursor()

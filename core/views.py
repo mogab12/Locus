@@ -6,10 +6,10 @@ from django.db.models import Q
 from django.contrib import messages
 from .forms import CustomUserCreationForm, UserProfileForm, NovoTopicoForm, NovaPostagemForm
 from django.http import HttpResponseForbidden
-from .models import Disciplina, UserDiscipline, Topico
+from .models import Disciplina, UserDiscipline, Topico, Postagem
 from django.core.exceptions import PermissionDenied
 from django.contrib.auth.models import User
-
+from .forms import TopicoForm
 
 
 
@@ -191,6 +191,52 @@ def novo_topico(request, disciplina_id):
         form = NovoTopicoForm()
     
     return render(request, 'core/novo_topico.html', {'disciplina': disciplina, 'form': form})
+
+@login_required
+def editar_topico(request, topico_id):
+    topico = get_object_or_404(Topico, id=topico_id)
+
+    if request.user.user_type not in ['representante', 'professor']:
+        return HttpResponseForbidden("Você não tem permissão para editar este tópico.")
+
+    if request.method == 'POST':
+        form = TopicoForm(request.POST, instance=topico)
+        if form.is_valid():
+            form.save()
+            return redirect('detalhe_topico', topico_id=topico.id)
+    else:
+        form = TopicoForm(instance=topico)
+
+    return render(request, 'core/editar_topico.html', {'form': form, 'topico': topico})
+@login_required
+def remover_topico(request, topico_id):
+    topico = get_object_or_404(Topico, id=topico_id)
+
+    # Verificar se o usuário é representante ou professor
+    if request.user.user_type not in ['representante', 'professor']:
+        return HttpResponseForbidden("Você não tem permissão para remover este tópico.")
+    
+    if request.method == 'POST':
+        topico.delete()
+        return redirect('lista_topicos', disciplina_id=topico.disciplina.id)
+
+    return render(request, 'core/remover_topico_confirmacao.html', {'postagem': postagem, 'topico': topico})
+
+@login_required
+def remover_postagem(request, postagem_id):
+    postagem = get_object_or_404(Postagem, id=postagem_id)
+    topico = postagem.topico  # Obtenha o tópico associado à postagem
+
+    # Verificar se o usuário é representante ou professor
+    if request.user.user_type not in ['representante', 'professor']:
+        return HttpResponseForbidden("Você não tem permissão para remover esta postagem.")
+    
+    if request.method == 'POST':
+        postagem.delete()
+        return redirect('detalhe_topico', topico_id=topico.id)
+
+    return render(request, 'core/remover_postagem_confirmacao.html', {'postagem': postagem, 'topico': topico})
+
 @login_required
 def eventos(request):
     return render(request, 'core/eventos.html')

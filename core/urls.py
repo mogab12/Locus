@@ -19,4 +19,7 @@ urlpatterns = [
     path('disciplinas/<int:disciplina_id>/forum/', views.lista_topicos, name='lista_topicos'),
     path('disciplinas/topico/<int:topico_id>/', views.detalhe_topico, name='detalhe_topico'),
     path('disciplinas/<int:disciplina_id>/forum/novo/', views.novo_topico, name='novo_topico'),
+    path('topico/<int:topico_id>/editar/', views.editar_topico, name='editar_topico'),
+    path('topico/<int:topico_id>/remover/', views.remover_topico, name='remover_topico'),
+    path('postagem/<int:postagem_id>/remover/', views.remover_postagem, name='remover_postagem'),
 ]

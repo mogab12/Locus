@@ -9,6 +9,9 @@
   {% for topico in topicos %}
   <li>
     <a href="{% url 'detalhe_topico' topico.id %}">{{ topico.titulo }}</a> - Criado por {{ topico.criado_por.username }}
+    {% if request.user.user_type == 'representante' or request.user.user_type == 'professor' %}
+        <a href="{% url 'editar_topico' topico.id %}">Editar</a>
+    {% endif %}
   </li>
   {% empty %}
   <li>Não há tópicos para esta disciplina ainda.</li>
@@ -20,4 +23,5 @@
 {% endif %}
 
 <a href="{% url 'detalhe_disciplina' disciplina.id %}">Voltar para Detalhes da Disciplina</a>
+
 {% endblock %}

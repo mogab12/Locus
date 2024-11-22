@@ -1,0 +1,15 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Editar Tópico - {{ topico.titulo }}{% endblock %}
+
+{% block content %}
+<h1>Editar Tópico</h1>
+
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Salvar Alterações</button>
+</form>
+
+<a href="{% url 'detalhe_topico' topico.id %}">Cancelar</a>
+{% endblock %}
