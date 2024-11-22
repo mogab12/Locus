@@ -1,10 +1,9 @@
 {% extends 'core/base.html' %}
 
-{% block title %}Disciplinas - Localizador de Salas{% endblock %}
+{% block title %}Minhas Disciplinas - Localizador de Salas{% endblock %}
 
 {% block content %}
-    <h1>Disciplinas</h1>
-    <p>Aqui você encontrará informações sobre as disciplinas disponíveis.</p>
+    <h1>Minhas Disciplinas</h1>
 
     {% if messages %}
         <ul class="messages">
@@ -14,55 +13,17 @@
         </ul>
     {% endif %}
 
-    <h2>Adicionar Nova Disciplina</h2>
-    <form method="get">
-        <label for="search">Buscar Disciplina:</label>
-        <input type="text" name="q" id="search" value="{{ query }}" placeholder="Nome ou Código">
-        <button type="submit">Pesquisar</button>
-    </form>
-
-    <h3>Resultados da Pesquisa</h3>
-    <ul>
-        {% for disciplina in search_results %}
-        <li>
-            {{ disciplina.nome }} ({{ disciplina.codigo }})
-            <form method="post" style="display:inline;">
-                {% csrf_token %}
-                <input type="hidden" name="disciplina_id" value="{{ disciplina.id }}">
-                <button type="submit" name="add">Adicionar</button>
-            </form>
-        </li>
-        {% empty %}
-        <li>Nenhuma disciplina encontrada.</li>
-        {% endfor %}
-    </ul>
-
-    <h2>Suas Disciplinas</h2>
     <ul>
         {% for user_discipline in user_disciplines %}
         <li>
             {{ user_discipline.disciplina.nome }} ({{ user_discipline.disciplina.codigo }})
-            <form method="post" style="display:inline;">
-                {% csrf_token %}
-                <input type="hidden" name="disciplina_id" value="{{ user_discipline.disciplina.id }}">
-                <button type="submit" name="remove">Remover</button>
-            </form>
         </li>
         {% empty %}
         <li>Você não adicionou nenhuma disciplina ainda.</li>
         {% endfor %}
     </ul>
 
-    <form method="post" class="import-form">
-        {% csrf_token %}
-        <button type="submit" name="importar_obrigatorias">Importar Disciplinas Obrigatórias</button>
-    </form>
-
-    <form method="post" class="remove-all-form">
-        {% csrf_token %}
-        <label for="confirm-remove">Digite "yes" para confirmar a remoção de todas as disciplinas:</label>
-        <input type="text" name="confirm_remove" id="confirm-remove" placeholder="Digite 'yes' para confirmar">
-        <button type="submit" name="remover_todas">Remover Todas as Disciplinas</button>
-    </form>
+    <a href="{% url 'adicionar_disciplinas' %}">Adicionar Disciplinas</a><br>
+    <a href="{% url 'remover_disciplinas' %}">Remover Disciplinas</a>
 
 {% endblock %}

@@ -69,11 +69,39 @@ def disciplinas(request):
     if request.user.user_type not in ['aluno', 'representante']:
         return HttpResponseForbidden("Você não tem permissão para acessar esta página.")
 
-    # Recuperar disciplinas salvas para o usuário
     user_disciplines = UserDiscipline.objects.filter(user=request.user).select_related('disciplina')
-    
+    return render(request, 'core/disciplinas.html', {
+        'user_disciplines': user_disciplines,
+    })
+
+@login_required
+def remover_disciplinas(request):
+    if request.user.user_type not in ['aluno', 'representante']:
+        return HttpResponseForbidden("Você não tem permissão para acessar esta página.")
+
+    user_disciplines = UserDiscipline.objects.filter(user=request.user).select_related('disciplina')
+
+    if request.method == 'POST':
+        if 'remove' in request.POST:
+            disciplina_id = request.POST.get('disciplina_id')
+            UserDiscipline.objects.filter(user=request.user, disciplina_id=disciplina_id).delete()
+            messages.success(request, 'Disciplina removida com sucesso!')
+
+        elif 'remover_todas' in request.POST:
+            UserDiscipline.objects.filter(user=request.user).delete()
+            messages.success(request, 'Todas as disciplinas foram removidas.')
+
+    return render(request, 'core/remover_disciplinas.html', {
+        'user_disciplines': user_disciplines,
+    })
+
+@login_required
+def adicionar_disciplinas(request):
+    if request.user.user_type not in ['aluno', 'representante']:
+        return HttpResponseForbidden("Você não tem permissão para acessar esta página.")
+
     search_results = []
-    query = request.GET.get('q', '')  # Get the search query
+    query = request.GET.get('q', '')
 
     if request.method == 'POST':
         if 'add' in request.POST:
@@ -81,11 +109,7 @@ def disciplinas(request):
             disciplina_id = request.POST.get('disciplina_id')
             disciplina = Disciplina.objects.get(id=disciplina_id)
             UserDiscipline.objects.get_or_create(user=request.user, disciplina=disciplina)
-
-        elif 'remove' in request.POST:
-            # Remover disciplina do usuário
-            disciplina_id = request.POST.get('disciplina_id')
-            UserDiscipline.objects.filter(user=request.user, disciplina_id=disciplina_id).delete()
+            messages.success(request, 'Disciplina adicionada com sucesso!')
 
         elif 'importar_obrigatorias' in request.POST:
             # Importar disciplinas obrigatórias
@@ -95,15 +119,6 @@ def disciplinas(request):
             for disciplina in obrigatorias:
                 UserDiscipline.objects.get_or_create(user=request.user, disciplina=disciplina)
             messages.success(request, 'Disciplinas obrigatórias importadas com sucesso!')
-
-        elif 'remover_todas' in request.POST:
-            # Verificação de duas etapas para remover todas
-            confirm_remove = request.POST.get('confirm_remove')
-            if confirm_remove == 'yes':
-                UserDiscipline.objects.filter(user=request.user).delete()
-                messages.success(request, 'Todas as disciplinas foram removidas.')
-            else:
-                messages.error(request, 'Confirmação necessária para remover todas as disciplinas.')
 
     if query:
         all_results = Disciplina.objects.filter(
@@ -117,8 +132,7 @@ def disciplinas(request):
                 search_results.append(disciplina)
                 seen_codes.add(disciplina.codigo)
 
-    return render(request, 'core/disciplinas.html', {
-        'user_disciplines': user_disciplines,
+    return render(request, 'core/adicionar_disciplinas.html', {
         'search_results': search_results,
         'query': query,
     })

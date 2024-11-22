@@ -1,0 +1,45 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Adicionar Disciplinas{% endblock %}
+
+{% block content %}
+    <h1>Adicionar Disciplinas</h1>
+
+    {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+    <form method="get">
+        <label for="search">Buscar Disciplina:</label>
+        <input type="text" name="q" id="search" value="{{ query }}" placeholder="Nome ou Código">
+        <button type="submit">Pesquisar</button>
+    </form>
+
+    <h3>Resultados da Pesquisa</h3>
+    <ul>
+        {% for disciplina in search_results %}
+        <li>
+            {{ disciplina.nome }} ({{ disciplina.codigo }})
+            <form method="post" style="display:inline;">
+                {% csrf_token %}
+                <input type="hidden" name="disciplina_id" value="{{ disciplina.id }}">
+                <button type="submit" name="add">Adicionar</button>
+            </form>
+        </li>
+        {% empty %}
+        <li>Nenhuma disciplina encontrada.</li>
+        {% endfor %}
+    </ul>
+
+    <form method="post" class="import-form">
+        {% csrf_token %}
+        <button type="submit" name="importar_obrigatorias">Importar Disciplinas Obrigatórias</button>
+    </form>
+
+    <a href="{% url 'disciplinas' %}">Voltar para Minhas Disciplinas</a>
+
+{% endblock %}

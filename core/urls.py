@@ -13,4 +13,6 @@ urlpatterns = [
     path('grade-horaria/', views.grade_horaria, name='grade_horaria'),
     path('profile/', views.profile, name='profile'),
     path('profile/edit/', views.edit_profile, name='edit_profile'),
+    path('disciplinas/adicionar_disciplinas', views.adicionar_disciplinas, name='adicionar_disciplinas'),
+    path('disciplinas/remover_disciplinas', views.remover_disciplinas, name='remover_disciplinas')
 ]

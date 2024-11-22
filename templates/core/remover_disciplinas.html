@@ -1,0 +1,49 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Remover Disciplinas - Localizador de Salas{% endblock %}
+
+{% block content %}
+    <h1>Remover Disciplinas</h1>
+
+    {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+    <ul>
+        {% for user_discipline in user_disciplines %}
+        <li>
+            {{ user_discipline.disciplina.nome }} ({{ user_discipline.disciplina.codigo }})
+            <form method="post" style="display:inline;">
+                {% csrf_token %}
+                <input type="hidden" name="disciplina_id" value="{{ user_discipline.disciplina.id }}">
+                <button type="submit" name="remove">Remover</button>
+            </form>
+        </li>
+        {% empty %}
+        <li>Você não adicionou nenhuma disciplina ainda.</li>
+        {% endfor %}
+    </ul>
+
+    {% if user_disciplines %}
+    <button onclick="confirmRemoveAll()">Remover Todas as Disciplinas</button>
+    <form id="remove-all-form" method="post" style="display:none;">
+        {% csrf_token %}
+        <input type="hidden" name="remover_todas">
+    </form>
+    {% endif %}
+
+    <a href="{% url 'disciplinas' %}">Voltar para Minhas Disciplinas</a>
+
+    <script>
+        function confirmRemoveAll() {
+            if (confirm("Tem certeza que deseja remover todas as disciplinas?")) {
+                document.getElementById('remove-all-form').submit();
+            }
+        }
+    </script>
+
+{% endblock %}
