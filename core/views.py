@@ -1,6 +1,6 @@
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login
 from django.db.models import Q
 from django.contrib import messages
@@ -136,6 +136,11 @@ def adicionar_disciplinas(request):
         'search_results': search_results,
         'query': query,
     })
+
+@login_required
+def detalhe_disciplina(request, disciplina_id):
+    disciplina = get_object_or_404(Disciplina, id=disciplina_id)
+    return render(request, 'core/detalhe_disciplina.html', {'disciplina': disciplina})
 
 @login_required
 def eventos(request):

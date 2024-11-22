@@ -1,0 +1,15 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Detalhes da Disciplina - {{ disciplina.nome }}{% endblock %}
+
+{% block content %}
+    <h1>Detalhes da Disciplina</h1>
+
+    <p><strong>Nome:</strong> {{ disciplina.nome }}</p>
+    <p><strong>Código:</strong> {{ disciplina.codigo }}</p>
+    <p><strong>Curso:</strong> {{ disciplina.curso }}</p>
+    <p><strong>Semestre:</strong> {{ disciplina.semestre }}</p>
+    <p><strong>Tipo:</strong> {{ disciplina.tipo }}</p>
+
+    <a href="{% url 'disciplinas' %}">Voltar para Minhas Disciplinas</a>
+{% endblock %}

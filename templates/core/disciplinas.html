@@ -16,7 +16,9 @@
     <ul>
         {% for user_discipline in user_disciplines %}
         <li>
-            {{ user_discipline.disciplina.nome }} ({{ user_discipline.disciplina.codigo }})
+            <a href="{% url 'detalhe_disciplina' user_discipline.disciplina.id %}">
+                <button>{{ user_discipline.disciplina.nome }} ({{ user_discipline.disciplina.codigo }})</button>
+            </a>
         </li>
         {% empty %}
         <li>Você não adicionou nenhuma disciplina ainda.</li>
