@@ -3,17 +3,24 @@
 {% block title %}Detalhes da Disciplina - {{ disciplina.nome }}{% endblock %}
 
 {% block content %}
-    <h1>Detalhes da Disciplina</h1>
+<h1>Detalhes da Disciplina</h1>
 
-    <p><strong>Nome:</strong> {{ disciplina.nome }}</p>
-    <p><strong>Código:</strong> {{ disciplina.codigo }}</p>
-    <p><strong>Curso:</strong> {{ disciplina.curso }}</p>
-    <p><strong>Semestre:</strong> {{ disciplina.semestre }}</p>
-    <p><strong>Tipo:</strong> {{ disciplina.tipo }}</p>
+<p><strong>Nome:</strong> {{ disciplina.nome }}</p>
+<p><strong>Código:</strong> {{ disciplina.codigo }}</p>
+<p><strong>Curso:</strong> {{ disciplina.curso }}</p>
+<p><strong>Semestre:</strong> {{ disciplina.semestre }}</p>
+<p><strong>Tipo:</strong> {{ disciplina.tipo }}</p>
 
-    <a href="{% url 'disciplinas' %}">Voltar para Minhas Disciplinas</a><br>
-    <a href="{% url 'lista_topicos' disciplina.id %}">
-        <button>Fórum da Disciplina</button>
-    </a>
+<h3>Professores Associados:</h3>
+<ul>
+    {% for professor in professores %}
+    <li>{{ professor.username }}</li>
+    {% empty %}
+    <li>Nenhum professor associado.</li>
+    {% endfor %}
+</ul>
+
+<a href="{% url 'disciplinas' %}">Voltar para Minhas Disciplinas</a><br>
+<a href="{% url 'lista_topicos' disciplina.id %}">Fórum da Disciplina</a>
 
 {% endblock %}

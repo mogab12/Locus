@@ -34,11 +34,12 @@
         <li>Nenhuma disciplina encontrada.</li>
         {% endfor %}
     </ul>
-
-    <form method="post" class="import-form">
-        {% csrf_token %}
-        <button type="submit" name="importar_obrigatorias">Importar Disciplinas Obrigatórias</button>
-    </form>
+    {% if user.user_type != 'professor' %}
+        <form method="post" class="import-form">
+            {% csrf_token %}
+            <button type="submit" name="importar_obrigatorias">Importar Disciplinas Obrigatórias</button>
+        </form>
+    {% endif %}
 
     <a href="{% url 'disciplinas' %}">Voltar para Minhas Disciplinas</a>
 

@@ -1,10 +1,9 @@
-<!-- lista_topicos.html -->
 {% extends 'core/base.html' %}
 
 {% block title %}Tópicos de {{ disciplina.nome }}{% endblock %}
 
 {% block content %}
-<h1>Fórum de {{ disciplina.nome }}</h1>
+<h1>Tópicos de {{ disciplina.nome }}</h1>
 
 <ul>
   {% for topico in topicos %}
@@ -16,7 +15,9 @@
   {% endfor %}
 </ul>
 
-<a href="{% url 'novo_topico' disciplina.id %}">Criar Novo Tópico</a>
-<a href="{% url 'detalhe_disciplina' disciplina.id %}">Voltar para Detalhes da Disciplina</a>
+{% if request.user.user_type == 'representante' or request.user.user_type == 'professor' %}
+    <a href="{% url 'novo_topico' disciplina.id %}">Criar Novo Tópico</a>
+{% endif %}
 
+<a href="{% url 'detalhe_disciplina' disciplina.id %}">Voltar para Detalhes da Disciplina</a>
 {% endblock %}

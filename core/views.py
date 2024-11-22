@@ -1,12 +1,15 @@
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, get_user_model
 from django.db.models import Q
 from django.contrib import messages
 from .forms import CustomUserCreationForm, UserProfileForm, NovoTopicoForm, NovaPostagemForm
 from django.http import HttpResponseForbidden
 from .models import Disciplina, UserDiscipline, Topico
+from django.core.exceptions import PermissionDenied
+from django.contrib.auth.models import User
+
 
 
 
@@ -67,19 +70,15 @@ def home(request):
 
 @login_required
 def disciplinas(request):
-    if request.user.user_type not in ['aluno', 'representante']:
-        return HttpResponseForbidden("Você não tem permissão para acessar esta página.")
+    if request.user.user_type not in ['aluno', 'representante', 'professor']:
+        raise PermissionDenied
 
     user_disciplines = UserDiscipline.objects.filter(user=request.user).select_related('disciplina')
-    return render(request, 'core/disciplinas.html', {
-        'user_disciplines': user_disciplines,
-    })
-
+    return render(request, 'core/disciplinas.html', {'user_disciplines': user_disciplines})
 @login_required
 def remover_disciplinas(request):
-    if request.user.user_type not in ['aluno', 'representante']:
-        return HttpResponseForbidden("Você não tem permissão para acessar esta página.")
-
+    if request.user.user_type not in ['aluno', 'representante', 'professor']:
+        raise PermissionDenied
     user_disciplines = UserDiscipline.objects.filter(user=request.user).select_related('disciplina')
 
     if request.method == 'POST':
@@ -98,9 +97,8 @@ def remover_disciplinas(request):
 
 @login_required
 def adicionar_disciplinas(request):
-    if request.user.user_type not in ['aluno', 'representante']:
-        return HttpResponseForbidden("Você não tem permissão para acessar esta página.")
-
+    if request.user.user_type not in ['aluno', 'representante', 'professor']:
+        raise PermissionDenied
     search_results = []
     query = request.GET.get('q', '')
 
@@ -138,10 +136,19 @@ def adicionar_disciplinas(request):
         'query': query,
     })
 
+User = get_user_model()
+
 @login_required
 def detalhe_disciplina(request, disciplina_id):
     disciplina = get_object_or_404(Disciplina, id=disciplina_id)
-    return render(request, 'core/detalhe_disciplina.html', {'disciplina': disciplina})
+
+    # Filtrar apenas os professores que têm a disciplina associada
+    professores = User.objects.filter(
+        user_type='professor',
+        userdiscipline__disciplina=disciplina
+    )
+
+    return render(request, 'core/detalhe_disciplina.html', {'disciplina': disciplina, 'professores': professores})
 
 @login_required
 def lista_topicos(request, disciplina_id):
@@ -163,9 +170,15 @@ def detalhe_topico(request, topico_id):
     else:
         form = NovaPostagemForm()
     return render(request, 'core/detalhe_topico.html', {'topico': topico, 'form': form})
+
 @login_required
 def novo_topico(request, disciplina_id):
+    # Verificar se o usuário é um representante ou professor
+    if request.user.user_type not in ['representante', 'professor']:
+        return HttpResponseForbidden("Você não tem permissão para criar um tópico.")
+
     disciplina = get_object_or_404(Disciplina, id=disciplina_id)
+    
     if request.method == 'POST':
         form = NovoTopicoForm(request.POST)
         if form.is_valid():
@@ -176,8 +189,8 @@ def novo_topico(request, disciplina_id):
             return redirect('lista_topicos', disciplina_id=disciplina.id)
     else:
         form = NovoTopicoForm()
+    
     return render(request, 'core/novo_topico.html', {'disciplina': disciplina, 'form': form})
-
 @login_required
 def eventos(request):
     return render(request, 'core/eventos.html')

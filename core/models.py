@@ -2,6 +2,7 @@ from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.core.validators import EmailValidator
 from django.contrib.auth import get_user_model
+from django.conf import settings
 
 class CustomEmailValidator(EmailValidator):
     def validate_domain_part(self, domain_part):
@@ -30,23 +31,29 @@ class CustomUser(AbstractUser):
 
 class Disciplina(models.Model):
     nome = models.CharField(max_length=255)
-    codigo = models.CharField(max_length=50)
-    semestre = models.CharField(max_length=50)
+    codigo = models.CharField(max_length=10)
     curso = models.CharField(max_length=255)
+    semestre = models.CharField(max_length=10)
     tipo = models.CharField(max_length=50)
+    professor_responsavel = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        limit_choices_to={'user_type': 'professor'}
+    )
 
     def __str__(self):
-        return f"{self.nome} ({self.codigo})"
-    
+        return self.nome
+
 User = get_user_model()
 
 class UserDiscipline(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_disciplines')
-    disciplina = models.ForeignKey(Disciplina, on_delete=models.CASCADE)
-    added_at = models.DateTimeField(auto_now_add=True)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    disciplina = models.ForeignKey('Disciplina', on_delete=models.CASCADE)
 
-    class Meta:
-        unique_together = ('user', 'disciplina')
+    def __str__(self):
+        return f"{self.user.username} - {self.disciplina.nome}"
 
 class Topico(models.Model):
     titulo = models.CharField(max_length=255)
