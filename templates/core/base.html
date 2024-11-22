@@ -17,7 +17,7 @@
                 {% if user.foto %}
                     <img src="{{ user.foto.url }}" alt="Profile Picture" class="profile-pic">
                 {% else %}
-                    <img src="media/defaultphoto.jpg" alt="Default Profile Picture" class="profile-pic">
+                    <img src="{% static 'defaultphoto.jpg' %}" alt="Default Profile Picture" class="profile-pic">
                 {% endif %}
                 <h3>{{ user.first_name }} {{ user.last_name }}</h3>
                 <p>{{ user.curso }}</p>
@@ -66,7 +66,7 @@
                 {% if user.foto %}
                     <img src="{{ user.foto.url }}" alt="{{ user.get_full_name }}" class="img-fluid rounded-circle">
                 {% else %}
-                    <img src="media/defaultphoto.jpg" alt="Foto de perfil padrão" class="img-fluid rounded-circle" style="width: 80px; height: 80px; object-fit: cover;">
+                    <img src="{% static 'defaultphoto.jpg' %}" alt="Foto de perfil padrão" class="img-fluid rounded-circle" style="width: 80px; height: 80px; object-fit: cover;">
                 {% endif %}
                 <h3>{{ user.get_full_name }}</h3>
                 <p>{{ user.get_user_type_display }}</p>

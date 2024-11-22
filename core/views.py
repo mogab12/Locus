@@ -4,13 +4,19 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
 from .forms import CustomUserCreationForm, UserProfileForm
 
+
 @login_required
 def edit_profile(request):
     if request.method == 'POST':
         form = UserProfileForm(request.POST, request.FILES, instance=request.user)
         if form.is_valid():
+            if request.POST.get('clear_foto'):
+                if request.user.foto:  
+                    request.user.foto.delete(save=False)
+                request.user.foto = None
             form.save()
             return redirect('profile')
+        
     else:
         form = UserProfileForm(instance=request.user)
     
