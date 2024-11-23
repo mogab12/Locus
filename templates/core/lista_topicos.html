@@ -3,27 +3,69 @@
 {% block title %}Tópicos de {{ disciplina.nome }}{% endblock %}
 
 {% block content %}
-<h1>Tópicos de {{ disciplina.nome }}</h1>
+{% block body %}
+<style>
+body {
+    background-color: white;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    overflow-x: hidden; 
+}
 
-<ul>
-  {% for topico in topicos %}
-  <li>
-    <a href="{% url 'detalhe_topico' topico.id %}">{{ topico.titulo }}</a> - Criado por {{ topico.criado_por.username }}
-    <a href="{% url 'view_profile' topico.criado_por.id %}" class="btn btn-secondary">Ver Perfil</a>
-    
+html, body {
+    width: 100%; 
+}
+</style>
+{% endblock %}
+<div class="disciplinas-add-container">
+    <!-- Título -->
+    <div class="header-container">
+        <h1>Tópicos de {{ disciplina.nome }}</h1>
+        <div class="actions">
+            <a href="{% url 'detalhe_disciplina' disciplina.id %}" class="icon-btn">
+                <i class="fa fa-arrow-left"></i>
+            </a>
+        </div>
+    </div>
+    <hr>
+
+    <!-- Lista de tópicos -->
+    <ul class="disciplinas-add-list">
+        {% for topico in topicos %}
+        <li class="disciplina-add-item">
+            <label class="topico-titulo">
+                <a href="{% url 'detalhe_topico' topico.id %}" class="disciplina-nome">{{ topico.titulo }}</a>
+            </label>
+            <label class="disciplina-codigo" style="font-weight: normal; font-size: min(12px,3vw); color: #666;">
+                Criado por: {{ topico.criado_por.username }}
+            </label>
+            <div class="topico-actions">
+                <a href="{% url 'view_profile' topico.criado_por.id %}" class="icon-btn" title="Ver Perfil">
+                    <i class="fa fa-user"></i>
+                </a>
+                {% if request.user.user_type == 'representante' or request.user.user_type == 'professor' %}
+                <a href="{% url 'editar_topico' topico.id %}" class="icon-btn" title="Editar Tópico">
+                    <i class="fa fa-edit"></i>
+                </a>
+                {% endif %}
+            </div>
+          
+        </li>
+        {% empty %}
+        <li class="empty-result" style="font-size: min(15px,4vw); color: #8c8c8c;">
+            Não há tópicos para esta disciplina ainda.
+        </li>
+        {% endfor %}
+    </ul>
+
     {% if request.user.user_type == 'representante' or request.user.user_type == 'professor' %}
-        <a href="{% url 'editar_topico' topico.id %}">Editar</a>
+    <div class="import-disciplinas-container">
+        <a href="{% url 'novo_topico' disciplina.id %}" class="import-btn">
+            <i class="fa fa-plus"></i>
+            <span>Criar Novo Tópico</span>
+        </a>
+    </div>
     {% endif %}
-  </li>
-  {% empty %}
-  <li>Não há tópicos para esta disciplina ainda.</li>
-  {% endfor %}
-</ul>
-
-{% if request.user.user_type == 'representante' or request.user.user_type == 'professor' %}
-    <a href="{% url 'novo_topico' disciplina.id %}">Criar Novo Tópico</a>
-{% endif %}
-
-<a href="{% url 'detalhe_disciplina' disciplina.id %}">Voltar para Detalhes da Disciplina</a>
-
+</div>
 {% endblock %}

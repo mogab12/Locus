@@ -3,47 +3,90 @@
 {% block title %}Remover Disciplinas - Localizador de Salas{% endblock %}
 
 {% block content %}
-    <h1>Remover Disciplinas</h1>
+{% block body %}
+<style>
+body {
+    background-color: white;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    overflow-x: hidden; 
+}
 
+html, body {
+    width: 100%; 
+}
+</style>
+{% endblock %}
+<div class="disciplinas-add-container">
+    <!-- Título e Botão de Voltar -->
+    <div class="header-container">
+        <h1>Remover Disciplinas</h1>
+        <div class="actions">
+            <a href="{% url 'disciplinas' %}" class="icon-btn">
+                <i class="fa fa-arrow-left"></i>
+            </a>
+        </div>
+    </div>
+    <hr>
+
+    <!-- Exibe mensagens, se existirem -->
     {% if messages %}
-        <ul class="messages">
-            {% for message in messages %}
-                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-            {% endfor %}
-        </ul>
+    <div class="toast-container">
+        {% for message in messages %}
+        <div class="toast {% if message.tags %}{{ message.tags }}{% endif %}">
+            {{ message }}
+        </div>
+        {% endfor %}
+    </div>
     {% endif %}
 
-    <ul>
+    <!-- Lista de disciplinas para remoção -->
+
+    <ul class="disciplinas-add-list">
         {% for user_discipline in user_disciplines %}
-        <li>
-            {{ user_discipline.disciplina.nome }} ({{ user_discipline.disciplina.codigo }})
-            <form method="post" style="display:inline;">
+        <li class="disciplina-add-item">
+            <label>{{ user_discipline.disciplina.nome }}</label>
+            <label class="disciplina-codigo" style="font-weight: normal; font-size: min(12px,3vw); color: #666;">
+                Código da disciplina: {{ user_discipline.disciplina.codigo }}
+            </label>
+            <form method="post" class="add-form">
                 {% csrf_token %}
                 <input type="hidden" name="disciplina_id" value="{{ user_discipline.disciplina.id }}">
-                <button type="submit" name="remove">Remover</button>
+                <button type="submit" name="remove" class="add-btn">
+                    <i class="fa fa-minus"></i> <!-- Ícone de "-" para remover -->
+                </button>
             </form>
         </li>
         {% empty %}
-        <li>Você não adicionou nenhuma disciplina ainda.</li>
+        <ul class="disciplinas-add-list">
+            <li class="empty-result" style="font-size: min(15px,4vw); color: #8c8c8c;">
+                Você não adicionou nenhuma disciplina ainda.
+            </li>
+        </ul>
         {% endfor %}
     </ul>
 
+    <!-- Botão para remover todas as disciplinas -->
     {% if user_disciplines %}
-    <button onclick="confirmRemoveAll()">Remover Todas as Disciplinas</button>
-    <form id="remove-all-form" method="post" style="display:none;">
-        {% csrf_token %}
-        <input type="hidden" name="remover_todas">
-    </form>
+    <div class="import-disciplinas-container">
+        <button onclick="confirmRemoveAll()" class="import-btn">
+            <i class="fa fa-trash"></i>
+            <span>Remover Todas as Disciplinas</span>
+        </button>
+        <form id="remove-all-form" method="post" style="display:none;">
+            {% csrf_token %}
+            <input type="hidden" name="remover_todas">
+        </form>
+    </div>
     {% endif %}
+</div>
 
-    <a href="{% url 'disciplinas' %}">Voltar para Minhas Disciplinas</a>
-
-    <script>
-        function confirmRemoveAll() {
-            if (confirm("Tem certeza que deseja remover todas as disciplinas?")) {
-                document.getElementById('remove-all-form').submit();
-            }
+<script>
+    function confirmRemoveAll() {
+        if (confirm("Tem certeza que deseja remover todas as disciplinas?")) {
+            document.getElementById('remove-all-form').submit();
         }
-    </script>
-
+    }
+</script>
 {% endblock %}

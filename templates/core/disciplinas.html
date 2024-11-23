@@ -3,29 +3,59 @@
 {% block title %}Minhas Disciplinas - Localizador de Salas{% endblock %}
 
 {% block content %}
-    <h1>Minhas Disciplinas</h1>
+{% block body %}
+<style>
+body {
+    background-color: white;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    overflow-x: hidden; 
+}
 
-    {% if messages %}
-        <ul class="messages">
-            {% for message in messages %}
-                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-            {% endfor %}
-        </ul>
-    {% endif %}
-
-    <ul>
-        {% for user_discipline in user_disciplines %}
-        <li>
-            <a href="{% url 'detalhe_disciplina' user_discipline.disciplina.id %}">
-                <button>{{ user_discipline.disciplina.nome }} ({{ user_discipline.disciplina.codigo }})</button>
+html, body {
+    width: 100%; 
+}
+</style>
+{% endblock %}
+<div class="disciplinas-container">
+    <!-- Título -->
+    <div class="header-container">
+        <h1>Minhas Disciplinas</h1>
+        <div class="actions">
+            <a href="{% url 'adicionar_disciplinas' %}" class="icon-btn">
+                <i class="fas fa-plus-circle"></i>
             </a>
+            <a href="{% url 'remover_disciplinas' %}" class="icon-btn">
+                <i class="fas fa-trash-alt"></i>
+            </a>
+        </div>
+    </div>
+    <hr>
+
+
+    <!-- Lista de disciplinas -->
+    <ul class="disciplinas-list">
+        {% for user_discipline in user_disciplines %}
+        <li class="disciplina-item">
+            <a href="{% url 'detalhe_disciplina' user_discipline.disciplina.id %}" class="disciplina-nome">
+                {{ user_discipline.disciplina.nome }}
+            </a>
+            <a href="{% url 'detalhe_disciplina' user_discipline.disciplina.id %}" class="disciplina-codigo" style="font-weight: normal; font-size: min(12px,3vw); color: #666;"> 
+                Código da disciplina: {{ user_discipline.disciplina.codigo }}
+            </a>
+            
         </li>
         {% empty %}
-        <li>Você não adicionou nenhuma disciplina ainda.</li>
+        <li class="empty-list" style="font-size: min(15px,4vw); color: #8c8c8c;">Você não adicionou nenhuma disciplina ainda.</li>
         {% endfor %}
     </ul>
+    <!--     
+    <div class="actions">
+        <a href="{% url 'adicionar_disciplinas' %}" class="action-btn">Adicionar Disciplinas</a>
+        <a href="{% url 'remover_disciplinas' %}" class="action-btn">Remover Disciplinas</a>
+    </div>
+    -->
 
-    <a href="{% url 'adicionar_disciplinas' %}">Adicionar Disciplinas</a><br>
-    <a href="{% url 'remover_disciplinas' %}">Remover Disciplinas</a>
-
+</div>
 {% endblock %}

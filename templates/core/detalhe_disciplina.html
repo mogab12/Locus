@@ -3,27 +3,69 @@
 {% block title %}Detalhes da Disciplina - {{ disciplina.nome }}{% endblock %}
 
 {% block content %}
-<h1>Detalhes da Disciplina</h1>
+{% load static %}
+{% block body %}
+<style>
+body {
+    background-color: white;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    overflow-x: hidden; 
+}
 
-<p><strong>Nome:</strong> {{ disciplina.nome }}</p>
-<p><strong>Código:</strong> {{ disciplina.codigo }}</p>
-<p><strong>Curso:</strong> {{ disciplina.curso }}</p>
-<p><strong>Semestre:</strong> {{ disciplina.semestre }}</p>
-<p><strong>Tipo:</strong> {{ disciplina.tipo }}</p>
+html, body {
+    width: 100%; 
+}
+</style>
+{% endblock %}
+<div class="disciplinas-add-container">
+    <!-- Título e Botão de Voltar -->
+    <div class="header-container">
+        <h1>Detalhes da Disciplina</h1>
+        <div class="actions">
+            <a href="{% url 'disciplinas' %}" class="icon-btn">
+                <i class="fa fa-arrow-left"></i>
+            </a>
+        </div>
+    </div>
+    <hr>
 
-<h3>Professores Associados:</h3>
-<ul>
-    {% for professor in professores %}
-    <li>
-        {{ professor.username }}
-        <a href="{% url 'view_profile' professor.id %}" class="btn btn-secondary">Ver Perfil</a>
-    </li>
-    {% empty %}
-    <li>Nenhum professor associado.</li>
-    {% endfor %}
-</ul>
+    <!-- Informações da Disciplina -->
+    <div class="disciplina-info">
+        <p><strong>Nome:</strong> {{ disciplina.nome }}</p>
+        <p><strong>Código:</strong> {{ disciplina.codigo }}</p>
+        <p><strong>Curso:</strong> {{ disciplina.curso }}</p>
+        <p><strong>Semestre:</strong> {{ disciplina.semestre }}</p>
+        <p><strong>Tipo:</strong> {{ disciplina.tipo }}</p>
+    </div>
 
-<a href="{% url 'disciplinas' %}">Voltar para Minhas Disciplinas</a><br>
-<a href="{% url 'lista_topicos' disciplina.id %}">Fórum da Disciplina</a>
+    <!-- Professores Associados -->
+    <div class="professores-container">
+        <h3>Professores Associados:</h3>
+        <ul class="disciplinas-add-list">
+            {% for professor in professores %}
+            <li class="disciplina-detail-item">
 
+                <span>{{ professor.username }}</span>
+                <a href="{% url 'view_profile' professor.id %}" class="btn btn-secondary">
+                    Ver Perfil
+                </a>
+            </li>
+            {% empty %}
+            <li class="empty-result" style="font-size: min(15px,4vw); color: #8c8c8c;">
+                Nenhum professor associado.
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <!-- Links adicionais -->
+    <div class="import-disciplinas-container">
+        <a href="{% url 'lista_topicos' disciplina.id %}" class="import-btn">
+            <i class="fa fa-comments"></i>
+            <span>Fórum da Disciplina</span>
+        </a>
+    </div>
+</div>
 {% endblock %}
