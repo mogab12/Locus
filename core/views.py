@@ -6,10 +6,10 @@ from django.db.models import Q
 from django.contrib import messages
 from .forms import CustomUserCreationForm, UserProfileForm, NovoTopicoForm, NovaPostagemForm
 from django.http import HttpResponseForbidden
-from .models import Disciplina, UserDiscipline, Topico, Postagem, CustomUser, Evento
+from .models import Disciplina, UserDiscipline, Topico, Postagem, CustomUser, Evento, Notificacao
 from django.core.exceptions import PermissionDenied
 from django.contrib.auth.models import User
-from .forms import TopicoForm, EventoForm
+from .forms import TopicoForm, EventoForm, NotificationForm
 
 
 
@@ -363,3 +363,105 @@ def toggle_interesse(request, evento_id):
     else:
         request.user.eventos_interesse.add(evento)
     return redirect('detalhe_evento', evento_id=evento.id)
+
+
+@login_required
+def notificacoes(request):
+    usuario = request.user
+    
+    # Inicialize o QuerySet de notificações vazio
+    notificacoes = Notificacao.objects.none()
+
+    if usuario.user_type in ['aluno', 'representante', 'professor']:
+        # Para alunos, representantes e professores, filtrar notificações de disciplinas que possuem
+        disciplinas_usuario = Disciplina.objects.filter(userdiscipline__user=usuario)
+        notificacoes_disciplina = Notificacao.objects.filter(disciplina__in=disciplinas_usuario)
+
+        # Adicione notificações de eventos de interesse
+        eventos_interessados = Evento.objects.filter(interessados=usuario)
+        notificacoes_eventos_interessados = Notificacao.objects.filter(evento__in=eventos_interessados)
+
+        # Combine notificações de disciplinas e eventos de interesse
+        notificacoes = notificacoes_disciplina | notificacoes_eventos_interessados
+
+    if usuario.user_type == 'entidade':
+        # Para entidades, incluir notificações de eventos que criaram ou estão interessados
+        eventos_usuario = Evento.objects.filter(criado_por=usuario)
+        eventos_interessados = Evento.objects.filter(interessados=usuario)
+        notificacoes_evento = Notificacao.objects.filter(evento__in=eventos_usuario | eventos_interessados)
+
+        # Combine notificações dos eventos organizados e interessados
+        notificacoes = notificacoes_evento
+
+    # Adicione notificações criadas pelo próprio usuário
+    notificacoes_criadas = Notificacao.objects.filter(criador=usuario)
+    notificacoes = (notificacoes | notificacoes_criadas).distinct()
+
+    # Verifica se o usuário pode criar notificações
+    pode_criar = usuario.user_type in ['professor', 'representante', 'entidade']
+
+    context = {
+        'notificacoes': notificacoes,
+        'pode_criar': pode_criar,
+    }
+    return render(request, 'core/notificacoes.html', context)
+
+@login_required
+@login_required
+def criar_notificacao(request):
+    if request.user.user_type not in ['professor', 'representante', 'entidade']:
+        return redirect('notificacoes')
+
+    if request.method == 'POST':
+        form = NotificationForm(request.POST, user=request.user)
+        if form.is_valid():
+            notificacao = form.save(commit=False)
+            notificacao.criador = request.user
+
+            # Salve só uma associação
+            if request.user.user_type in ['professor', 'representante']:
+                notificacao.evento = None  # Certifique-se de que evento está nulo
+            elif request.user.user_type == 'entidade':
+                notificacao.disciplina = None  # Certifique-se de que disciplina está nula
+
+            notificacao.save()
+            return redirect('notificacoes')
+    else:
+        form = NotificationForm(user=request.user)
+
+    return render(request, 'core/criar_notificacao.html', {'form': form})
+
+@login_required
+def minhas_notificacoes(request):
+    # Notificações criadas pelo usuário
+    notificacoes = Notificacao.objects.filter(criador=request.user)
+    return render(request, 'core/minhas_notificacoes.html', {'notificacoes': notificacoes})
+
+@login_required
+def editar_notificacao(request, notificacao_id):
+    notificacao = get_object_or_404(Notificacao, id=notificacao_id, criador=request.user)
+    
+    if request.method == 'POST':
+        form = NotificationForm(request.POST, instance=notificacao, user=request.user)
+        if form.is_valid():
+            form.save()
+            return redirect('minhas_notificacoes')
+    else:
+        form = NotificationForm(instance=notificacao, user=request.user)
+
+    return render(request, 'core/editar_notificacao.html', {'form': form})
+
+@login_required
+def remover_notificacao(request, notificacao_id):
+    notificacao = get_object_or_404(Notificacao, id=notificacao_id, criador=request.user)
+    notificacao.delete()
+    return redirect('minhas_notificacoes')
+
+@login_required
+def excluir_notificacao_recebida(request, notificacao_id):
+    notificacao = get_object_or_404(Notificacao, id=notificacao_id)
+    
+    # Adiciona o usuário à lista de usuários que excluíram a notificação
+    notificacao.excluidas_por.add(request.user)
+    
+    return redirect('notificacoes')

@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
-from .models import CustomUser, CustomEmailValidator, Topico, Postagem, Evento
+from .models import CustomUser, CustomEmailValidator, Topico, Postagem, Evento, Disciplina, Notificacao
 import sqlite3
 
 class NovoTopicoForm(forms.ModelForm):
@@ -127,3 +127,23 @@ class EventoForm(forms.ModelForm):
             'data_inicio': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
             'data_fim': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
         }
+
+class NotificationForm(forms.ModelForm):
+    class Meta:
+        model = Notificacao
+        fields = ['titulo', 'mensagem', 'disciplina', 'evento']
+
+    def __init__(self, *args, **kwargs):
+        user = kwargs.pop('user', None)
+        super().__init__(*args, **kwargs)
+        
+        # Restringir escolhas com base no tipo de usuário
+        if user:
+            if user.user_type in ['professor', 'representante']:
+                # Filtra disciplinas do professor ou representante
+                self.fields['disciplina'].queryset = Disciplina.objects.filter(userdiscipline__user=user)
+                self.fields['evento'].queryset = Evento.objects.none()
+            elif user.user_type == 'entidade':
+                # Filtra eventos criados ou geridos pela entidade
+                self.fields['evento'].queryset = Evento.objects.filter(criado_por=user)
+                self.fields['disciplina'].queryset = Disciplina.objects.none()

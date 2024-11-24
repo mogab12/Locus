@@ -1,13 +1,12 @@
 {% extends 'core/base.html' %}
 
-{% block title %}Notificações{% endblock %}
+{% block title %}Minhas Notificações{% endblock %}
 
 {% block content %}
-<h1>Notificações</h1>
+<h1>Minhas Notificações</h1>
 
 <ul class="list-group mb-4">
     {% for notificacao in notificacoes %}
-    {% if user not in notificacao.excluidas_por.all %}
     <li class="list-group-item">
         <h5>{{ notificacao.titulo }}</h5>
         <p>{{ notificacao.mensagem }}</p>
@@ -22,18 +21,12 @@
             <a href="{% url 'detalhe_evento' notificacao.evento.id %}" class="btn btn-link">Ver Evento</a>
         {% endif %}
         
-        <small>Enviado por: {{ notificacao.criador.get_full_name }} em {{ notificacao.criado_em|date:"d/m/Y H:i" }}</small>
-        
-        <a href="{% url 'excluir_notificacao_recebida' notificacao.id %}" class="btn btn-danger">Excluir</a>
+        <a href="{% url 'editar_notificacao' notificacao.id %}" class="btn btn-warning">Editar</a>
+        <a href="{% url 'remover_notificacao' notificacao.id %}" class="btn btn-danger">Remover</a>
     </li>
-    {% endif %}
     {% empty %}
-    <li class="list-group-item">Nenhuma notificação disponível.</li>
+    <li class="list-group-item">Você não criou nenhuma notificação ainda.</li>
     {% endfor %}
 </ul>
 
-{% if pode_criar %}
-    <a href="{% url 'criar_notificacao' %}" class="btn btn-primary">Criar Notificação</a>
-    <a href="{% url 'minhas_notificacoes' %}" class="btn btn-secondary">Minhas Notificações</a>
-{% endif %}
 {% endblock %}
