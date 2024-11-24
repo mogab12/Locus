@@ -276,21 +276,31 @@ def view_profile(request, user_id):
 
 @login_required
 def lista_eventos(request):
-    # Obtém os eventos de interesse do usuário, se autenticado
+    query = request.GET.get('q', '').strip()  # Garante que query seja uma string vazia se não houver valor
+
+    eventos_interesse = Evento.objects.none()
+    todos_eventos = Evento.objects.all()
+
     if request.user.is_authenticated:
         eventos_interesse = request.user.eventos_interesse.all()
-        # Exclui eventos de interesse da lista de todos os eventos
-        todos_eventos = Evento.objects.exclude(id__in=eventos_interesse.values_list('id', flat=True))
-    else:
-        eventos_interesse = Evento.objects.none()
-        todos_eventos = Evento.objects.all()
+        todos_eventos = todos_eventos.exclude(id__in=eventos_interesse.values_list('id', flat=True))
+
+    if query:
+        # Filtra eventos pelo nome do evento ou pelo nome completo do organizador
+        eventos_interesse = eventos_interesse.filter(
+            Q(nome__icontains=query) | Q(criado_por__first_name__icontains=query) | Q(criado_por__last_name__icontains=query)
+        )
+        todos_eventos = todos_eventos.filter(
+            Q(nome__icontains=query) | Q(criado_por__first_name__icontains=query) | Q(criado_por__last_name__icontains=query)
+        )
 
     context = {
         'todos_eventos': todos_eventos,
         'eventos_interesse': eventos_interesse,
+        'query': query,  # Passa a consulta de pesquisa de volta ao contexto
     }
     return render(request, 'core/lista_eventos.html', context)
-    
+
 @login_required
 def criar_evento(request):
     if request.user.user_type != 'entidade':
