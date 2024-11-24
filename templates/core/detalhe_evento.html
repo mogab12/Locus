@@ -1,0 +1,43 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Detalhes do Evento - {{ evento.nome }}{% endblock %}
+
+{% block content %}
+<h1>{{ evento.nome }}</h1>
+<p><strong>Descrição:</strong> {{ evento.descricao }}</p>
+<p><strong>Data de Início:</strong> {{ evento.data_inicio }}</p>
+<p><strong>Data de Fim:</strong> {{ evento.data_fim }}</p>
+<p><strong>Local:</strong> {{ evento.local }}</p>
+<p><strong>Organizado por:</strong> 
+    <a href="{% url 'view_profile' evento.criado_por.id %}" class="btn btn-link">
+        {{ evento.criado_por.get_full_name }}
+    </a>
+</p>
+<style>
+    .link-button {
+        color: black;  /* Define a cor do texto como preto */
+        text-decoration: none; /* Remove a decoração padrão dos links */
+    }
+
+    .link-button:hover {
+        text-decoration: underline; /* Adiciona sublinhado ao passar o mouse */
+    }
+
+    .link-button:visited {
+        color: black; /* Mantém a cor preta mesmo após visitar o link */
+    }
+
+    .link-button:active {
+        color: black; /* Mantém a cor preta enquanto o link está ativo */
+    }
+</style>
+
+{% if request.user == evento.criado_por %}
+    <a href="{% url 'editar_evento' evento.id %}" class="btn btn-warning link-button">Editar</a>
+    <form action="{% url 'deletar_evento' evento.id %}" method="post" style="display:inline;">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger link-button">Deletar</button>
+    </form>
+{% endif %}
+<a href="{% url 'lista_eventos' %}" class="btn btn-secondary link-button">Voltar para Lista de Eventos</a>
+{% endblock %}

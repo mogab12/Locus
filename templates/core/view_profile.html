@@ -53,19 +53,19 @@ html, body {
         </div>
     </div>
 
-    <!-- Disciplinas Associadas -->
+    <!-- Eventos Organizadore por Entidade -->
     <div class="professores-container">
-        <h3>Disciplinas</h3>
-        <ul class="disciplinas-add-list">
-            {% for disciplina in disciplinas %}
-            <li class="disciplina-detail-item">
-                <a href="{% url 'detalhe_disciplina' disciplina_id=disciplina.id %}" class="btn btn-link">
-                    {{ disciplina.nome }} - {{ disciplina.codigo }}
+        <h3>Eventos Organizados</h3>
+        <ul class="eventos-add-list">
+            {% for evento in eventos %}
+            <li class="evento-detail-item">
+                <a href="{% url 'detalhe_evento' evento.id %}" class="btn btn-link">
+                    {{ evento.nome }} - {{ evento.data_inicio|date:'d/m/Y' }}
                 </a>
             </li>
             {% empty %}
             <li class="empty-result" style="font-size: min(15px,4vw); color: #8c8c8c;">
-                Sem disciplinas associadas.
+                Sem eventos organizados.
             </li>
             {% endfor %}
         </ul>

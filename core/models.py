@@ -68,3 +68,17 @@ class Postagem(models.Model):
     criado_por = models.ForeignKey(User, on_delete=models.CASCADE)
     data_criacao = models.DateTimeField(auto_now_add=True)
 
+class Evento(models.Model):
+    nome = models.CharField(max_length=255)
+    descricao = models.TextField()
+    data_inicio = models.DateTimeField()
+    data_fim = models.DateTimeField()
+    local = models.CharField(max_length=255)
+    criado_por = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        limit_choices_to={'user_type': 'entidade'}
+    )
+
+    def __str__(self):
+        return self.nome

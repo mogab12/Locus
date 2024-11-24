@@ -1,0 +1,14 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Editar Evento - {{ evento.nome }}{% endblock %}
+
+{% block content %}
+    <h1>Editar Evento: {{ evento.nome }}</h1>
+    
+    <form method="post" novalidate>
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary">Salvar Alterações</button>
+        <a href="{% url 'detalhe_evento' evento.id %}" class="btn btn-secondary">Cancelar</a>
+    </form>
+{% endblock %}

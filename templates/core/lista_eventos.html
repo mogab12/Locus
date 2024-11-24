@@ -1,0 +1,42 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Eventos Disponíveis{% endblock %}
+
+{% block content %}
+<h1>Eventos</h1>
+
+{% if request.user.user_type == 'entidade' %}
+    <a href="{% url 'criar_evento' %}" class="btn btn-primary mb-3">Criar Evento</a>
+{% endif %}
+
+<style>
+    .event-link {
+        color: black; /* Define a cor do texto como preto */
+        text-decoration: none; /* Remove a decoração padrão dos links */
+    }
+    
+    .event-link:hover {
+        text-decoration: underline; /* Adiciona sublinhado ao passar o mouse */
+    }
+    
+    .event-link:visited {
+        color: black; /* Mantém a cor preta mesmo após visitar o link */
+    }
+    
+    .event-link:active {
+        color: black; /* Mantém a cor preta enquanto o link está ativo */
+    }
+</style>
+
+<ul class="list-group">
+    {% for evento in eventos %}
+    <li class="list-group-item">
+        <a href="{% url 'detalhe_evento' evento.id %}" class="event-link">
+            <strong>{{ evento.nome }}</strong> - Organizado por: {{ evento.criado_por.get_full_name }}
+        </a>
+    </li>
+    {% empty %}
+    <li class="list-group-item">Nenhum evento disponível no momento.</li>
+    {% endfor %}
+</ul>
+{% endblock %}

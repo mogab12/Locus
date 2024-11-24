@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
-from .models import CustomUser, CustomEmailValidator, Topico, Postagem
+from .models import CustomUser, CustomEmailValidator, Topico, Postagem, Evento
 import sqlite3
 
 class NovoTopicoForm(forms.ModelForm):
@@ -115,3 +115,13 @@ class CustomUserCreationForm(UserCreationForm):
                 self.add_error('departamento', 'Este campo é obrigatório para professores.')
         
         return cleaned_data
+    
+
+class EventoForm(forms.ModelForm):
+    class Meta:
+        model = Evento
+        fields = ['nome', 'descricao', 'data_inicio', 'data_fim', 'local']
+        widgets = {
+            'data_inicio': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
+            'data_fim': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
+        }

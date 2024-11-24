@@ -6,10 +6,10 @@ from django.db.models import Q
 from django.contrib import messages
 from .forms import CustomUserCreationForm, UserProfileForm, NovoTopicoForm, NovaPostagemForm
 from django.http import HttpResponseForbidden
-from .models import Disciplina, UserDiscipline, Topico, Postagem, CustomUser
+from .models import Disciplina, UserDiscipline, Topico, Postagem, CustomUser, Evento
 from django.core.exceptions import PermissionDenied
 from django.contrib.auth.models import User
-from .forms import TopicoForm
+from .forms import TopicoForm, EventoForm
 
 
 
@@ -238,10 +238,6 @@ def remover_postagem(request, postagem_id):
     return render(request, 'core/remover_postagem_confirmacao.html', {'postagem': postagem, 'topico': topico})
 
 @login_required
-def eventos(request):
-    return render(request, 'core/eventos.html')
-
-@login_required
 def notificacoes(request):
     return render(request, 'core/notificacoes.html')
 
@@ -264,5 +260,73 @@ def view_profile(request, user_id):
         'profile_user': user,
         'disciplinas': disciplinas,
     }
+    if user.user_type == 'entidade':
+        # Obter eventos que a entidade está organizando
+        eventos = Evento.objects.filter(criado_por=user)
+    else:
+        eventos = []  # Manter a lista vazia para outros tipos de usuário
+
+    context = {
+        'profile_user': user,
+        'eventos': eventos,
+    }
     
     return render(request, 'core/view_profile.html', context)
+
+
+@login_required
+def lista_eventos(request):
+    eventos = Evento.objects.all()
+    return render(request, 'core/lista_eventos.html', {'eventos': eventos})
+
+@login_required
+def criar_evento(request):
+    if request.user.user_type != 'entidade':
+        return redirect('lista_eventos')  # Redireciona se o usuário não é uma entidade
+
+    if request.method == 'POST':
+        form = EventoForm(request.POST)
+        if form.is_valid():
+            evento = form.save(commit=False)
+            evento.criado_por = request.user
+            evento.save()
+            return redirect('lista_eventos')
+    else:
+        form = EventoForm()
+
+    return render(request, 'core/criar_evento.html', {'form': form})
+
+@login_required
+def detalhe_evento(request, evento_id):
+    evento = get_object_or_404(Evento, id=evento_id)
+    return render(request, 'core/detalhe_evento.html', {'evento': evento})
+
+@login_required
+def editar_evento(request, evento_id):
+    evento = get_object_or_404(Evento, id=evento_id)
+    
+    if request.user != evento.criado_por:
+        return redirect('lista_eventos')
+
+    if request.method == 'POST':
+        form = EventoForm(request.POST, instance=evento)
+        if form.is_valid():
+            form.save()
+            return redirect('detalhe_evento', evento_id=evento.id)
+    else:
+        form = EventoForm(instance=evento)
+
+    context = {
+        'form': form,
+        'evento': evento  # Passando a instância do evento para o template
+    }
+
+    return render(request, 'core/editar_evento.html', context)
+@login_required
+def deletar_evento(request, evento_id):
+    evento = get_object_or_404(Evento, id=evento_id)
+    
+    if request.user == evento.criado_por:
+        evento.delete()
+
+    return redirect('lista_eventos')
