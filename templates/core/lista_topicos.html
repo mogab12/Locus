@@ -35,22 +35,11 @@ html, body {
         {% for topico in topicos %}
         <li class="disciplina-add-item">
             <label class="topico-titulo">
-                <a href="{% url 'detalhe_topico' topico.id %}" class="disciplina-nome">{{ topico.titulo }}</a>
+                <a href="{% url 'detalhe_topico' topico.id %}" class="disciplina-nome" style="font-weight: bold; color: black; font-size:min(18px,3.5vw) ;">{{ topico.titulo }}</a>
             </label>
             <label class="disciplina-codigo" style="font-weight: normal; font-size: min(12px,3vw); color: #666;">
                 Criado por: {{ topico.criado_por.username }}
             </label>
-            <div class="topico-actions">
-                <a href="{% url 'view_profile' topico.criado_por.id %}" class="icon-btn" title="Ver Perfil">
-                    <i class="fa fa-user"></i>
-                </a>
-                {% if request.user.user_type == 'representante' or request.user.user_type == 'professor' %}
-                <a href="{% url 'editar_topico' topico.id %}" class="icon-btn" title="Editar Tópico">
-                    <i class="fa fa-edit"></i>
-                </a>
-                {% endif %}
-            </div>
-          
         </li>
         {% empty %}
         <li class="empty-result" style="font-size: min(15px,4vw); color: #8c8c8c;">

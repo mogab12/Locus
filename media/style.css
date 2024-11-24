@@ -514,23 +514,29 @@
         justify-content: space-between;
         align-items: center; 
     }
-    
     .actions {
+        display: flex; /* Define o layout flexível */
+        flex-direction: row; /* Alinha os itens na horizontal */
+        gap: min(10px, 2vw); /* Espaçamento entre os botões */
+        justify-content: center; /* Centraliza os botões horizontalmente */
+        align-items: center; /* Alinha verticalmente */
+    }
+    .actions .icon-btn {
         display: flex;
-        gap: min(5px,1vw); 
+        flex-direction: row;
+        justify-content: center;
+        background-color: #000;
+        color: #fff;
+        border: none;
+        border-radius: 50%;
+        width: min(40px, 8vw);
+        height: min(40px, 8vw);
+        font-size: min(18px, 4vw);
+        cursor: pointer;
+        text-decoration: none;
+        transition: background-color 0.3s ease;
     }
     
-    .icon-btn {
-        font-size: min(30px, 6vw); 
-        color: #333;
-        text-decoration: none;
-        cursor: pointer;
-        transition: color 0.3s ease;
-    }   
-
-
-
-
     .disciplinas-add-container {
         padding: min(6vw, 20px);
         font-family: Arial, sans-serif;
@@ -728,6 +734,8 @@
         text-decoration: none; /* Remove sublinhado no texto */
         transition: background-color 0.3s ease, transform 0.2s ease; /* Transições suaves */
     }
+
+    
     /* Estilo do ícone */
     .import-btn i {
         margin-right: min(10px, 2vw); /* Espaço entre o ícone e o texto */
@@ -784,4 +792,192 @@
         justify-content: center;
     }
 
+    .profile-header{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        line-height: 0;
+    }
+
+    .topico-info p,a{
+        font-size: min(12px);
+        color: grey;
+    }
+    .topico-info strong{
+        color: black;
+    }
+
+    .topico-detail-item {
+        display: flex;
+        align-items: center; /* Alinha o conteúdo ao topo */
+        background-color: #fff;
+        border: 1px solid #c3c3c3;
+        margin-bottom: min(10px, 6vw);
+        padding: min(15px, 6vw);
+        text-align: left;
+        width: 100%;
+        box-sizing: border-box;
+        position: relative;
+    }
+
+
+
+   /* Estilo da lista de postagens */
+    .topico-detail-item {
+        display: flex;
+        flex-direction: column;
+        justify-content: left;
+        background-color: #fff;
+        border: 1px solid #c3c3c3;
+        margin-bottom: min(10px, 6vw);
+        padding: min(15px, 6vw);
+        text-align: left;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    /* Estilo do conteúdo principal */
+    .postagem-conteudo {
+        display: flex;
+        flex-direction: column;
+        justify-content: left;
+        align-items: flex-start; /* Garante que tudo fique alinhado à esquerda */
+        padding: 0; /* Remove qualquer padding */
+        margin: 0; /* Remove margens adicionais */
+        width: 100%; /* Garante que ocupe toda a largura da div */
+        box-sizing: border-box; /* Garante que as dimensões sejam calculadas corretamente */
+    }
+
+    /* Estilo das informações de postagem */
+    .postagem-info {
+        display: flex;
+        justify-content: left;
+        align-items: center;
+        font-size: min(14px, 2vw); /* Fonte menor */
+        color: #333;
+        margin: 0;
+        gap: 2vw;
+    }
+
+    /* Botão de remover */
+    .remover-btn {
+        display: flex;
+        align-items: center;
+        gap: min(4px, 1vw);
+        font-size: min(14px, 2vw); 
+        text-decoration: none;
+    }
+
+    .remover-btn i {
+        font-size: min(14px,2vw); /* Ícone menor */
+    }
+
+    /* Container da entrada de texto */
+    .postagem-form {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        background-color: #f3f3f3;
+        border: 1px solid #c3c3c3;
+        border-radius: min(10px, 1.5vw);
+        padding: min(10px, 2vw);
+        margin-top: 20px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Caixa de entrada */
+    .postagem-form textarea {
+        flex: 1;
+        border: none;
+        resize: none; /* Remove a capacidade de redimensionar */
+        padding: min(10px, 2vw);
+        font-size: min(14px, 3vw);
+        outline: none;
+        background-color: transparent;
+        box-sizing: border-box;
+        color: #333;
+        height: min(40px, 8vw);
+    }
+
+    /* Botão de postagem */
+    .postagem-form button {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: #000;
+        color: #fff;
+        border: none;
+        border-radius: 50%;
+        width: min(40px, 8vw);
+        height: min(40px, 8vw);
+        font-size: min(16px, 4vw);
+        cursor: pointer;
+        margin-left: min(10px, 2vw);
+        transition: background-color 0.3s ease;
+    }
+
+    .postagem-form button:hover {
+        background-color: #333;
+    }
+
+    .import-disciplinas-container-topico {
+        text-align: center; /* Centraliza o conteúdo horizontalmente */
+        margin-top: min(20px, 6vw); /* Espaço acima do botão */
+        margin-bottom: min(5vw,20px);
+    }
+
+
+    /* Container do formulário */
+    .import-disciplinas-container-topico {
+        width: 100%;
+        margin: 0 auto;
+    }
+
+    /* Grupos de formulário */
+    .topico-form .form-group .form-group-title {
+        margin-bottom: min(20px,6vw);
+        display: flex;
+        flex-direction: column;
+        padding: 0;
+    }
+
+
+    .topico-form .form-group label,
+    .topico-form .form-group-title label {
+        font-size: min(16px, 4vw); /* Tamanho do texto proporcional */
+        font-weight: bold; /* Negrito para o rótulo */
+        margin-bottom: min(5px, 2vw); /* Espaço abaixo do rótulo */
+        text-align: left; /* Alinhado à esquerda */
+        display: block; /* Garantir que ocupe uma linha */
+}
+
+
+    /* Campos de entrada */
+    .topico-form .form-group input,
+    .topico-form .form-group textarea {
+        width: 100%;
+        padding: min(10px,3vw);
+        font-size: min(14px, 3.5vw);
+        border: 1px solid #ccc;
+        border-radius: min(5px,2vw);
+        box-sizing: border-box;
+        resize: none; /* Impede redimensionamento manual no textarea */
+        margin-bottom: min(3vw,10px);
+    }
+
+    .form-group-title input,
+    .form-group-title textarea{
+        width: 100%;
+        padding: min(10px,3vw);
+        font-size: min(14px, 3.5vw);
+        border: 1px solid #ccc;
+        border-radius: min(5px,2vw);
+        box-sizing: border-box;
+        height: min(50px,15vw);
+        resize: none; /* Impede redimensionamento manual no textarea */
+        margin-bottom: min(3vw,10px);
+    }
+    
 /*}*/

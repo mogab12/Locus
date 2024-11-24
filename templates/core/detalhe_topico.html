@@ -3,45 +3,92 @@
 {% block title %}Detalhes do Tópico - {{ topico.titulo }}{% endblock %}
 
 {% block content %}
-<h1>{{ topico.titulo }}</h1>
-<p><strong>Descrição:</strong> {{ topico.descricao }}</p>
-<p><strong>Criado por:</strong> {{ topico.criado_por.username }}
-    <a href="{% url 'view_profile' topico.criado_por.id %}" class="btn btn-secondary">Ver Perfil</a>
-</p>
-<p><strong>Data de Criação:</strong> {{ topico.data_criacao }}</p>
+{% block body %}
+<style>
+body {
+    background-color: white;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    overflow-x: hidden; 
+}
 
-{% if request.user.user_type == 'representante' or request.user.user_type == 'professor' %}
-    <a href="{% url 'editar_topico' topico.id %}">Editar Tópico</a>
-    <a href="{% url 'remover_topico' topico.id %}">Remover Tópico</a>
-{% endif %}
+html, body {
+    width: 100%; 
+}
+</style>
+{% endblock %}
+<div class="disciplinas-add-container">
+    <!-- Título e Botão de Voltar -->
+    <div class="header-container">
+        <h1>{{ topico.titulo }}</h1>
+        <div class="actions">
+            {% if request.user.user_type == 'representante' or request.user.user_type == 'professor' %}
 
-<h2>Postagens</h2>
-<ul>
-  {% for postagem in topico.postagens.all %}
-  <li>
-    <p>{{ postagem.conteudo }}</p>
-    <p><strong>Por:</strong> {{ postagem.criado_por.username }}
-        <a href="{% url 'view_profile' postagem.criado_por.id %}" class="btn btn-secondary">Ver Perfil</a>
-    </p>
-    <p><strong>Data de Criação:</strong> {{ postagem.data_criacao }}</p>
+                <a href="{% url 'editar_topico' topico.id %}" class="icon-btn">
+                    <i class="fas fa fa-edit"></i>
+                </a>
+                <a href="{% url 'remover_topico' topico.id %}" class="icon-btn">
+                    <i class="fas fa-trash-alt"></i>
+                </a>
+            {% endif %}
+            <a href="{% url 'lista_topicos' topico.disciplina.id %}" class="icon-btn">
+                <i class="fa fa-arrow-left"></i>
+            </a>
+        </div>
+    </div>
+    <hr>
 
-    {% if request.user.user_type == 'representante' or request.user.user_type == 'professor' %}
-        <a href="{% url 'remover_postagem' postagem.id %}">Remover Postagem</a>
+    <!-- Informações do Tópico -->
+    <div class="topico-info">
+        <p><strong>Descrição:</strong> {{ topico.descricao }}</p>
+        <p>
+            <a href="{% url 'view_profile' topico.criado_por.id %}">
+                <strong>Criado por:</strong> {{ topico.criado_por.username }}
+            </a>
+        </p>
+        <p><strong>Data de Criação:</strong> {{ topico.data_criacao }}</p>
+    </div>
+
+    <!-- Lista de Postagens -->
+    <div class="professores-container">
+        <h3 style="margin-bottom: 0;">Postagens:</h3>
+        <hr>
+        <ul class="disciplinas-add-list">
+            {% for postagem in topico.postagens.all %}
+            <li class="topico-detail-item">
+                <div class="postagem-conteudo">
+                    <p class="disciplina-nome" style="font-size: min(14px, 2vw); ">{{ postagem.conteudo }}</p>
+                    <div class="postagem-info">
+                        <span><strong>Por:</strong> <a href="{% url 'view_profile' topico.criado_por.id %}" style="font-size: min(14px, 2vw); color: black;">{{ postagem.criado_por.username }}</a></span>
+                        <span><strong>Data:</strong> {{ postagem.data_criacao }}</span>
+                        {% if request.user.user_type == 'representante' or request.user.user_type == 'professor' %}
+                        <a href="{% url 'remover_postagem' postagem.id %}" class="icon-btn remover-btn" style="color: red;">
+                            <i class="fa fa-trash"></i> Remover
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </li>
+            {% empty %}
+            <li class="empty-result" style="font-size: min(15px,4vw); color: #8c8c8c;">Não há postagens neste tópico ainda.</li>
+            {% endfor %}
+        </ul>
+    <hr>
+    </div>
+    
+    <!-- Adicionar Nova Postagem -->
+    {% if user.is_authenticated %}
+    <div class="import-disciplinas-container-topico">
+        <form method="post" class="postagem-form">
+            {% csrf_token %}
+            <textarea name="conteudo" placeholder="Escreva sua postagem..."></textarea>
+            <button type="submit">
+                <i class="fa fa-paper-plane"></i>
+            </button>
+        </form>
+    </div>
     {% endif %}
-  </li>
-  {% empty %}
-  <li>Não há postagens neste tópico ainda.</li>
-  {% endfor %}
-</ul>
-
-{% if user.is_authenticated %}
-    <h3>Adicionar nova postagem</h3>
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Postar</button>
-    </form>
-{% endif %}
-
-<a href="{% url 'lista_topicos' topico.disciplina.id %}">Voltar para Tópicos</a>
+    
+</div>
 {% endblock %}
