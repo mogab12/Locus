@@ -4,7 +4,6 @@
 {% block title %}Perfil de {{ profile_user.get_full_name }}{% endblock %}
 
 {% block content %}
-{% block body %}
 <style>
 body {
     background-color: white;
@@ -17,10 +16,26 @@ body {
 html, body {
     width: 100%; 
 }
+
+.private-profile {
+    text-align: center;
+    padding: 50px 0;
+    font-size: 1.5em;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 70vh; /* Altura total da viewport para centralizar verticalmente */
+}
+
+.private-profile i {
+    font-size: 5em;
+    color: #ccc;
+    margin-bottom: 20px;
+}
 </style>
-{% endblock %}
+
 <div class="disciplinas-add-container">
-    <!-- Cabeçalho do Perfil -->
     <div class="header-container">
         <h1>Perfil</h1>
         <div class="actions">
@@ -31,44 +46,51 @@ html, body {
     </div>
     <hr>
 
-    <!-- Informações do Perfil -->
-    <div class="disciplina-info">
-        <div class="profile-header">
-            {% if profile_user.foto %}
-                <img src="{{ profile_user.foto.url }}" alt="{{ profile_user.get_full_name }}" class="img-fluid rounded-circle" style="width: 20vw; max-width: 120px; max-height: 120px; height: 20vw; border-radius: 50%; margin-bottom: 0">
-            {% else %}
-                <img src="{% static 'defaultphoto.jpg' %}" alt="Foto de perfil padrão" class="img-fluid rounded-circle" style="width: 20vw; max-width: 120px; max-height: 120px; height: 20vw; border-radius: 50%; margin-bottom: 0">
-            {% endif %}
-            <p style="font-size: min(20px, 5vw); margin-bottom: 0;">{{ profile_user.get_full_name }}</p>
-            <p style="color: #8c8c8c;">{{ profile_user.get_user_type_display }}</p>
+    {% if is_private %}
+        <div class="private-profile">
+            <i class="fa fa-lock"></i>
+            <p>Este perfil é privado.</p>
         </div>
-        <hr>
-        <div class="profile-body">
-            {% if profile_user.user_type == 'aluno' or profile_user.user_type == 'representante' %}
-                <p>Curso: {{ profile_user.curso }}</p>
-                <p>Semestre: {{ profile_user.semestre }}</p>
-            {% elif profile_user.user_type == 'professor' %}
-                <p>Departamento: {{ profile_user.departamento }}</p>
-            {% endif %}
+    {% else %}
+        <!-- Informações do Perfil -->
+        <div class="disciplina-info">
+            <div class="profile-header">
+                {% if profile_user.foto %}
+                    <img src="{{ profile_user.foto.url }}" alt="{{ profile_user.get_full_name }}" class="img-fluid rounded-circle" style="width: 20vw; max-width: 120px; max-height: 120px; height: 20vw; border-radius: 50%; margin-bottom: 0">
+                {% else %}
+                    <img src="{% static 'defaultphoto.jpg' %}" alt="Foto de perfil padrão" class="img-fluid rounded-circle" style="width: 20vw; max-width: 120px; max-height: 120px; height: 20vw; border-radius: 50%; margin-bottom: 0">
+                {% endif %}
+                <p style="font-size: min(20px, 5vw); margin-bottom: 0;">{{ profile_user.get_full_name }}</p>
+                <p style="color: #8c8c8c;">{{ profile_user.get_user_type_display }}</p>
+            </div>
+            <hr>
+            <div class="profile-body">
+                {% if profile_user.user_type == 'aluno' or profile_user.user_type == 'representante' %}
+                    <p>Curso: {{ profile_user.curso }}</p>
+                    <p>Semestre: {{ profile_user.semestre }}</p>
+                {% elif profile_user.user_type == 'professor' %}
+                    <p>Departamento: {{ profile_user.departamento }}</p>
+                {% endif %}
+            </div>
         </div>
-    </div>
 
-    <!-- Eventos Organizadore por Entidade -->
-    <div class="professores-container">
-        <h3>Eventos Organizados</h3>
-        <ul class="eventos-add-list">
-            {% for evento in eventos %}
-            <li class="evento-detail-item">
-                <a href="{% url 'detalhe_evento' evento.id %}" class="btn btn-link">
-                    {{ evento.nome }} - {{ evento.data_inicio|date:'d/m/Y' }}
-                </a>
-            </li>
-            {% empty %}
-            <li class="empty-result" style="font-size: min(15px,4vw); color: #8c8c8c;">
-                Sem eventos organizados.
-            </li>
-            {% endfor %}
-        </ul>
-    </div>
+        <!-- Eventos Organizadore por Entidade -->
+        <div class="professores-container">
+            <h3>Eventos Organizados</h3>
+            <ul class="eventos-add-list">
+                {% for evento in eventos %}
+                <li class="evento-detail-item">
+                    <a href="{% url 'detalhe_evento' evento.id %}" class="btn btn-link">
+                        {{ evento.nome }} - {{ evento.data_inicio|date:'d/m/Y' }}
+                    </a>
+                </li>
+                {% empty %}
+                <li class="empty-result" style="font-size: min(15px,4vw); color: #8c8c8c;">
+                    Sem eventos organizados.
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
 </div>
 {% endblock %}

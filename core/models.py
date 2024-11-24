@@ -22,6 +22,7 @@ class CustomUser(AbstractUser):
     foto = models.ImageField(upload_to='user_photos/', blank=True, null=True, default='defaultphoto.jpg')
     email = models.EmailField(unique=True, validators=[CustomEmailValidator()])
     eventos_interesse = models.ManyToManyField('Evento', blank=True, related_name='interessados')
+    is_public_profile = models.BooleanField(default=True)
 
     def __str__(self):
         return f"{self.get_full_name()} ({self.get_user_type_display()})"

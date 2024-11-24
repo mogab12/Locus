@@ -9,20 +9,17 @@
 </div>
 <div class="container mt-5">
     <h2 class="editprofile">Editar Perfil</h2>
-    <form method="post" enctype="multipart/form-data">
+    <form method="post" enctype="multipart/form-data" id="profile-form">
         {% csrf_token %}
         {% for field in form %}
             <div class="mb-3">
-                <!-- Lida especificamente com o campo "foto" -->
                 {% if field.name == "foto" %}
                     <label for="id_foto">Foto de Perfil</label>
                     {% if field.value %}
-                        <!-- Exibe a foto atual, se houver -->
                         <div class="current-photo">
                             <img src="{{ field.value.url }}" class="FotoAtual">
                         </div>
                     {% endif %}
-                    <!-- Opção para remover a foto atual -->
                     {% if field.value %}
                     <div class="remove-photo">
                         <label for="clear_{{ field.name }}">
@@ -31,17 +28,19 @@
                         </label>
                     </div>
                     {% endif %}
-                    <!-- Campo para alterar a foto -->
                     <label for="id_foto">Nova foto:</label>
                     <input type="file" name="foto" id="id_foto" class="custom-file-input">
-                
                 {% else %}
-                    <!-- Renderiza os outros campos normalmente -->
                     {{ field.label_tag }}
-                    {{ field }}
+                    {% if field.name == "is_public_profile" %}
+                        <button type="button" id="lock-toggle" class="icon-btn">
+                            <i class="fa fa-lock{% if not field.value %}-open{% endif %}" id="lock-icon"></i>
+                        </button>
+                        <input type="hidden" id="is-public-profile" name="{{ field.html_name }}" value="{{ field.value }}">
+                    {% else %}
+                        {{ field }}
+                    {% endif %}
                 {% endif %}
-    
-                <!-- Exibe erros, se existirem -->
                 {% if field.errors %}
                     <div class="alert alert-danger">
                         {{ field.errors }}
@@ -49,10 +48,27 @@
                 {% endif %}
             </div>
         {% endfor %}
-        <!-- Botão para salvar alterações -->
         <button type="submit" class="btn btn-primary">Salvar Alterações</button>
     </form>
-    
-    
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const lockToggle = document.getElementById('lock-toggle');
+        const lockIcon = document.getElementById('lock-icon');
+        const isPublicProfileInput = document.getElementById('is-public-profile');
+
+        lockToggle.addEventListener('click', function () {
+            if (lockIcon.classList.contains('fa-lock-open')) {
+                lockIcon.classList.remove('fa-lock-open');
+                lockIcon.classList.add('fa-lock');
+                isPublicProfileInput.value = 'False';  // Define como perfil privado
+            } else {
+                lockIcon.classList.remove('fa-lock');
+                lockIcon.classList.add('fa-lock-open');
+                isPublicProfileInput.value = 'True';   // Define como perfil público
+            }
+        });
+    });
+</script>
 {% endblock %}

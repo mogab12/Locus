@@ -20,12 +20,11 @@ def edit_profile(request):
         form = UserProfileForm(request.POST, request.FILES, instance=request.user)
         if form.is_valid():
             if request.POST.get('clear_foto'):
-                if request.user.foto:  
+                if request.user.foto:
                     request.user.foto.delete(save=False)
                 request.user.foto = None
             form.save()
             return redirect('profile')
-        
     else:
         form = UserProfileForm(instance=request.user)
     
@@ -248,31 +247,34 @@ def grade_horaria(request):
 @login_required
 def view_profile(request, user_id):
     user = get_object_or_404(CustomUser, id=user_id)
-    
-    # Filtrar disciplinas de acordo com o tipo de usuário
+
+    # Verifica se o perfil é privado e se o usuário não é o dono do perfil
+    if not user.is_public_profile and request.user != user:
+        context = {
+            'profile_user': user,
+            'is_private': True,
+        }
+        return render(request, 'core/view_profile.html', context)
+
+    # Buscar disciplinas e eventos do usuário
     if user.user_type in ['aluno', 'representante', 'professor']:
-        # Utilize a relação UserDiscipline para obter as disciplinas do aluno/representante
         disciplinas = Disciplina.objects.filter(userdiscipline__user=user)
     else:
-        disciplinas = []  # Ou qualquer lógica que faça sentido para outros tipos de usuário
+        disciplinas = []
+
+    if user.user_type == 'entidade':
+        eventos = Evento.objects.filter(criado_por=user)
+    else:
+        eventos = []
 
     context = {
         'profile_user': user,
         'disciplinas': disciplinas,
-    }
-    if user.user_type == 'entidade':
-        # Obter eventos que a entidade está organizando
-        eventos = Evento.objects.filter(criado_por=user)
-    else:
-        eventos = []  # Manter a lista vazia para outros tipos de usuário
-
-    context = {
-        'profile_user': user,
         'eventos': eventos,
+        'is_private': False,
     }
     
     return render(request, 'core/view_profile.html', context)
-
 
 @login_required
 def lista_eventos(request):

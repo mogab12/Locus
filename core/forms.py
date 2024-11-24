@@ -49,18 +49,20 @@ def get_cursos_e_semestres():
 class UserProfileForm(forms.ModelForm):
     class Meta:
         model = CustomUser
-        fields = ['first_name', 'last_name', 'user_type', 'curso', 'semestre', 'departamento', 'foto']
+        fields = ['first_name', 'last_name', 'user_type', 'curso', 'semestre', 'departamento', 'foto', 'is_public_profile']
         widgets = {
             'foto': forms.ClearableFileInput(attrs={
                 'class': 'custom-file-input',
                 'placeholder': 'Escolha um arquivo',
-                'accept': 'image/*',  # Apenas imagens
+                'accept': 'image/*',
             }),
+            'is_public_profile': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
         }
         labels = {
-            'foto': 'Foto de Perfil',  # Altere o texto do rótulo aqui
+            'foto': 'Foto de Perfil',
+            'is_public_profile': 'Privacidade',
         }
-        
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         if self.instance.user_type not in ['aluno', 'representante']:
