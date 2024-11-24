@@ -35,9 +35,9 @@ html, body {
     <div class="disciplina-info">
         <div class="profile-header">
             {% if profile_user.foto %}
-                <img src="{{ profile_user.foto.url }}" alt="{{ profile_user.get_full_name }}" class="img-fluid rounded-circle" style="width: 20vw; max-width: 300px; max-height: 300px; height: 20vw; border-radius: 50%; margin-bottom: 0">
+                <img src="{{ profile_user.foto.url }}" alt="{{ profile_user.get_full_name }}" class="img-fluid rounded-circle" style="width: 20vw; max-width: 120px; max-height: 120px; height: 20vw; border-radius: 50%; margin-bottom: 0">
             {% else %}
-                <img src="{% static 'defaultphoto.jpg' %}" alt="Foto de perfil padrão" class="img-fluid rounded-circle" style="width: 20vw; max-width: 80px; max-height: 80px; height: 20vw; border-radius: 50%; margin-bottom: 0">
+                <img src="{% static 'defaultphoto.jpg' %}" alt="Foto de perfil padrão" class="img-fluid rounded-circle" style="width: 20vw; max-width: 120px; max-height: 120px; height: 20vw; border-radius: 50%; margin-bottom: 0">
             {% endif %}
             <p style="font-size: min(20px, 5vw); margin-bottom: 0;">{{ profile_user.get_full_name }}</p>
             <p style="color: #8c8c8c;">{{ profile_user.get_user_type_display }}</p>
