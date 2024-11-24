@@ -21,7 +21,8 @@ class CustomUser(AbstractUser):
     departamento = models.CharField(max_length=100, blank=True, null=True)
     foto = models.ImageField(upload_to='user_photos/', blank=True, null=True, default='defaultphoto.jpg')
     email = models.EmailField(unique=True, validators=[CustomEmailValidator()])
-    
+    eventos_interesse = models.ManyToManyField('Evento', blank=True, related_name='interessados')
+
     def __str__(self):
         return f"{self.get_full_name()} ({self.get_user_type_display()})"
 
@@ -83,3 +84,9 @@ class Evento(models.Model):
 
     def __str__(self):
         return self.nome
+    
+
+class Interesse(models.Model):
+    usuario = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    evento = models.ForeignKey(Evento, on_delete=models.CASCADE)
+    data_interesse = models.DateTimeField(auto_now_add=True)

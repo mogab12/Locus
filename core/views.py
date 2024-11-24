@@ -276,9 +276,21 @@ def view_profile(request, user_id):
 
 @login_required
 def lista_eventos(request):
-    eventos = Evento.objects.all()
-    return render(request, 'core/lista_eventos.html', {'eventos': eventos})
+    # Obtém os eventos de interesse do usuário, se autenticado
+    if request.user.is_authenticated:
+        eventos_interesse = request.user.eventos_interesse.all()
+        # Exclui eventos de interesse da lista de todos os eventos
+        todos_eventos = Evento.objects.exclude(id__in=eventos_interesse.values_list('id', flat=True))
+    else:
+        eventos_interesse = Evento.objects.none()
+        todos_eventos = Evento.objects.all()
 
+    context = {
+        'todos_eventos': todos_eventos,
+        'eventos_interesse': eventos_interesse,
+    }
+    return render(request, 'core/lista_eventos.html', context)
+    
 @login_required
 def criar_evento(request):
     if request.user.user_type != 'entidade':
@@ -330,3 +342,12 @@ def deletar_evento(request, evento_id):
         evento.delete()
 
     return redirect('lista_eventos')
+
+@login_required
+def toggle_interesse(request, evento_id):
+    evento = get_object_or_404(Evento, id=evento_id)
+    if request.user in evento.interessados.all():
+        request.user.eventos_interesse.remove(evento)
+    else:
+        request.user.eventos_interesse.add(evento)
+    return redirect('detalhe_evento', evento_id=evento.id)

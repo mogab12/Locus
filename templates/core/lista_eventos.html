@@ -5,11 +5,32 @@
 
 {% block content %}
 <h1>Eventos</h1>
+
 {% if request.user.user_type == 'entidade' %}
     <a href="{% url 'criar_evento' %}" class="btn btn-primary mb-3">Criar Evento</a>
 {% endif %}
+
+{% if eventos_interesse %}
+    <h2>Eventos de Interesse</h2>
+    <ul class="list-group mb-4">
+        {% for evento in eventos_interesse %}
+        <li class="list-group-item">
+            <a href="{% url 'detalhe_evento' evento.id %}" class="stretched-link" style="text-decoration: none;">
+                {% if evento.imagem %}
+                    <img src="{{ evento.imagem.url }}" alt="{{ evento.nome }}" style="width: 100px; height: auto; max-width: 150px;" class="img-thumbnail">
+                {% else %}
+                    <img src="{% static 'event.webp' %}" alt="Imagem padrão do evento" style="width: 100px; height: auto; max-width: 150px;" class="img-thumbnail">
+                {% endif %}
+                <strong>{{ evento.nome }}</strong> - Organizado por: {{ evento.criado_por.get_full_name }}
+            </a>
+        </li>
+        {% endfor %}
+    </ul>
+{% endif %}
+
+<h2>Todos os Eventos</h2>
 <ul class="list-group">
-    {% for evento in eventos %}
+    {% for evento in todos_eventos %}
     <li class="list-group-item">
         <a href="{% url 'detalhe_evento' evento.id %}" class="stretched-link" style="text-decoration: none;">
             {% if evento.imagem %}
@@ -24,4 +45,5 @@
     <li class="list-group-item">Nenhum evento disponível no momento.</li>
     {% endfor %}
 </ul>
+
 {% endblock %}

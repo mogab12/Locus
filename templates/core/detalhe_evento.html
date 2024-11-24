@@ -27,5 +27,16 @@
         <button type="submit" class="btn btn-danger link-button">Deletar</button>
     </form>
 {% endif %}
+
+<!-- Botão de Interesse -->
+<form action="{% url 'toggle_interesse' evento.id %}" method="post" style="display:inline;">
+    {% csrf_token %}
+    {% if user in evento.interessados.all %}
+        <button type="submit" class="btn btn-secondary">Remover dos Interesses</button>
+    {% else %}
+        <button type="submit" class="btn btn-primary">Adicionar aos Interesses</button>
+    {% endif %}
+</form>
+
 <a href="{% url 'lista_eventos' %}" class="btn btn-secondary link-button">Voltar para Lista de Eventos</a>
 {% endblock %}
