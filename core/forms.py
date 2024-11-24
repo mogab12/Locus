@@ -120,7 +120,7 @@ class CustomUserCreationForm(UserCreationForm):
 class EventoForm(forms.ModelForm):
     class Meta:
         model = Evento
-        fields = ['nome', 'descricao', 'data_inicio', 'data_fim', 'local']
+        fields = ['nome', 'descricao', 'data_inicio', 'data_fim', 'local', 'imagem']
         widgets = {
             'data_inicio': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
             'data_fim': forms.DateTimeInput(attrs={'type': 'datetime-local'}),

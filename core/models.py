@@ -79,6 +79,7 @@ class Evento(models.Model):
         on_delete=models.CASCADE,
         limit_choices_to={'user_type': 'entidade'}
     )
+    imagem = models.ImageField(upload_to='eventos/', null=True, blank=True) 
 
     def __str__(self):
         return self.nome

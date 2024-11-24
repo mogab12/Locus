@@ -285,7 +285,7 @@ def criar_evento(request):
         return redirect('lista_eventos')  # Redireciona se o usuário não é uma entidade
 
     if request.method == 'POST':
-        form = EventoForm(request.POST)
+        form = EventoForm(request.POST, request.FILES)
         if form.is_valid():
             evento = form.save(commit=False)
             evento.criado_por = request.user
@@ -309,7 +309,7 @@ def editar_evento(request, evento_id):
         return redirect('lista_eventos')
 
     if request.method == 'POST':
-        form = EventoForm(request.POST, instance=evento)
+        form = EventoForm(request.POST, request.FILES, instance=evento)  
         if form.is_valid():
             form.save()
             return redirect('detalhe_evento', evento_id=evento.id)

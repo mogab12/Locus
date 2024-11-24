@@ -1,9 +1,15 @@
 {% extends 'core/base.html' %}
+{% load static %}
 
 {% block title %}Detalhes do Evento - {{ evento.nome }}{% endblock %}
 
 {% block content %}
 <h1>{{ evento.nome }}</h1>
+{% if evento.imagem %}
+    <img src="{{ evento.imagem.url }}" alt="{{ evento.nome }}" style="width: 300px; height: auto;" class="img-fluid mb-3">
+{% else %}
+    <img src="{% static 'event.webp' %}" alt="Imagem padrão do evento" style="width: 300px; height: auto;" class="img-fluid mb-3">
+{% endif %}
 <p><strong>Descrição:</strong> {{ evento.descricao }}</p>
 <p><strong>Data de Início:</strong> {{ evento.data_inicio }}</p>
 <p><strong>Data de Fim:</strong> {{ evento.data_fim }}</p>
@@ -13,24 +19,6 @@
         {{ evento.criado_por.get_full_name }}
     </a>
 </p>
-<style>
-    .link-button {
-        color: black;  /* Define a cor do texto como preto */
-        text-decoration: none; /* Remove a decoração padrão dos links */
-    }
-
-    .link-button:hover {
-        text-decoration: underline; /* Adiciona sublinhado ao passar o mouse */
-    }
-
-    .link-button:visited {
-        color: black; /* Mantém a cor preta mesmo após visitar o link */
-    }
-
-    .link-button:active {
-        color: black; /* Mantém a cor preta enquanto o link está ativo */
-    }
-</style>
 
 {% if request.user == evento.criado_por %}
     <a href="{% url 'editar_evento' evento.id %}" class="btn btn-warning link-button">Editar</a>
