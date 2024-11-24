@@ -59,7 +59,9 @@ html, body {
         <ul class="disciplinas-add-list">
             {% for disciplina in disciplinas %}
             <li class="disciplina-detail-item">
-                <span>{{ disciplina.nome }} - {{ disciplina.codigo }}</span>
+                <a href="{% url 'detalhe_disciplina' disciplina_id=disciplina.id %}" class="btn btn-link">
+                    {{ disciplina.nome }} - {{ disciplina.codigo }}
+                </a>
             </li>
             {% empty %}
             <li class="empty-result" style="font-size: min(15px,4vw); color: #8c8c8c;">
