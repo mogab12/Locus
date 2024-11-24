@@ -1,0 +1,56 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Resultados da Pesquisa{% endblock %}
+
+{% block content %}
+<h1>Resultados da Pesquisa</h1>
+
+<!-- Barra de Pesquisa com Filtro -->
+<form method="GET" action="{% url 'search_results' %}">
+    <input type="text" name="query" value="{{ query }}" placeholder="Digite para buscar..." required>
+
+    <!-- Filtro de Categoria -->
+    <select name="filter">
+        <option value="user" {% if filter == 'user' %}selected{% endif %}>Usuário</option>
+        <option value="disciplina" {% if filter == 'disciplina' %}selected{% endif %}>Disciplina</option>
+        <option value="evento" {% if filter == 'evento' %}selected{% endif %}>Evento</option>
+    </select>
+    
+    <button type="submit">Pesquisar</button>
+</form>
+
+{% if query %}
+    <h2>Resultados para "{{ query }}"</h2>
+
+    {% if filter == 'user' %}
+        <h3>Usuários</h3>
+        <ul>
+            {% for user in users %}
+                <li><a href="{% url 'view_profile' user.id %}">{{ user.get_full_name }}</a></li>
+            {% empty %}
+                <li>Nenhum usuário encontrado.</li>
+            {% endfor %}
+        </ul>
+    {% elif filter == 'disciplina' %}
+        <h3>Disciplinas</h3>
+        <ul>
+            {% for disciplina in disciplinas %}
+                <li><a href="{% url 'detalhe_disciplina' disciplina.id %}">{{ disciplina.nome }}</a> - Código: {{ disciplina.codigo }}</li>
+            {% empty %}
+                <li>Nenhuma disciplina encontrada.</li>
+            {% endfor %}
+        </ul>
+    {% elif filter == 'evento' %}
+        <h3>Eventos</h3>
+        <ul>
+            {% for evento in eventos %}
+                <li><a href="{% url 'detalhe_evento' evento.id %}">{{ evento.nome }}</a></li>
+            {% empty %}
+                <li>Nenhum evento encontrado.</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+{% else %}
+    <p>Digite um termo de pesquisa para obter resultados.</p>
+{% endif %}
+{% endblock %}

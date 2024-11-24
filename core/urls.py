@@ -33,4 +33,5 @@ urlpatterns = [
     path('topico/<int:topico_id>/remover/', views.remover_topico, name='remover_topico'),
     path('postagem/<int:postagem_id>/remover/', views.remover_postagem, name='remover_postagem'),
     path('perfil/<int:user_id>/', views.view_profile, name='view_profile'),
+    path('search/', views.search_results, name='search_results')
 ]

@@ -14,6 +14,7 @@ from .forms import TopicoForm, EventoForm, NotificationForm
 
 
 
+
 @login_required
 def edit_profile(request):
     if request.method == 'POST':
@@ -510,3 +511,29 @@ def excluir_notificacao_recebida(request, notificacao_id):
     notificacao.excluidas_por.add(request.user)
     
     return redirect('notificacoes')
+
+User = get_user_model()
+
+def search_results(request):
+    query = request.GET.get('query', '')
+    filter_type = request.GET.get('filter', 'user')
+
+    users, disciplinas, eventos = [], [], []
+    
+    if query:
+        if filter_type == 'user':
+            users = User.objects.filter(username__icontains=query)
+        elif filter_type == 'disciplina':
+            # Buscar disciplinas por nome e código
+            disciplinas = Disciplina.objects.filter(Q(nome__icontains=query) | Q(codigo__icontains=query))
+        elif filter_type == 'evento':
+            eventos = Evento.objects.filter(nome__icontains=query)
+
+    context = {
+        'query': query,
+        'filter': filter_type,
+        'users': users,
+        'disciplinas': disciplinas,
+        'eventos': eventos,
+    }
+    return render(request, 'core/search_results.html', context)
