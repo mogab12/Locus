@@ -3,14 +3,46 @@
 {% block title %}Confirmar Remoção de Postagem{% endblock %}
 
 {% block content %}
-<h1>Remover Postagem</h1>
+{% load static %}
+{% block body %}
+<style>
+body {
+    background-color: white;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    overflow-x: hidden; 
+}
 
-<p>Tem certeza de que deseja remover esta postagem? Esta ação não pode ser desfeita.</p>
+html, body {
+    width: 100%; 
+}
+</style>
+{% endblock %}
+<div class="disciplinas-add-container">
+    <!-- Título e Botão de Voltar -->
+    <div class="header-container">
+        <h1>Remover Postagem</h1>
+        <div class="actions">
+            <a href="{% url 'detalhe_topico' topico_id=topico.id %}" class="icon-btn">
+                <i class="fa fa-arrow-left"></i>
+            </a>
+        </div>
+    </div>
+    <hr>
 
-<form method="post">
-    {% csrf_token %}
-    <button type="submit">Sim, remover</button>
-</form>
-
-<a href="{% url 'detalhe_topico' topico_id=topico.id %}">Cancelar</a>
+    <!-- Mensagem de confirmação e ações -->
+    <div class="import-disciplinas-container-topico">
+        <p class="confirmation-message" style="font-size: min(15px,4vw); color: #8c8c8c;">
+            Tem certeza de que deseja remover esta postagem? Esta ação não pode ser desfeita.
+        </p>
+        <form method="post" class="topico-form">
+            {% csrf_token %}
+            <button type="submit" class="import-btn">
+                <i class="fa fa-trash"></i>
+                <span>Sim, remover</span>
+            </button>
+        </form>
+    </div>
+</div>
 {% endblock %}

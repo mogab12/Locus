@@ -455,4 +455,529 @@
         width: 100vw;
         z-index: 400;
     }
+
+
+
+    /* Container principal */
+    .disciplinas-container {
+        padding: min(6vw, 20px);
+        font-family: Arial, sans-serif;
+        padding-bottom: min(20vw,80px);
+        width: 100vw;
+        box-sizing: border-box;
+    }
+
+    /* Título */
+    .disciplinas-container h1 {
+        font-size: min(28px,8vw);
+        margin-bottom: 0;
+        margin-top: 0;
+        font-weight:normal;
+        text-align: left;
+    }
+
+    /* Lista de Disciplinas */
+    .disciplinas-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .disciplina-item {
+        display: flex;
+        flex-direction: column;
+        background-color: #fff;
+        border: 1px solid #c3c3c3;
+        margin-bottom: min(10px,6vw);
+        padding: min(15px,6vw);
+        box-shadow: min(4px,2vw) min(4px,2vw) min(4px,2vw) rgba(0, 0, 0, 0.2);
+        text-align: left;
+        width: 100%;
+        box-sizing: border-box;
+        position: relative; 
+        overflow: hidden; 
+    }
+    .disciplina-item a{
+        width: 80%;
+        text-align: left;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis; 
+        text-decoration: none;
+        color: #333;
+        font-size: min(15px,4vw);
+        font-weight: bold;
+    }
+    .header-container {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center; 
+    }
+    .actions {
+        display: flex; /* Define o layout flexível */
+        flex-direction: row; /* Alinha os itens na horizontal */
+        gap: min(10px, 2vw); /* Espaçamento entre os botões */
+        justify-content: center; /* Centraliza os botões horizontalmente */
+        align-items: center; /* Alinha verticalmente */
+    }
+    .actions .icon-btn {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        background-color: #000;
+        color: #fff;
+        border: none;
+        border-radius: 50%;
+        width: min(40px, 8vw);
+        height: min(40px, 8vw);
+        font-size: min(18px, 4vw);
+        cursor: pointer;
+        text-decoration: none;
+        transition: background-color 0.3s ease;
+    }
+    
+    .disciplinas-add-container {
+        padding: min(6vw, 20px);
+        font-family: Arial, sans-serif;
+        padding-bottom: min(20vw,80px);
+        width: 100vw;
+        box-sizing: border-box;
+    }
+    .disciplinas-add-container h3{
+        font-weight: normal;
+        font-size: min(18px,5vw);
+    }
+    .disciplinas-add-container h1 {
+        font-size: min(30px,6vw);
+        margin-bottom: 0;
+        margin-top: 0;
+        font-weight:normal;
+        text-align: left;
+    }
+
+    .search-form {
+        width: 100%;
+        margin-bottom: min(20px,4vw);
+        display: flex;
+        justify-content: center;
+        height: min(10vw,40px);
+        padding: 0;
+        margin: 0 auto;
+    }
+    .search-input-group input::placeholder{
+        font-size: min(16px, 4vw);
+        color: #999;
+        opacity: 0.8;
+    }
+
+    .search-input-group {
+        display: flex;
+        align-items: center;
+        background-color: #e0e0e0; 
+        border-radius: min(5px,1.5vw); 
+        padding: 5px 10px; 
+        width: 100%; 
+    }
+
+    .search-input-group input {
+        border: none;
+        background-color: transparent; 
+        flex: 1;
+        font-size: min(16px,4vw);
+        padding: min(10px,3vw);
+        outline: none; 
+        color: #333;
+    }
+
+    .search-input-group input::placeholder {
+        color: #999; 
+    }
+
+    .search-input-group button {
+        background: none;
+        border: none;
+        font-size: min(18px,4vw); 
+        color: #666;
+        cursor: pointer;
+        padding: min(5px,1vw);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        outline: none;
+        transition: color 0.3s ease;
+    }
+    .disciplina-add-item label{
+        width: 80%;
+        text-align: left;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis; 
+        text-decoration: none;
+        color: #333;
+        font-size: min(15px,4vw);
+        font-weight: bold;
+    }
+
+    .disciplinas-add-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .disciplina-add-item {
+        display: flex;
+        flex-direction: column;
+        background-color: #fff;
+        border: 1px solid #c3c3c3;
+        margin-bottom: min(10px,6vw);
+        padding: min(15px,6vw);
+        padding-right: 0;
+        box-shadow: min(4px,2vw) min(4px,2vw) min(4px,2vw) rgba(0, 0, 0, 0.2);
+        text-align: left;
+        width: 100%; 
+        box-sizing: border-box;
+        position: relative; 
+        overflow: hidden; 
+    }
+
+    .add-btn {
+        position: absolute;
+        top: min(20px,6.5vw);
+        right: min(10px,2vw);
+        background: none;
+        border: none;
+        font-size: min(18px, 5vw); 
+        color: #666;
+        cursor: pointer;
+        outline: none;
+        transition: color 0.3s ease, transform 0.2s ease;
+    }
+
+
+
+    .toast-container {
+        position: fixed;
+        bottom: min(20px, 5vw); 
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 9999; 
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: min(10px, 3vw); 
+    }
+
+    .toast {
+        background-color: #333; 
+        color: #fff; 
+        padding: min(10px, 3vw) min(20px, 6vw); 
+        border-radius: min(5px, 2vw);
+        font-size: min(14px, 4vw); 
+        box-shadow: 0 min(4px, 2vw) min(6px, 3vw) rgba(0, 0, 0, 0.1);
+        animation: fade-in-out 5s ease-in-out forwards; 
+        opacity: 0; 
+    }
+
+    @keyframes fade-in-out {
+        0% {
+            opacity: 0;
+            transform: translateY(min(20px, 5vw)); /* Começa deslocado para baixo */
+        }
+        10% {
+            opacity: 1;
+            transform: translateY(0); /* Fica visível e no lugar */
+        }
+        90% {
+            opacity: 1;
+            transform: translateY(0); /* Permanece visível */
+        }
+        100% {
+            opacity: 0;
+            transform: translateY(min(-20px, -5vw)); /* Desaparece deslocado para cima */
+        }
+    }
+
+
+
+    .disciplinas-add-list {
+        display: flex;
+        justify-content: center; 
+        align-items: center; 
+        margin-bottom: min(10px);
+    }
+    
+    .empty-result {
+        text-align: center; 
+    }
+
+    /* Estilo do container para centralizar o botão */
+    .import-disciplinas-container {
+        text-align: center; /* Centraliza o conteúdo horizontalmente */
+        margin-top: min(20px, 6vw); /* Espaço acima do botão */
+    }
+
+    /* Estilo do botão */
+    .import-btn {
+        display: inline-flex; /* Para alinhar o ícone e o texto */
+        align-items: center; /* Centraliza verticalmente */
+        justify-content: center; /* Centraliza horizontalmente */
+        font-size: min(16px, 4vw); /* Tamanho do texto */
+        color: white; /* Cor do texto */
+        background-color: #000000; /* Cor de fundo */
+        padding: min(10px, 3vw) min(20px, 6vw); /* Espaçamento interno */
+        border-radius: min(8px, 2vw); /* Bordas arredondadas */
+        border: none; /* Remove borda padrão */
+        cursor: pointer; /* Mostra cursor de ponteiro */
+        text-decoration: none; /* Remove sublinhado no texto */
+        transition: background-color 0.3s ease, transform 0.2s ease; /* Transições suaves */
+    }
+
+    
+    /* Estilo do ícone */
+    .import-btn i {
+        margin-right: min(10px, 2vw); /* Espaço entre o ícone e o texto */
+        font-size: min(18px, 4vw); /* Tamanho do ícone */
+    }
+
+    .disciplina-info p{
+        font-size: min(18px,4vw);
+    }
+
+    .disciplina-detail-item {
+        display: flex;
+        align-items: center; /* Centraliza os itens verticalmente */
+        justify-content: space-between; /* Espaça os itens horizontalmente */
+        background-color: #fff;
+        border: 1px solid #c3c3c3;
+        margin-bottom: min(10px,6vw);
+        padding: min(15px,6vw);
+        text-align: left;
+        width: 100%;
+        box-sizing: border-box;
+    }
+    
+    .disciplina-detail-item span{
+        font-size: min(14px,4vw);
+        color: #333;
+    }
+    .disciplina-detail-item a{
+        font-size: min(14px,4vw);
+        color: #000000;
+    }
+
+    /* Ações do tópico */
+    .topico-actions {
+        margin-left: auto; /* Empurra os ícones para a direita */
+        display: flex;
+        flex-direction: column;
+        gap: min(10px, 2vw); /* Espaçamento entre os ícones */
+        align-items: center; /* Centraliza os ícones verticalmente */
+        margin-right: min(18px, 4vw);   
+        margin-top: max(-30px, -8vw);
+    }
+
+    .icon-btn {
+        background: none;
+        border: none;
+        font-size: min(18px, 4vw); /* Tamanho do ícone */
+        color: #000000;
+        cursor: pointer;
+        text-decoration: none;
+        transition: color 0.3s ease, transform 0.2s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .profile-header{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        line-height: 0;
+    }
+
+    .topico-info p,a{
+        font-size: min(12px);
+        color: grey;
+    }
+    .topico-info strong{
+        color: black;
+    }
+
+    .topico-detail-item {
+        display: flex;
+        align-items: center; /* Alinha o conteúdo ao topo */
+        background-color: #fff;
+        border: 1px solid #c3c3c3;
+        margin-bottom: min(10px, 6vw);
+        padding: min(15px, 6vw);
+        text-align: left;
+        width: 100%;
+        box-sizing: border-box;
+        position: relative;
+    }
+
+
+
+   /* Estilo da lista de postagens */
+    .topico-detail-item {
+        display: flex;
+        flex-direction: column;
+        justify-content: left;
+        background-color: #fff;
+        border: 1px solid #c3c3c3;
+        margin-bottom: min(10px, 6vw);
+        padding: min(15px, 6vw);
+        text-align: left;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    /* Estilo do conteúdo principal */
+    .postagem-conteudo {
+        display: flex;
+        flex-direction: column;
+        justify-content: left;
+        align-items: flex-start; /* Garante que tudo fique alinhado à esquerda */
+        padding: 0; /* Remove qualquer padding */
+        margin: 0; /* Remove margens adicionais */
+        width: 100%; /* Garante que ocupe toda a largura da div */
+        box-sizing: border-box; /* Garante que as dimensões sejam calculadas corretamente */
+    }
+
+    /* Estilo das informações de postagem */
+    .postagem-info {
+        display: flex;
+        justify-content: left;
+        align-items: center;
+        font-size: min(14px, 2vw); /* Fonte menor */
+        color: #333;
+        margin: 0;
+        gap: 2vw;
+    }
+
+    /* Botão de remover */
+    .remover-btn {
+        display: flex;
+        align-items: center;
+        gap: min(4px, 1vw);
+        font-size: min(14px, 2vw); 
+        text-decoration: none;
+    }
+
+    .remover-btn i {
+        font-size: min(14px,2vw); /* Ícone menor */
+    }
+
+    /* Container da entrada de texto */
+    .postagem-form {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        background-color: #f3f3f3;
+        border: 1px solid #c3c3c3;
+        border-radius: min(10px, 1.5vw);
+        padding: min(10px, 2vw);
+        margin-top: 20px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Caixa de entrada */
+    .postagem-form textarea {
+        flex: 1;
+        border: none;
+        resize: none; /* Remove a capacidade de redimensionar */
+        padding: min(10px, 2vw);
+        font-size: min(14px, 3vw);
+        outline: none;
+        background-color: transparent;
+        box-sizing: border-box;
+        color: #333;
+        height: min(40px, 8vw);
+    }
+
+    /* Botão de postagem */
+    .postagem-form button {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: #000;
+        color: #fff;
+        border: none;
+        border-radius: 50%;
+        width: min(40px, 8vw);
+        height: min(40px, 8vw);
+        font-size: min(16px, 4vw);
+        cursor: pointer;
+        margin-left: min(10px, 2vw);
+        transition: background-color 0.3s ease;
+    }
+
+    .postagem-form button:hover {
+        background-color: #333;
+    }
+
+    .import-disciplinas-container-topico {
+        text-align: center; /* Centraliza o conteúdo horizontalmente */
+        margin-top: min(20px, 6vw); /* Espaço acima do botão */
+        margin-bottom: min(5vw,20px);
+    }
+
+
+    /* Container do formulário */
+    .import-disciplinas-container-topico {
+        width: 100%;
+        margin: 0 auto;
+    }
+
+    /* Grupos de formulário */
+    .topico-form .form-group .form-group-title {
+        margin-bottom: min(20px,6vw);
+        display: flex;
+        flex-direction: column;
+        padding: 0;
+    }
+
+
+    .topico-form .form-group label,
+    .topico-form .form-group-title label {
+        font-size: min(16px, 4vw); /* Tamanho do texto proporcional */
+        font-weight: bold; /* Negrito para o rótulo */
+        margin-bottom: min(5px, 2vw); /* Espaço abaixo do rótulo */
+        text-align: left; /* Alinhado à esquerda */
+        display: block; /* Garantir que ocupe uma linha */
+}
+
+
+    /* Campos de entrada */
+    .topico-form .form-group input,
+    .topico-form .form-group textarea {
+        width: 100%;
+        padding: min(10px,3vw);
+        font-size: min(14px, 3.5vw);
+        border: 1px solid #ccc;
+        border-radius: min(5px,2vw);
+        box-sizing: border-box;
+        resize: none; /* Impede redimensionamento manual no textarea */
+        margin-bottom: min(3vw,10px);
+    }
+
+    .form-group-title input,
+    .form-group-title textarea{
+        width: 100%;
+        padding: min(10px,3vw);
+        font-size: min(14px, 3.5vw);
+        border: 1px solid #ccc;
+        border-radius: min(5px,2vw);
+        box-sizing: border-box;
+        height: min(50px,15vw);
+        resize: none; /* Impede redimensionamento manual no textarea */
+        margin-bottom: min(3vw,10px);
+    }
+    
 /*}*/
