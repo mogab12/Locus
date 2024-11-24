@@ -158,6 +158,8 @@ def lista_topicos(request, disciplina_id):
 @login_required
 def detalhe_topico(request, topico_id):
     topico = get_object_or_404(Topico, id=topico_id)
+    disciplina = topico.disciplina
+
     if request.method == 'POST':
         form = NovaPostagemForm(request.POST)
         if form.is_valid():
@@ -165,19 +167,35 @@ def detalhe_topico(request, topico_id):
             postagem.topico = topico
             postagem.criado_por = request.user
             postagem.save()
+
+            alunos = UserDiscipline.objects.filter(disciplina=disciplina).select_related('user')
+            destinatarios = [ud.user for ud in alunos]
+
+            if destinatarios:
+                notificacao = Notificacao.objects.create(
+                    titulo=f"Nova Postagem no Tópico: {topico.titulo}",
+                    mensagem=f"Uma nova postagem foi adicionada ao tópico '{topico.titulo}' na disciplina {disciplina.nome}.",
+                    criador=request.user,
+                    disciplina=disciplina,
+                    # Supondo que você tenha um campo ForeignKey 'topico' na Notificacao
+                    topico=topico  
+                )
+                notificacao.destinatarios.set(destinatarios)
+
             return redirect('detalhe_topico', topico_id=topico.id)
     else:
         form = NovaPostagemForm()
+
     return render(request, 'core/detalhe_topico.html', {'topico': topico, 'form': form})
 
 @login_required
+@login_required
 def novo_topico(request, disciplina_id):
-    # Verificar se o usuário é um representante ou professor
     if request.user.user_type not in ['representante', 'professor']:
         return HttpResponseForbidden("Você não tem permissão para criar um tópico.")
 
     disciplina = get_object_or_404(Disciplina, id=disciplina_id)
-    
+
     if request.method == 'POST':
         form = NovoTopicoForm(request.POST)
         if form.is_valid():
@@ -185,10 +203,26 @@ def novo_topico(request, disciplina_id):
             topico.disciplina = disciplina
             topico.criado_por = request.user
             topico.save()
+
+            # Recupera todos os alunos associados à disciplina
+            alunos = UserDiscipline.objects.filter(disciplina=disciplina).select_related('user')
+            destinatarios = [ud.user for ud in alunos]
+
+            # Criar notificação para todos os alunos da disciplina
+            if destinatarios:
+                notificacao = Notificacao.objects.create(
+                    titulo=f"Novo Tópico Criado: {topico.titulo}",
+                    mensagem=f"Um novo tópico '{topico.titulo}' foi criado na disciplina {disciplina.nome}.",
+                    criador=request.user,
+                    disciplina=disciplina,
+                    topico=topico  # Passando a referência para o novo campo
+                )
+                notificacao.destinatarios.set(destinatarios)
+
             return redirect('lista_topicos', disciplina_id=disciplina.id)
     else:
         form = NovoTopicoForm()
-    
+
     return render(request, 'core/novo_topico.html', {'disciplina': disciplina, 'form': form})
 
 @login_required
@@ -328,14 +362,24 @@ def detalhe_evento(request, evento_id):
 @login_required
 def editar_evento(request, evento_id):
     evento = get_object_or_404(Evento, id=evento_id)
-    
+
     if request.user != evento.criado_por:
         return redirect('lista_eventos')
 
     if request.method == 'POST':
-        form = EventoForm(request.POST, request.FILES, instance=evento)  
+        form = EventoForm(request.POST, request.FILES, instance=evento)
         if form.is_valid():
             form.save()
+            # Após salvar, cria uma notificação para os interessados
+            interessados = evento.interessados.all()
+            if interessados.exists():
+                notificacao = Notificacao.objects.create(
+                    titulo=f"Evento {evento.nome} foi editado",
+                    mensagem=f"O evento {evento.nome} foi editado. Confira os detalhes.",
+                    criador=request.user,
+                    evento=evento
+                )
+                notificacao.destinatarios.set(interessados)
             return redirect('detalhe_evento', evento_id=evento.id)
     else:
         form = EventoForm(instance=evento)
@@ -346,6 +390,7 @@ def editar_evento(request, evento_id):
     }
 
     return render(request, 'core/editar_evento.html', context)
+
 @login_required
 def deletar_evento(request, evento_id):
     evento = get_object_or_404(Evento, id=evento_id)

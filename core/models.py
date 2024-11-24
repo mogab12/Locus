@@ -96,11 +96,12 @@ class Notificacao(models.Model):
     titulo = models.CharField(max_length=255)
     mensagem = models.TextField()
     criado_em = models.DateTimeField(auto_now_add=True)
-    criador = models.ForeignKey(User, on_delete=models.CASCADE, related_name='notificacoes_criadas')
-    destinatarios = models.ManyToManyField(User, related_name='notificacoes_recebidas')
+    criador = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='notificacoes_criadas')
+    destinatarios = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='notificacoes_recebidas')
     disciplina = models.ForeignKey('Disciplina', null=True, blank=True, on_delete=models.SET_NULL, related_name='notificacoes')
     evento = models.ForeignKey('Evento', null=True, blank=True, on_delete=models.SET_NULL, related_name='notificacoes')
-    excluidas_por = models.ManyToManyField(User, related_name='notificacoes_excluidas', blank=True)
+    topico = models.ForeignKey('Topico', null=True, blank=True, on_delete=models.SET_NULL, related_name='notificacoes')  # Novo campo
+    excluidas_por = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='notificacoes_excluidas', blank=True)
 
     def __str__(self):
         return f"{self.titulo} - {self.criador.get_full_name()}"

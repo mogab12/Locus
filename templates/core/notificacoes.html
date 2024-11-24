@@ -21,8 +21,20 @@
             <p>Referente ao evento: {{ notificacao.evento.nome }}</p>
             <a href="{% url 'detalhe_evento' notificacao.evento.id %}" class="btn btn-link">Ver Evento</a>
         {% endif %}
-        
-        <small>Enviado por: {{ notificacao.criador.get_full_name }} em {{ notificacao.criado_em|date:"d/m/Y H:i" }}</small>
+
+        {% if notificacao.topico %}
+            <p>Referente ao tópico: {{ notificacao.topico.titulo }}</p>
+            <a href="{% url 'detalhe_topico' notificacao.topico.id %}" class="btn btn-link">Ver Tópico</a>
+        {% endif %}
+
+        <small>Enviado por: 
+            {% if notificacao.criador %}
+                {{ notificacao.criador.get_full_name }}
+            {% else %}
+                Sistema
+            {% endif %}
+            em {{ notificacao.criado_em|date:"d/m/Y H:i" }}
+        </small>
         
         <a href="{% url 'excluir_notificacao_recebida' notificacao.id %}" class="btn btn-danger">Excluir</a>
     </li>
