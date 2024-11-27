@@ -4,39 +4,78 @@
 {% block title %}Detalhes do Evento - {{ evento.nome }}{% endblock %}
 
 {% block content %}
-<h1>{{ evento.nome }}</h1>
-{% if evento.imagem %}
-    <img src="{{ evento.imagem.url }}" alt="{{ evento.nome }}" style="width: 300px; height: auto;" class="img-fluid mb-3">
-{% else %}
-    <img src="{% static 'event.webp' %}" alt="Imagem padrão do evento" style="width: 300px; height: auto;" class="img-fluid mb-3">
-{% endif %}
-<p><strong>Descrição:</strong> {{ evento.descricao }}</p>
-<p><strong>Data de Início:</strong> {{ evento.data_inicio }}</p>
-<p><strong>Data de Fim:</strong> {{ evento.data_fim }}</p>
-<p><strong>Local:</strong> {{ evento.local }}</p>
-<p><strong>Organizado por:</strong> 
-    <a href="{% url 'view_profile' evento.criado_por.id %}" class="btn btn-link">
-        {{ evento.criado_por.get_full_name }}
-    </a>
-</p>
+{% block body %}
+<style>
+body {
+    background-color: rgb(234, 234, 234);
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    overflow-x: hidden; 
+}
 
-{% if request.user == evento.criado_por %}
-    <a href="{% url 'editar_evento' evento.id %}" class="btn btn-warning link-button">Editar</a>
-    <form action="{% url 'deletar_evento' evento.id %}" method="post" style="display:inline;">
-        {% csrf_token %}
-        <button type="submit" class="btn btn-danger link-button">Deletar</button>
-    </form>
-{% endif %}
-
-<!-- Botão de Interesse -->
-<form action="{% url 'toggle_interesse' evento.id %}" method="post" style="display:inline;">
-    {% csrf_token %}
-    {% if user in evento.interessados.all %}
-        <button type="submit" class="btn btn-secondary">Remover dos Interesses</button>
+html, body {
+    width: 100%; 
+}
+</style>
+{% endblock %}
+<div class="logo">
+    {% if evento.imagem %}
+    <img src="{{ evento.imagem.url }}" alt="{{ evento.nome }}" class="img-fluid" style=" z-index: -100;width: 100vw; height: auto;">
     {% else %}
-        <button type="submit" class="btn btn-primary">Adicionar aos Interesses</button>
+    <img src="{% static 'event.webp' %}" alt="Imagem padrão do evento" class="img-fluid">
     {% endif %}
-</form>
+</div>
+<div class="container" style="display: flex; flex-direction: column; align-items: flex-start; text-align: left; gap: 0;">
+    <div class="icon_event">
+        {% if request.user == evento.criado_por %}
+        <a href="{% url 'editar_evento' evento.id %}">
+            <i class="fa fa-edit" style="font-size: 6vw; color: rgb(0, 0, 0);"></i>
+        </a>
+        <form action="{% url 'deletar_evento' evento.id %}" method="post" style="display:inline;">
+            {% csrf_token %}
+            <button type="submit" class="tab" style="background: none; border: none; cursor: pointer; padding: 0; margin-top: 10.6vw;">
+                <i class="fa fa-trash" style="font-size: 6vw; color: rgb(0, 0, 0);"></i>
+            </button>
+        </form>
+        {% else %}
+        <form action="{% url 'toggle_interesse' evento.id %}" method="post" style="display: inline;">
+            {% csrf_token %}
+            <button type="submit" style="background: none; border: none; cursor: pointer; padding: 0; margin-bottom: 9.1vw; text-align: right; margin-left: 5.5vw;">
+                {% if user in evento.interessados.all %}
+                    <i class="fa fa-bell" style="font-size: 6vw; color: rgb(0, 0, 0);"></i>
+                {% else %}
+                    <i class="fa fa-bell" style="font-size: 6vw; color: rgb(182, 182, 182);"></i>
+                {% endif %}
+            </button>
+        </form>
+        {% endif %}
+    </div>  
 
-<a href="{% url 'lista_eventos' %}" class="btn btn-secondary link-button">Voltar para Lista de Eventos</a>
+
+    
+    <div class="event_main_container" style="margin-bottom: 6vw;">
+        <div class="img_event">
+            {% if evento.criado_por.foto %}
+                <img src="{{ evento.criado_por.foto.url }}"  class="ent_img" style="width: 20vw; max-width: 80px; max-height: 80px; height: 20vw; border-radius: 50%; margin-bottom: 0">
+            {% else %}
+                <img src="{% static 'defaultphoto.jpg' %}" class="ent_img_default" >
+            {% endif %}
+        </div>
+        <div class="text_event" >
+            <p class="p_event" style="color: black; font-weight: bold; font-size: 4vw;">{{ evento.nome }}</p>
+            <p class="p_event">Início: {{ evento.data_inicio }}</p>
+            <p class="p_event">Fim: {{ evento.data_fim }}</p>
+            <p class="p_event">Local: {{ evento.local }}</p>
+            <p class="p_event">Organizado por:
+                <a href="{% url 'view_profile' evento.criado_por.id %}" class="tab" style="font-size: 3vw; font-weight: normal; text-decoration: underline;">{{ evento.criado_por.get_full_name }}</a>
+            </p>
+        </div>
+    </div>
+    <div class="description" style=" display: flex; flex-direction: column; text-align: center; justify-content: space-between;">
+        <p class="p_event" style="margin-top: 4vw; color: black; font-size: 3.5vw; margin-left: 10vw;"><strong>Descrição do evento:</strong></p>
+        <p  style="margin-top: 2vw; color: grey; margin-left: 10vw; font-size: 3.5vw; margin-right: 10vw;">{{ evento.descricao }}</p>
+    </div>
+
+</div>
 {% endblock %}
