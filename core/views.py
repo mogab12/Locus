@@ -502,7 +502,6 @@ def notificacoes(request):
     return render(request, 'core/notificacoes.html', context)
 
 @login_required
-@login_required
 def criar_notificacao(request):
     if request.user.user_type not in ['professor', 'representante', 'entidade']:
         return redirect('notificacoes')

@@ -23,7 +23,7 @@
                 {% if request.user.user_type == 'aluno' or request.user.user_type == 'representante' %}
                 <p>{{ user.curso }}</p>
                 {% else %}
-                <p>{{ user.user_type }}</p>
+                <p>{{ user.user_type|capfirst }}</p>
                 {% endif %}
             </div>
             <ul class="menu-items">

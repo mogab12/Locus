@@ -45,15 +45,25 @@ html, body {
             {% if user not in notificacao.excluidas_por.all %}
             <li class="topico-detail-item">
                 <div class="postagem-conteudo">
-                    <h5 class="disciplina-nome" style="font-size: min(20px, 7vw); margin-top: 0; margin-bottom: 0;">{{ notificacao.titulo }}</h5>
-                    <p class="disciplina-nome" style="font-size: min(18px, 5vw); color: black;">{{ notificacao.mensagem }}</p>
-                    
+                    {% if notificacao.topico %}
+                        <a href="{% url 'detalhe_topico' notificacao.topico.id %}">
+                    {% elif notificacao.disciplina %}
+                        <a href="{% url 'detalhe_disciplina' notificacao.disciplina.id %}">
+                    {% elif notificacao.evento %}
+                        <a href="{% url 'detalhe_evento' notificacao.evento.id %}">
+                    {% else %}
+                        <a href="#">
+                    {% endif %}
+                        <h5 class="disciplina-nome" style="font-size: min(20px, 7vw); margin-top: 0; margin-bottom: 0;">{{ notificacao.titulo }}</h5>
+                        <p class="disciplina-nome" style="font-size: min(18px, 5vw); color: black;">{{ notificacao.mensagem }}</p>
+                    </a>
+
                     {% if notificacao.disciplina %}
                         <p class="disciplina-nome" style="font-size: min(15px, 3.5vw); color: #8c8c8c; margin-bottom:0; margin-top: 0;">Referente à disciplina: {{ notificacao.disciplina.nome }}</p>
                     {% endif %}
                     
                     {% if notificacao.evento %}
-                    <div style="display: flex; flex-direction: row; gap: min(2vw,10px); ">
+                    <div style="display: flex; flex-direction: row; gap: min(2vw,10px);">
                         <p class="disciplina-nome" style="font-size: min(15px, 3.5vw); color: #8c8c8c; margin-bottom:0; margin-top: 0;">Referente ao evento: {{ notificacao.evento.nome }}</p>
                     </div>
                     {% endif %}
@@ -76,20 +86,20 @@ html, body {
                     <div style="display: flex; flex-direction: row; gap: min(2vw,10px); font-size: min(15px, 3.5vw); margin-top: min(14px,4vw); padding: 0">
                         {% if notificacao.disciplina %}
                             <a href="{% url 'detalhe_disciplina' notificacao.disciplina.id %}" class="icon-btn">
-                                <i class="fa fa-book" style=" font-size: min(15px, 3.5vw);margin-right:min(1vw,3px);"></i> Ver Disciplina
+                                <i class="fa fa-book" style="font-size: min(15px, 3.5vw); margin-right:min(1vw,3px);"></i> Ver Disciplina
                             </a>
                         {% endif %}
                         
                         {% if notificacao.evento %}
-                            <a href="{% url 'detalhe_evento' notificacao.evento.id %}" class="icon-btn"></a>
-                                <i class="fa fa-calendar"  style="margin-right: max(-1vw,-6px);font-size: min(15px, 3.5vw);margin-left: max(-1.8vw,-10px)"></i> Ver Evento
+                            <a href="{% url 'detalhe_evento' notificacao.evento.id %}" class="icon-btn">
+                                <i class="fa fa-calendar" style="margin-right: max(-1vw,-6px); font-size: min(15px, 3.5vw); margin-left: max(-1.8vw,-10px)"></i> Ver Evento
                             </a>
                         {% endif %}
 
                         {% if notificacao.topico %}
                         <div style="display: flex; flex-direction: row;">
                             <a href="{% url 'detalhe_topico' notificacao.topico.id %}" class="icon-btn">
-                                <i class="fa fa-comments" style="font-size: min(15px, 3.5vw);margin-right:min(1vw,3px);"></i> Ver Tópico
+                                <i class="fa fa-comments" style="font-size: min(15px, 3.5vw); margin-right:min(1vw,3px);"></i> Ver Tópico
                             </a>
                         </div>
                         {% endif %}
@@ -107,4 +117,4 @@ html, body {
         </ul>
     </div>
 </div>
-{% endblock %}
+{% endblock %}  
