@@ -19,6 +19,14 @@ html, body {
 }
 </style>
 {% endblock %}
+<div class="header_event">
+    <div class="actions">
+        <button class="icon-btn" onclick="history.back();" style="margin-left: auto; margin-right: 5vw; margin-top: 5vw;">
+            <i class="fa fa-arrow-left"></i>
+        </button>
+    </div>
+</div>
+
 <div class="logo">
     {% if evento.imagem %}
     <img src="{{ evento.imagem.url }}" alt="{{ evento.nome }}" class="img-fluid" style=" z-index: -100;width: 100vw; height: auto;">

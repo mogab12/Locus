@@ -3,11 +3,64 @@
 {% block title %}Criar Notificação{% endblock %}
 
 {% block content %}
-<h1>Criar Notificação</h1>
-<form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit" class="btn btn-primary">Enviar Notificação</button>
-    <a href="{% url 'notificacoes' %}" class="btn btn-secondary">Cancelar</a>
-</form>
+{% block body %}
+<style>
+body {
+    background-color: white;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    overflow-x: hidden; 
+}
+
+html, body {
+    width: 100%; 
+}
+</style>
+{% endblock %}
+<div class="disciplinas-add-container">
+    <!-- Título e Botão de Voltar -->
+    <div class="header-container">
+        <h1>Enviar Notificação</h1>
+        <div class="actions">
+            <a href="{% url 'notificacoes' %}" class="icon-btn">
+                <i class="fa fa-arrow-left"></i>
+            </a>
+        </div>
+    </div>
+    <hr>
+
+    <!-- Formulário para criar notificação -->
+    <div class="import-disciplinas-container-topico">
+        <form method="post" class="topico-form">
+            {% csrf_token %}
+            <div class="form-group-title">
+                <label for="titulo">Título da Notificação:</label>
+                {{ form.titulo }}
+            </div>
+            <div class="form-group">
+                <label for="mensagem">Mensagem:</label>
+                {{ form.mensagem }}
+            </div>
+            <div class="form-group">
+                <label for="disciplina">Disciplina:</label>
+                {{ form.disciplina }}
+                {% if form.disciplina.value %}
+                <p style="font-size: min(15px, 3.5vw); color: #8c8c8c;">Selecionada: {{ form.disciplina.value }}</p>
+                {% endif %}
+            </div>
+            <div class="form-group" style="margin-bottom: min(12vw,35px);">
+                <label for="evento">Evento:</label>
+                {{ form.evento }}
+                {% if form.evento.value %}
+                <p style="font-size: min(15px, 3.5vw); color: #8c8c8c;">Selecionado: {{ form.evento.value }}</p>
+                {% endif %}
+            </div>
+            <button type="submit" class="import-btn">
+                <i class="fa fa-paper-plane"></i>
+                <span>Enviar Notificação</span>
+            </button>
+        </form>
+    </div>
+</div>
 {% endblock %}

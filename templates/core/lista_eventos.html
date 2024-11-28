@@ -68,7 +68,7 @@
     <h3>Eventos de Interesse</h3>
     <ul class="disciplinas-add-list">
         {% for evento in eventos_interesse %}
-        <li class="disciplina-add-item">
+        <li class="disciplina-add-item" style="padding: 0;">
             <div style="display: flex; align-items: center;">
                 {% if evento.imagem %}
                 <img src="{{ evento.imagem.url }}" alt="{{ evento.nome }}" style="width: 20vw; height: auto; max-width: 100px; margin-right: min(10px,1vw);" class="img-thumbnail">
@@ -76,8 +76,8 @@
                 <img src="{% static 'event.webp' %}" alt="Imagem padrão do evento" style="width: 20vw; height: auto; max-width: 100px; margin-right: min(10px,1vw);" class="img-thumbnail">
                 {% endif %}
                 <div>
-                    <a href="{% url 'detalhe_evento' evento.id %}" class="disciplina-nome">{{ evento.nome }}</a>
-                    <p class="disciplina-codigo">Organizado por: {{ evento.criado_por.get_full_name }}</p>
+                    <a href="{% url 'detalhe_evento' evento.id %}" class="disciplina-nome" style="color: black; font-size: min(18px,4vw); font-weight: 200;">{{ evento.nome }}</a>
+                    <p class="disciplina-codigo" style="font-size: min(15px,3vw); color: #8c8c8c; margin-top: 0;">Organizado por: {{ evento.criado_por.get_full_name }}</p>
                 </div>
             </div>
         </li>

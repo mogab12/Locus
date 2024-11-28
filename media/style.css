@@ -855,7 +855,7 @@
         display: flex;
         justify-content: left;
         align-items: center;
-        font-size: min(14px, 2vw); /* Fonte menor */
+        font-size: min(14px, 3vw); /* Fonte menor */
         color: #333;
         margin: 0;
         gap: 2vw;
@@ -1058,4 +1058,23 @@
         cursor: pointer; 
     }
 
+    .header_event{
+        position: absolute;
+        width: 100%;
+        padding: 0;
+    }
+
+    .header_event button{
+        width: 4vw;
+        height: auto;
+        box-shadow: 0 min(2vw,8px) min(3vw,11px) rgba(0, 0, 0, 0.2), 
+                    0 min(1vw,4px) min(1.5vw,6px) rgba(0, 0, 0, 0.12);
+    }
+
+    .form-group-title a{
+        font-size: 4vw;
+    }
+    .form-group-title {
+        font-size: 4vw;
+    }
 /*}*/

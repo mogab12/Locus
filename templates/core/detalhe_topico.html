@@ -32,9 +32,9 @@ html, body {
                     <i class="fas fa-trash-alt"></i>
                 </a>
             {% endif %}
-            <a href="{% url 'lista_topicos' topico.disciplina.id %}" class="icon-btn">
+            <button class="icon-btn" onclick="history.back();">
                 <i class="fa fa-arrow-left"></i>
-            </a>
+            </button>
         </div>
     </div>
     <hr>
@@ -58,12 +58,12 @@ html, body {
             {% for postagem in topico.postagens.all %}
             <li class="topico-detail-item">
                 <div class="postagem-conteudo">
-                    <p class="disciplina-nome" style="font-size: min(14px, 2vw); ">{{ postagem.conteudo }}</p>
+                    <p class="disciplina-nome" style="font-size: min(18px, 4vw); ">{{ postagem.conteudo }}</p>
                     <div class="postagem-info">
-                        <span><strong>Por:</strong> <a href="{% url 'view_profile' topico.criado_por.id %}" style="font-size: min(14px, 2vw); color: black;">{{ postagem.criado_por.username }}</a></span>
-                        <span><strong>Data:</strong> {{ postagem.data_criacao }}</span>
+                        <span style="font-size: min(14px, 2.1vw);"><strong >Por:</strong> <a href="{% url 'view_profile' topico.criado_por.id %}" style="font-size: min(14px, 2.1vw); color: black; text-decoration: underline;">{{ postagem.criado_por.username }}</a></span>
+                        <span style="font-size: min(14px, 2.1vw);"><strong >Data:</strong> {{ postagem.data_criacao }}</span>
                         {% if request.user.user_type == 'representante' or request.user.user_type == 'professor' %}
-                        <a href="{% url 'remover_postagem' postagem.id %}" class="icon-btn remover-btn" style="color: red;">
+                        <a href="{% url 'remover_postagem' postagem.id %}" class="icon-btn remover-btn" style="color: red;font-size: min(14px, 2.1vw);">
                             <i class="fa fa-trash"></i> Remover
                         </a>
                         {% endif %}

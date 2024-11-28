@@ -3,30 +3,78 @@
 {% block title %}Minhas Notificações{% endblock %}
 
 {% block content %}
-<h1>Minhas Notificações</h1>
+{% block body %}
+<style>
+body {
+    background-color: white;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    overflow-x: hidden; 
+}
 
-<ul class="list-group mb-4">
-    {% for notificacao in notificacoes %}
-    <li class="list-group-item">
-        <h5>{{ notificacao.titulo }}</h5>
-        <p>{{ notificacao.mensagem }}</p>
-        
-        {% if notificacao.disciplina %}
-            <p>Referente à disciplina: {{ notificacao.disciplina.nome }}</p>
-            <a href="{% url 'detalhe_disciplina' notificacao.disciplina.id %}" class="btn btn-link">Ver Disciplina</a>
-        {% endif %}
-        
-        {% if notificacao.evento %}
-            <p>Referente ao evento: {{ notificacao.evento.nome }}</p>
-            <a href="{% url 'detalhe_evento' notificacao.evento.id %}" class="btn btn-link">Ver Evento</a>
-        {% endif %}
-        
-        <a href="{% url 'editar_notificacao' notificacao.id %}" class="btn btn-warning">Editar</a>
-        <a href="{% url 'remover_notificacao' notificacao.id %}" class="btn btn-danger">Remover</a>
-    </li>
-    {% empty %}
-    <li class="list-group-item">Você não criou nenhuma notificação ainda.</li>
-    {% endfor %}
-</ul>
+html, body {
+    width: 100%; 
+}
+</style>
+{% endblock %}
+<div class="disciplinas-add-container">
+    <!-- Título -->
+    <div class="header-container">
+        <h1>Minhas Notificações</h1>
+        <div class="actions">
+            <button class="icon-btn" onclick="history.back();">
+                <i class="fa fa-arrow-left"></i>
+            </button>
+        </div>
+    </div>
+    <hr>
 
+    <!-- Lista de Minhas Notificações -->
+    <div class="professores-container">
+        <ul class="disciplinas-add-list">
+            {% for notificacao in notificacoes %}
+            <li class="topico-detail-item">
+                <div class="postagem-conteudo">
+                    <h5 class="disciplina-nome" style="font-size: min(20px, 7vw); margin-top: 0; margin-bottom: 0;">{{ notificacao.titulo }}</h5>
+                    <p class="disciplina-nome" style="font-size: min(18px, 5vw); color: black;">{{ notificacao.mensagem }}</p>
+                    
+                    {% if notificacao.disciplina %}
+                        <p class="disciplina-nome" style="font-size: min(15px, 3.5vw); color: #8c8c8c; margin-bottom:0; margin-top: 0;">Referente à disciplina: {{ notificacao.disciplina.nome }}</p>
+                    {% endif %}
+                    
+                    {% if notificacao.evento %}
+                    <div style="display: flex; flex-direction: row; gap: min(2vw,10px);">
+                        <p class="disciplina-nome" style="font-size: min(15px, 3.5vw); color: #8c8c8c; margin-bottom:0; margin-top: 0;">Referente ao evento: {{ notificacao.evento.nome }}</p>
+                    </div>
+                    {% endif %}
+
+                    <div style="display: flex; flex-direction: row; gap: min(2vw,10px); font-size: min(15px, 3.5vw); margin-top: min(14px,4vw); padding: 0;">
+                        {% if notificacao.disciplina %}
+                            <a href="{% url 'detalhe_disciplina' notificacao.disciplina.id %}" class="icon-btn">
+                                <i class="fa fa-book" style=" font-size: min(15px, 3.5vw);margin-right:min(1vw,3px);"></i> Ver Disciplina
+                            </a>
+                        {% endif %}
+                        
+                        {% if notificacao.evento %}
+                            <a href="{% url 'detalhe_evento' notificacao.evento.id %}" class="icon-btn">
+                                <i class="fa fa-calendar" style=" font-size: min(15px, 3.5vw);margin-right: min(1vw,6px);"></i> Ver Evento
+                            </a>
+                        {% endif %}
+
+                        <a href="{% url 'editar_notificacao' notificacao.id %}" class="icon-btn" style="font-size: min(15px, 3.5vw); color: orange;">
+                            <i class="fa fa-edit" style="font-size: min(15px, 3.5vw)"></i> Editar
+                        </a>
+                        <a href="{% url 'remover_notificacao' notificacao.id %}" class="icon-btn remover-btn" style="font-size: min(15px, 3.5vw); color: red;">
+                            <i class="fa fa-trash" style="font-size: min(15px, 3.5vw)"></i> Remover
+                        </a>
+                    </div>
+                </div>
+            </li>
+            {% empty %}
+            <li class="empty-result" style="font-size: min(15px, 4vw); color: #8c8c8c;">Você não criou nenhuma notificação ainda.</li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
 {% endblock %}

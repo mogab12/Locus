@@ -20,7 +20,11 @@
                     <img src="{% static 'defaultphoto.jpg' %}" alt="Default Profile Picture" class="profile-pic">
                 {% endif %}
                 <h3>{{ user.first_name }} {{ user.last_name }}</h3>
+                {% if request.user.user_type == 'aluno' or request.user.user_type == 'representante' %}
                 <p>{{ user.curso }}</p>
+                {% else %}
+                <p>{{ user.user_type }}</p>
+                {% endif %}
             </div>
             <ul class="menu-items">
                 {% if request.user.user_type != 'entidade' %}
