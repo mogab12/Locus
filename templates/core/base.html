@@ -20,13 +20,18 @@
                     <img src="{% static 'defaultphoto.jpg' %}" alt="Default Profile Picture" class="profile-pic">
                 {% endif %}
                 <h3>{{ user.first_name }} {{ user.last_name }}</h3>
+                {% if request.user.user_type == 'aluno' or request.user.user_type == 'representante' %}
                 <p>{{ user.curso }}</p>
+                {% else %}
+                <p>{{ user.user_type }}</p>
+                {% endif %}
             </div>
             <ul class="menu-items">
+                {% if request.user.user_type != 'entidade' %}
                 <li><a href="{% url 'disciplinas' %}"><i class="fa fa-book"></i> Disciplinas</a></li>
+                {% endif %}
                 <li><a href="{% url 'lista_eventos' %}"><i class="fa fa-calendar"></i> Eventos</a></li>
                 <li><a href="{% url 'notificacoes' %}"><i class="fa fa-bell"></i> Notificações</a></li>
-                <li><a href="{% url 'grade_horaria' %}"><i class="fa fa-clock"></i> Grade Horária</a></li>
                 <form method="post" action="{% url 'logout' %}" style="display: inline;">
                     {% csrf_token %}
                     <button type="submit" class="logout-btn">

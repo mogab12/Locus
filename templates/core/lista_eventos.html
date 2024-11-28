@@ -1,54 +1,110 @@
 {% extends 'core/base.html' %}
-{% load static %}
 
 {% block title %}Eventos Disponíveis{% endblock %}
 
 {% block content %}
-<h1>Eventos</h1>
+{% load static %}
+<style>
+    body {
+        background-color: white;
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        overflow-x: hidden; 
+    }
+    
+    html, body {
+        width: 100%; 
+    }
+    
+    .private-profile {
+        text-align: center;
+        padding: 50px 0;
+        font-size: 1.5em;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 70vh; /* Altura total da viewport para centralizar verticalmente */
+    }
+    
+    .private-profile i {
+        font-size: 5em;
+        color: #ccc;
+        margin-bottom: 20px;
+    }
+    </style>
+<div class="disciplinas-add-container">
+    <!-- Título -->
+    <div class="header-container">
+        <h1>Eventos</h1>
+        <div class="actions">
+            {% if request.user.user_type == 'entidade' %}
+                <a href="{% url 'criar_evento' %}" class="icon-btn">
+                    <i class="fas fa-plus-circle"></i>
+                </a>
+            {% endif %}
+            <button class="icon-btn" onclick="history.back();">
+                <i class="fa fa-arrow-left"></i>
+            </button>  
+        </div>
+    </div>
+    <hr>
 
-<form method="get" action="{% url 'lista_eventos' %}" class="mb-4">
-    <input type="text" name="q" value="{{ query }}" placeholder="Pesquisar eventos ou organizadores" class="form-control" aria-label="Pesquisar">
-    <button type="submit" class="btn btn-primary mt-2">Pesquisar</button>
-</form>
+    <!-- Barra de Pesquisa com Filtro -->
+    <form method="get" action="{% url 'lista_eventos' %}" class="search-form">
+        <div class="search-input-group">
+            <input type="text" name="q" value="{{ query }}" placeholder="Pesquisar eventos ou organizadores" id="search">
+            <button type="submit" class="search-btn">
+                <i class="fa fa-search"></i>
+            </button>
+        </div>
+    </form>
 
-{% if request.user.user_type == 'entidade' %}
-    <a href="{% url 'criar_evento' %}" class="btn btn-primary mb-3">Criar Evento</a>
-{% endif %}
+    <!-- Botão Criar Evento -->
 
-{% if eventos_interesse %}
-    <h2>Eventos de Interesse</h2>
-    <ul class="list-group mb-4">
+    <!-- Eventos de Interesse -->
+    {% if eventos_interesse %}
+    <h3>Eventos de Interesse</h3>
+    <ul class="disciplinas-add-list">
         {% for evento in eventos_interesse %}
-        <li class="list-group-item">
-            <a href="{% url 'detalhe_evento' evento.id %}" class="stretched-link" style="text-decoration: none;">
+        <li class="disciplina-add-item" style="padding: 0;">
+            <div style="display: flex; align-items: center;">
                 {% if evento.imagem %}
-                    <img src="{{ evento.imagem.url }}" alt="{{ evento.nome }}" style="width: 100px; height: auto; max-width: 150px;" class="img-thumbnail">
+                <img src="{{ evento.imagem.url }}" alt="{{ evento.nome }}" style="width: 20vw; height: auto; max-width: 100px; margin-right: min(10px,1vw);" class="img-thumbnail">
                 {% else %}
-                    <img src="{% static 'event.webp' %}" alt="Imagem padrão do evento" style="width: 100px; height: auto; max-width: 150px;" class="img-thumbnail">
+                <img src="{% static 'event.webp' %}" alt="Imagem padrão do evento" style="width: 20vw; height: auto; max-width: 100px; margin-right: min(10px,1vw);" class="img-thumbnail">
                 {% endif %}
-                <strong>{{ evento.nome }}</strong> - Organizado por: {{ evento.criado_por.get_full_name }}
-            </a>
+                <div>
+                    <a href="{% url 'detalhe_evento' evento.id %}" class="disciplina-nome" style="color: black; font-size: min(18px,4vw); font-weight: 200;">{{ evento.nome }}</a>
+                    <p class="disciplina-codigo" style="font-size: min(15px,3vw); color: #8c8c8c; margin-top: 0;">Organizado por: {{ evento.criado_por.get_full_name }}</p>
+                </div>
+            </div>
         </li>
         {% endfor %}
     </ul>
-{% endif %}
+    {% endif %}
 
-<h2>Todos os Eventos</h2>
-<ul class="list-group">
-    {% for evento in todos_eventos %}
-    <li class="list-group-item">
-        <a href="{% url 'detalhe_evento' evento.id %}" class="stretched-link" style="text-decoration: none;">
-            {% if evento.imagem %}
-                <img src="{{ evento.imagem.url }}" alt="{{ evento.nome }}" style="width: 100px; height: auto; max-width: 150px;" class="img-thumbnail">
-            {% else %}
-                <img src="{% static 'event.webp' %}" alt="Imagem padrão do evento" style="width: 100px; height: auto; max-width: 150px;" class="img-thumbnail">
-            {% endif %}
-            <strong>{{ evento.nome }}</strong> - Organizado por: {{ evento.criado_por.get_full_name }}
-        </a>
-    </li>
-    {% empty %}
-    <li class="list-group-item">Nenhum evento disponível no momento.</li>
-    {% endfor %}
-</ul>
-
+    <!-- Todos os Eventos -->
+    <h3>Todos os Eventos</h3>
+    <ul class="disciplinas-add-list">
+        {% for evento in todos_eventos %}
+        <li class="disciplina-add-item" style="padding: 0;">
+            <div style="display: flex; align-items: center;">
+                {% if evento.imagem %}
+                <img src="{{ evento.imagem.url }}" alt="{{ evento.nome }}" style="width: 20vw; height: auto; max-width: 100px; margin-right: min(10px,1vw);" class="img-thumbnail">
+                {% else %}
+                <img src="{% static 'event.webp' %}" alt="Imagem padrão do evento" style="width: 20vw; height: auto; max-width: 100px; margin-right: min(10px,1vw);" class="img-thumbnail">
+                {% endif %}
+                <div>
+                    <a href="{% url 'detalhe_evento' evento.id %}" class="disciplina-nome" style="color: black; font-size: min(18px,4vw); font-weight: 200;">{{ evento.nome }}</a>
+                    <p class="disciplina-codigo" style="font-size: min(15px,3vw); color: #8c8c8c; margin-top: 0;">Organizado por: {{ evento.criado_por.get_full_name }}</p>
+                </div>
+            </div>
+        </li>
+        {% empty %}
+        <li class="empty-result" style="font-size: min(15px,4vw); color: #8c8c8c;">Nenhum evento disponível no momento.</li>
+        {% endfor %}
+    </ul>
+</div>
 {% endblock %}

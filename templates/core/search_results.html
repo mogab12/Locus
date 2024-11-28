@@ -3,54 +3,95 @@
 {% block title %}Resultados da Pesquisa{% endblock %}
 
 {% block content %}
-<h1>Resultados da Pesquisa</h1>
+{% load static %}
+{% block body %}
+<style>
+body {
+    background-color: white;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    overflow-x: hidden; 
+}
 
-<!-- Barra de Pesquisa com Filtro -->
-<form method="GET" action="{% url 'search_results' %}">
-    <input type="text" name="query" value="{{ query }}" placeholder="Digite para buscar..." required>
+html, body {
+    width: 100%; 
+}
+</style>
+{% endblock %}
+<div class="disciplinas-add-container">
+    <!-- Título e Botão de Voltar -->
+    <div class="header-container">
+        <h1>Resultados da Pesquisa</h1>
+        <div class="actions">
+            <div class="actions">
+                <button class="icon-btn" onclick="history.back();">
+                    <i class="fa fa-arrow-left"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+    <hr>
 
-    <!-- Filtro de Categoria -->
-    <select name="filter">
-        <option value="user" {% if filter == 'user' %}selected{% endif %}>Usuário</option>
-        <option value="disciplina" {% if filter == 'disciplina' %}selected{% endif %}>Disciplina</option>
-        <option value="evento" {% if filter == 'evento' %}selected{% endif %}>Evento</option>
-    </select>
-    
-    <button type="submit">Pesquisar</button>
-</form>
+    <!-- Barra de Pesquisa com Filtro -->
+    <form method="GET" action="{% url 'search_results' %}" class="search-form">
+        <div class="search-input-group">
+            <input type="text" name="query" value="{{ query }}" placeholder="Digite para buscar..." required>
+            <select name="filter" class="filter-select">
+                <option value="user" {% if filter == 'user' %}selected{% endif %}>Usuário</option>
+                <option value="disciplina" {% if filter == 'disciplina' %}selected{% endif %}>Disciplina</option>
+                <option value="evento" {% if filter == 'evento' %}selected{% endif %}>Evento</option>
+            </select>
+            <button type="submit" class="search-btn">
+                <i class="fa fa-search"></i>
+            </button>
+        </div>
+    </form>
 
-{% if query %}
-    <h2>Resultados para "{{ query }}"</h2>
+    <!-- Resultados -->
+    {% if query %}
+        <h2>Resultados para "{{ query }}"</h2>
 
-    {% if filter == 'user' %}
-        <h3>Usuários</h3>
-        <ul>
-            {% for user in users %}
-                <li><a href="{% url 'view_profile' user.id %}">{{ user.get_full_name }}</a></li>
-            {% empty %}
-                <li>Nenhum usuário encontrado.</li>
-            {% endfor %}
-        </ul>
-    {% elif filter == 'disciplina' %}
-        <h3>Disciplinas</h3>
-        <ul>
-            {% for disciplina in disciplinas %}
-                <li><a href="{% url 'detalhe_disciplina' disciplina.id %}">{{ disciplina.nome }}</a> - Código: {{ disciplina.codigo }}</li>
-            {% empty %}
-                <li>Nenhuma disciplina encontrada.</li>
-            {% endfor %}
-        </ul>
-    {% elif filter == 'evento' %}
-        <h3>Eventos</h3>
-        <ul>
-            {% for evento in eventos %}
-                <li><a href="{% url 'detalhe_evento' evento.id %}">{{ evento.nome }}</a></li>
-            {% empty %}
-                <li>Nenhum evento encontrado.</li>
-            {% endfor %}
-        </ul>
+        {% if filter == 'user' %}
+            <h3>Usuários</h3>
+            <ul class="disciplinas-add-list">
+                {% for user in users %}
+                <li class="disciplina-add-item">
+                    <span>{{ user.get_full_name }}</span>
+                    <a href="{% url 'view_profile' user.id %}" class="btn btn-secondary">Ver Perfil</a>
+                </li>
+                {% empty %}
+                <li class="empty-result" style="font-size: min(15px,4vw); color: #8c8c8c;">Nenhum usuário encontrado.</li>
+                {% endfor %}
+            </ul>
+        {% elif filter == 'disciplina' %}
+            <h3>Disciplinas</h3>
+            <ul class="disciplinas-add-list">
+                {% for disciplina in disciplinas %}
+                <li class="disciplina-add-item">
+                    <span>{{ disciplina.nome }}</span>
+                    <span style="font-weight: normal; font-size: min(12px,3vw); color: #666;">Código: {{ disciplina.codigo }}</span>
+                    <a href="{% url 'detalhe_disciplina' disciplina.id %}" class="btn btn-secondary">Ver Detalhes</a>
+                </li>
+                {% empty %}
+                <li class="empty-result" style="font-size: min(15px,4vw); color: #8c8c8c;">Nenhuma disciplina encontrada.</li>
+                {% endfor %}
+            </ul>
+        {% elif filter == 'evento' %}
+            <h3>Eventos</h3>
+            <ul class="disciplinas-add-list">
+                {% for evento in eventos %}
+                <li class="disciplina-add-item">
+                    <span>{{ evento.nome }}</span>
+                    <a href="{% url 'detalhe_evento' evento.id %}" class="btn btn-secondary">Ver Detalhes</a>
+                </li>
+                {% empty %}
+                <li class="empty-result" style="font-size: min(15px,4vw); color: #8c8c8c;">Nenhum evento encontrado.</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    {% else %}
+        <p class="empty-result" style="font-size: min(15px,4vw); color: #8c8c8c;">Digite um termo de pesquisa para obter resultados.</p>
     {% endif %}
-{% else %}
-    <p>Digite um termo de pesquisa para obter resultados.</p>
-{% endif %}
+</div>
 {% endblock %}
