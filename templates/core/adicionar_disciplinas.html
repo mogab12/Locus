@@ -23,7 +23,7 @@ html, body {
     <div class="header-container">
         <h1>Minhas Disciplinas</h1>
         <div class="actions">
-            <a href="{% url 'disciplinas' %}" class="icon-btn"]>
+            <a href="{% url 'disciplinas' %}" class="icon-btn">
                 <i class="fa fa-arrow-left"></i>
             </a>        
         </div>
@@ -44,7 +44,7 @@ html, body {
     <!-- Formulário de busca -->
     <form method="get" class="search-form">
         <div class="search-input-group">
-            <input type="text" name="q" id="search" value="{{ query }}" placeholder="Buscar discplina">
+            <input type="text" name="q" id="search" value="{{ query }}" placeholder="Buscar disciplina">
             <button type="submit" class="search-btn">
                 <i class="fa fa-search" aria-hidden="true"></i>
             </button>
@@ -54,10 +54,18 @@ html, body {
     <!-- Resultados da pesquisa -->
     <h3>Resultados da Pesquisa</h3>
     <ul class="disciplinas-add-list">
-        {% for disciplina in search_results %}
+        {% for disciplina, show_turma in search_results %}
         <li class="disciplina-add-item">
-            <label>{{ disciplina.nome }}</label>
-            <label class="disciplina-codigo" style="font-weight: normal; font-size: min(12px,3vw); color: #666;"> Código da disciplina: {{ disciplina.codigo }}</label>
+            <a href="{% url 'detalhe_disciplina' disciplina.id %}" class="disciplina-nome">
+                <label>{{ disciplina.nome }}</label>
+                <br>
+                <label class="disciplina-codigo" style="font-weight: normal; font-size: min(12px,3vw); color: #666;">
+                    {{ disciplina.codigo }}
+                    {% if show_turma %}- Turma {{ disciplina.turma }}{% endif %}
+                </label>
+            </a>
+            
+            
             <form method="post" class="add-form">
                 {% csrf_token %}
                 <input type="hidden" name="disciplina_id" value="{{ disciplina.id }}">
@@ -72,7 +80,7 @@ html, body {
         </ul>
         {% endfor %}
     </ul>
-    
+
     {% if user.user_type != 'professor' %}
     <div class="import-disciplinas-container">
         <form method="post" class="import-form">

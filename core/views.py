@@ -73,13 +73,47 @@ def disciplinas(request):
     if request.user.user_type not in ['aluno', 'representante', 'professor']:
         raise PermissionDenied
 
+    # Obtenha todas as disciplinas do usuário
     user_disciplines = UserDiscipline.objects.filter(user=request.user).select_related('disciplina')
-    return render(request, 'core/disciplinas.html', {'user_disciplines': user_disciplines})
+
+    # Cria um dicionário para contar as turmas de cada disciplina
+    turma_counts = {}
+    for ud in user_disciplines:
+        key = (ud.disciplina.nome, ud.disciplina.codigo)
+        if key in turma_counts:
+            turma_counts[key] += 1
+        else:
+            turma_counts[key] = 1
+
+    # Crie uma lista de tuplas com a disciplina e a flag para mostrar a turma
+    disciplinas_com_turmas = [
+        (ud, turma_counts[(ud.disciplina.nome, ud.disciplina.codigo)] > 1)
+        for ud in user_disciplines
+    ]
+
+    return render(request, 'core/disciplinas.html', {'user_disciplines': disciplinas_com_turmas})
+
 @login_required
 def remover_disciplinas(request):
     if request.user.user_type not in ['aluno', 'representante', 'professor']:
         raise PermissionDenied
+
     user_disciplines = UserDiscipline.objects.filter(user=request.user).select_related('disciplina')
+
+    # Cria um dicionário para contar as turmas de cada disciplina
+    turma_counts = {}
+    for ud in user_disciplines:
+        key = (ud.disciplina.nome, ud.disciplina.codigo)
+        if key in turma_counts:
+            turma_counts[key] += 1
+        else:
+            turma_counts[key] = 1
+
+    # Crie uma lista de tuplas com a disciplina e a flag para mostrar a turma
+    disciplinas_com_turmas = [
+        (ud, turma_counts[(ud.disciplina.nome, ud.disciplina.codigo)] > 1)
+        for ud in user_disciplines
+    ]
 
     if request.method == 'POST':
         if 'remove' in request.POST:
@@ -92,19 +126,20 @@ def remover_disciplinas(request):
             messages.success(request, 'Todas as disciplinas foram removidas.')
 
     return render(request, 'core/remover_disciplinas.html', {
-        'user_disciplines': user_disciplines,
+        'user_disciplines': disciplinas_com_turmas,
     })
 
 @login_required
 def adicionar_disciplinas(request):
     if request.user.user_type not in ['aluno', 'representante', 'professor']:
         raise PermissionDenied
+
     search_results = []
     query = request.GET.get('q', '')
 
     if request.method == 'POST':
         if 'add' in request.POST:
-            # Adicionar disciplina selecionada ao usuário
+            # Adicionar a disciplina selecionada ao usuário
             disciplina_id = request.POST.get('disciplina_id')
             disciplina = Disciplina.objects.get(id=disciplina_id)
             UserDiscipline.objects.get_or_create(user=request.user, disciplina=disciplina)
@@ -120,16 +155,31 @@ def adicionar_disciplinas(request):
             messages.success(request, 'Disciplinas obrigatórias importadas com sucesso!')
 
     if query:
+        # Recuperar todas as disciplinas que correspondem à busca
         all_results = Disciplina.objects.filter(
             Q(nome__icontains=query) | Q(codigo__icontains=query)
         )
 
-        # Remover duplicatas com base no 'codigo'
-        seen_codes = set()
-        for disciplina in all_results:
-            if disciplina.codigo not in seen_codes:
-                search_results.append(disciplina)
-                seen_codes.add(disciplina.codigo)
+        # Obter disciplinas que o usuário já adicionou
+        disciplinas_usuario = UserDiscipline.objects.filter(user=request.user).values_list('disciplina_id', flat=True)
+
+        # Filtrar disciplinas que o usuário ainda não adicionou
+        search_results = all_results.exclude(id__in=disciplinas_usuario)
+
+        # Verificar quantas turmas existem para exibir a turma quando apropriado
+        turma_counts = {}
+        for disciplina in search_results:
+            key = (disciplina.nome, disciplina.codigo)
+            if key in turma_counts:
+                turma_counts[key] += 1
+            else:
+                turma_counts[key] = 1
+
+        # Atualizar search_results com a lógica de exibição de turma
+        search_results = [
+            (disciplina, turma_counts[(disciplina.nome, disciplina.codigo)] > 1)
+            for disciplina in search_results
+        ]
 
     return render(request, 'core/adicionar_disciplinas.html', {
         'search_results': search_results,
@@ -189,7 +239,6 @@ def detalhe_topico(request, topico_id):
 
     return render(request, 'core/detalhe_topico.html', {'topico': topico, 'form': form})
 
-@login_required
 @login_required
 def novo_topico(request, disciplina_id):
     if request.user.user_type not in ['representante', 'professor']:

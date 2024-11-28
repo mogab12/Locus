@@ -2,6 +2,7 @@ import os
 import django
 import requests
 from bs4 import BeautifulSoup
+from collections import defaultdict
 
 # Configurar o ambiente Django
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings')
@@ -53,31 +54,45 @@ def extrair_disciplinas(url, nome_curso):
 
 def inserir_disciplinas(nome_curso, disciplinas_obrigatorias, disciplinas_optativas):
     disciplinas_para_inserir = []
+    contador_turmas = defaultdict(int)  # Contador para manter o número de turmas para cada combinação de código e nome
 
+    # Primeiro, carregue o contador de turmas existente a partir do banco de dados
+    todas_disciplinas = Disciplina.objects.all()
+    for d in todas_disciplinas:
+        key = (d.nome, d.codigo)
+        contador_turmas[key] = max(contador_turmas[key], d.turma)
+
+    # Agora, processe as novas disciplinas
     for semestre, disciplinas in disciplinas_obrigatorias.items():
         for disciplina in disciplinas:
+            key = (disciplina['nome'], disciplina['codigo'])
+            contador_turmas[key] += 1  # Incrementa o contador para cada nova instância
             disciplinas_para_inserir.append(
                 Disciplina(
                     nome=disciplina['nome'],
                     codigo=disciplina['codigo'],
                     semestre=semestre,
                     curso=nome_curso,
-                    tipo='Obrigatória'
+                    tipo='Obrigatória',
+                    turma=contador_turmas[key]
                 )
             )
 
     for semestre, disciplinas in disciplinas_optativas.items():
         for disciplina in disciplinas:
+            key = (disciplina['nome'], disciplina['codigo'])
+            contador_turmas[key] += 1
             disciplinas_para_inserir.append(
                 Disciplina(
                     nome=disciplina['nome'],
                     codigo=disciplina['codigo'],
                     semestre=semestre,
                     curso=nome_curso,
-                    tipo='Optativa'
+                    tipo='Optativa',
+                    turma=contador_turmas[key]
                 )
             )
-    
+
     # Usar o Django ORM para salvar em massa
     Disciplina.objects.bulk_create(disciplinas_para_inserir)
 

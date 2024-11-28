@@ -44,7 +44,7 @@ class Disciplina(models.Model):
         on_delete=models.SET_NULL,
         limit_choices_to={'user_type': 'professor'}
     )
-
+    turma = models.IntegerField(default=1)
     def __str__(self):
         return self.nome
 

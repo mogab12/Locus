@@ -10,11 +10,11 @@ body {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    overflow-x: hidden; 
+    overflow-x: hidden;
 }
 
 html, body {
-    width: 100%; 
+    width: 100%;
 }
 </style>
 {% endblock %}
@@ -42,13 +42,15 @@ html, body {
     {% endif %}
 
     <!-- Lista de disciplinas para remoção -->
-
     <ul class="disciplinas-add-list">
-        {% for user_discipline in user_disciplines %}
+        {% for user_discipline, show_turma in user_disciplines %}
         <li class="disciplina-add-item">
             <label>{{ user_discipline.disciplina.nome }}</label>
             <label class="disciplina-codigo" style="font-weight: normal; font-size: min(12px,3vw); color: #666;">
-                Código da disciplina: {{ user_discipline.disciplina.codigo }}
+                {{ user_discipline.disciplina.codigo }}
+                {% if show_turma %}
+                - Turma {{ user_discipline.disciplina.turma }}
+                {% endif %}
             </label>
             <form method="post" class="add-form">
                 {% csrf_token %}
