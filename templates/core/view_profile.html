@@ -95,13 +95,15 @@ html, body {
         {% endif %}
 
 
-        {% if profile_user.user_type == 'professor' or profile_user.user_type == 'aluno'%}
+        {% if profile_user.user_type != 'entidade'%}
         <div class="professores-container">
             <h3>Disciplinas</h3>
             <ul class="disciplinas-add-list">
                 {% for disciplina in disciplinas %}
                 <li class="disciplina-detail-item">
-                    <span>{{ disciplina.nome }} - {{ disciplina.codigo }}</span>
+                    <a href="{% url 'detalhe_disciplina' disciplina.id %}">
+                        {{ disciplina.nome }} - {{ disciplina.codigo }}
+                    </a>
                 </li>
                 {% empty %}
                 <li class="empty-result" style="font-size: min(15px,4vw); color: #8c8c8c;">
