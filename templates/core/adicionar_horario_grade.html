@@ -1,0 +1,15 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Adicionar Horário à Grade{% endblock %}
+
+{% block content %}
+<h2>Adicionar Horário à Minha Grade</h2>
+
+<form method="post" novalidate>
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Adicionar Horário</button>
+</form>
+
+<a href="{% url 'grade_horaria' %}">Voltar para a Grade</a>
+{% endblock %}

@@ -105,3 +105,21 @@ class Notificacao(models.Model):
 
     def __str__(self):
         return f"{self.titulo} - {self.criador.get_full_name()}"
+    
+class HorarioGrade(models.Model):
+    usuario = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='horarios_grade')
+    disciplina = models.ForeignKey('Disciplina', on_delete=models.CASCADE)
+    dia_da_semana = models.CharField(max_length=3, choices=[
+        ('SEG', 'Segunda-feira'),
+        ('TER', 'Terça-feira'),
+        ('QUA', 'Quarta-feira'),
+        ('QUI', 'Quinta-feira'),
+        ('SEX', 'Sexta-feira'),
+        ('SAB', 'Sábado'),
+        ('DOM', 'Domingo'),
+    ])
+    horario_inicio = models.TimeField()
+    horario_fim = models.TimeField()
+
+    def __str__(self):
+        return f"{self.usuario} - {self.disciplina.nome} ({self.get_dia_da_semana_display()})"

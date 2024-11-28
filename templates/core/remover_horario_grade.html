@@ -1,0 +1,16 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Remover Horário{% endblock %}
+
+{% block content %}
+<h2>Remover Horário</h2>
+
+<p>Tem certeza de que deseja remover o horário <strong>{{ horario.disciplina.nome }}</strong> de <strong>{{ horario.horario_inicio }}</strong> a <strong>{{ horario.horario_fim }}</strong> no dia {{ horario.get_dia_da_semana_display }}?</p>
+
+<form method="post">
+    {% csrf_token %}
+    <button type="submit">Sim, remover</button>
+</form>
+
+<a href="{% url 'grade_horaria' %}">Cancelar</a>
+{% endblock %}

@@ -147,3 +147,14 @@ class NotificationForm(forms.ModelForm):
                 # Filtra eventos criados ou geridos pela entidade
                 self.fields['evento'].queryset = Evento.objects.filter(criado_por=user)
                 self.fields['disciplina'].queryset = Disciplina.objects.none()
+
+from .models import HorarioGrade
+
+class HorarioGradeForm(forms.ModelForm):
+    class Meta:
+        model = HorarioGrade
+        fields = ['disciplina', 'dia_da_semana', 'horario_inicio', 'horario_fim']
+        widgets = {
+            'horario_inicio': forms.TimeInput(format='%H:%M', attrs={'type': 'time'}),
+            'horario_fim': forms.TimeInput(format='%H:%M', attrs={'type': 'time'}),
+        }

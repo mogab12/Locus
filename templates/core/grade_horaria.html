@@ -1,8 +1,28 @@
 {% extends 'core/base.html' %}
 
-{% block title %}Grade Horária - Localizador de Salas{% endblock %}
+{% block title %}Minha Grade Horária{% endblock %}
 
 {% block content %}
-    <h1>Grade Horária</h1>
-    <p>Visualize sua grade horária e localize suas aulas.</p>
+<h2>Minha Grade Horária</h2>
+
+{% for dia, horarios in grade.items %}
+  <h3>{{ dia }}</h3>
+  {% if horarios %}
+    <ul>
+      {% for horario in horarios %}
+        <li>
+            <a href="{% url 'detalhe_disciplina' horario.disciplina.id %}">
+                {{ horario.disciplina.nome }}
+            </a>: {{ horario.horario_inicio }} - {{ horario.horario_fim }}
+            <a href="{% url 'editar_horario_grade' horario.id %}" class="editar-btn">Editar</a>
+            <a href="{% url 'remover_horario_grade' horario.id %}" class="remover-btn">Remover</a>
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>Nenhum horário neste dia.</p>
+  {% endif %}
+{% endfor %}
+
+<a href="{% url 'adicionar_horario_grade' %}">Adicionar Disciplina à Grade</a>
 {% endblock %}

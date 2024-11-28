@@ -585,3 +585,77 @@ def search_results(request):
         'eventos': eventos,
     }
     return render(request, 'core/search_results.html', context)
+
+from .models import HorarioGrade, Disciplina
+from .forms import HorarioGradeForm
+
+@login_required
+def grade_horaria(request):
+    # Organiza horários por dia da semana
+    horarios = request.user.horarios_grade.all().order_by('dia_da_semana', 'horario_inicio')
+    dias_da_semana = ['SEG', 'TER', 'QUA', 'QUI', 'SEX', 'SAB', 'DOM']
+    grade = {dia: [] for dia in dias_da_semana}
+    
+    for horario in horarios:
+        grade[horario.dia_da_semana].append(horario)
+
+    return render(request, 'core/grade_horaria.html', {'grade': grade})
+
+@login_required
+def adicionar_horario_grade(request):
+    if request.method == 'POST':
+        form = HorarioGradeForm(request.POST)
+        # Filtra disciplinas que o usuário possui
+        form.fields['disciplina'].queryset = Disciplina.objects.filter(userdiscipline__user=request.user)
+        if form.is_valid():
+            horario_grade = form.save(commit=False)
+            horario_grade.usuario = request.user
+            horario_grade.save()
+            return redirect('grade_horaria')
+    else:
+        form = HorarioGradeForm()
+        # Filtra disciplinas que o usuário possui
+        form.fields['disciplina'].queryset = Disciplina.objects.filter(userdiscipline__user=request.user)
+
+    return render(request, 'core/adicionar_horario_grade.html', {'form': form})
+@login_required
+def adicionar_horario_grade(request):
+    if request.method == 'POST':
+        form = HorarioGradeForm(request.POST)
+        # Filtra disciplinas que o usuário possui
+        form.fields['disciplina'].queryset = Disciplina.objects.filter(userdiscipline__user=request.user)
+        if form.is_valid():
+            horario_grade = form.save(commit=False)
+            horario_grade.usuario = request.user
+            horario_grade.save()
+            return redirect('grade_horaria')
+    else:
+        form = HorarioGradeForm()
+        # Filtra disciplinas que o usuário possui
+        form.fields['disciplina'].queryset = Disciplina.objects.filter(userdiscipline__user=request.user)
+
+    return render(request, 'core/adicionar_horario_grade.html', {'form': form})
+
+@login_required
+def remover_horario_grade(request, horario_id):
+    horario = get_object_or_404(HorarioGrade, id=horario_id, usuario=request.user)
+    if request.method == 'POST':
+        horario.delete()
+        return redirect('grade_horaria')
+    return render(request, 'core/remover_horario_grade.html', {'horario': horario})
+
+@login_required
+def editar_horario_grade(request, horario_id):
+    horario = get_object_or_404(HorarioGrade, id=horario_id, usuario=request.user)
+    
+    if request.method == 'POST':
+        form = HorarioGradeForm(request.POST, instance=horario)
+        if form.is_valid():
+            form.save()
+            return redirect('grade_horaria')
+    else:
+        form = HorarioGradeForm(instance=horario)
+        # Filtra apenas as disciplinas que o usuário possui
+        form.fields['disciplina'].queryset = Disciplina.objects.filter(userdiscipline__user=request.user)
+
+    return render(request, 'core/editar_horario_grade.html', {'form': form, 'horario': horario})
