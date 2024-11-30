@@ -3,13 +3,93 @@
 {% block title %}Adicionar Horário à Grade{% endblock %}
 
 {% block content %}
-<h2>Adicionar Horário à Minha Grade</h2>
 
-<form method="post" novalidate>
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Adicionar Horário</button>
-</form>
+{% block body %}
+<style>
+body {
+    background-color: white;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    overflow-x: hidden; 
+}
 
-<a href="{% url 'grade_horaria' %}">Voltar para a Grade</a>
+html, body {
+    width: 100%; 
+}
+
+.form-control {
+    font-size: min(18px, 4vw);
+    padding: min(10px, 2vw);
+    margin-bottom: min(15px, 4vw);
+    width: 100%;
+    max-height: 40px;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+button { 
+    font-size: min(18px, 4vw);
+    padding: min(10px, 2vw);
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.icon-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: min(24px, 6vw);
+    color: black;
+}
+</style>
+{% endblock %}
+
+<div class="disciplinas-add-container">
+    <!-- Título e Botão de Voltar -->
+    <div class="header-container">
+        <h1>Adicionar Horário à Grade</h1>
+        <div class="actions">
+            <a href="{% url 'grade_horaria' %}" class="icon-btn">
+                <i class="fa fa-arrow-left"></i>
+            </a>
+        </div>
+    </div>
+    <hr>
+
+    <!-- Formulário para adicionar horário -->
+    <div class="import-disciplinas-container-topico">
+        <form method="post" class="topico-form">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="disciplina">Disciplina:</label>
+                {{ form.disciplina }}
+            </div>
+            <div class="form-group">
+                <label for="dia_da_semana">Dia da Semana:</label>
+                {{ form.dia_da_semana }}
+            </div>
+            <div class="form-group">
+                <label for="horario_inicio">Horário de Início:</label>
+                {{ form.horario_inicio }}
+            </div>
+            <div class="form-group">
+                <label for="horario_fim">Horário de Fim:</label>
+                {{ form.horario_fim }}
+            </div>
+            <button type="submit" class="import-btn">
+                <i class="fa fa-plus"></i>
+                <span>Adicionar Horário</span>
+            </button>
+        </form>
+    </div>
+
+        
+    
+</div>
 {% endblock %}

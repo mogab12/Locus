@@ -54,7 +54,7 @@ html, body {
                     {% else %}
                         <a href="#">
                     {% endif %}
-                        <h5 class="disciplina-nome" style="font-size: min(20px, 7vw); margin-top: 0; margin-bottom: 0;">{{ notificacao.titulo }}</h5>
+                        <h5 class="disciplina-nome" style="font-size: min(20px, 7vw); margin-top: 0; margin-bottom: 0; color: black;">{{ notificacao.titulo }}</h5>
                         <p class="disciplina-nome" style="font-size: min(18px, 5vw); color: black;">{{ notificacao.mensagem }}</p>
                     </a>
 
@@ -92,7 +92,7 @@ html, body {
                         
                         {% if notificacao.evento %}
                             <a href="{% url 'detalhe_evento' notificacao.evento.id %}" class="icon-btn">
-                                <i class="fa fa-calendar" style="margin-right: max(-1vw,-6px); font-size: min(15px, 3.5vw); margin-left: max(-1.8vw,-10px)"></i> Ver Evento
+                                <i class="fa fa-calendar" style="font-size: min(15px, 3.5vw);margin-right:min(1vw,3px);"></i> Ver Evento
                             </a>
                         {% endif %}
 

@@ -32,7 +32,9 @@
                 {% endif %}
                 <li><a href="{% url 'lista_eventos' %}"><i class="fa fa-calendar"></i> Eventos</a></li>
                 <li><a href="{% url 'notificacoes' %}"><i class="fa fa-bell"></i> Notificações</a></li>
+                {% if request.user.user_type != 'entidade'%}
                 <li><a href="{% url 'grade_horaria' %}"><i class="fa fa-table"></i> Grade Horária</a></li>
+                {% endif %}
                 <form method="post" action="{% url 'logout' %}" style="display: inline;">
                     {% csrf_token %}
                     <button type="submit" class="logout-btn">

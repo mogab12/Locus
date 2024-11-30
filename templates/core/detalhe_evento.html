@@ -65,7 +65,7 @@ html, body {
     <div class="event_main_container" style="margin-bottom: 6vw;">
         <div class="img_event">
             {% if evento.criado_por.foto %}
-                <img src="{{ evento.criado_por.foto.url }}"  class="ent_img" style="width: 20vw; max-width: 80px; max-height: 80px; height: 20vw; border-radius: 50%; margin-bottom: 0">
+                <img src="{{ evento.criado_por.foto.url }}"  class="ent_img" style="width: 20vw; height: 20vw; border-radius: 50%; margin-bottom: 0">
             {% else %}
                 <img src="{% static 'defaultphoto.jpg' %}" class="ent_img_default" >
             {% endif %}
@@ -80,7 +80,7 @@ html, body {
             </p>
         </div>
     </div>
-    <div class="description" style=" display: flex; flex-direction: column; text-align: center; justify-content: space-between;">
+    <div class="description" style=" display: flex; flex-direction: column; text-align: center; justify-content: space-between; margin-bottom: 10vh;">
         <p class="p_event" style="margin-top: 4vw; color: black; font-size: 3.5vw; margin-left: 10vw;"><strong>Descrição do evento:</strong></p>
         <p  style="margin-top: 2vw; color: grey; margin-left: 10vw; font-size: 3.5vw; margin-right: 10vw;">{{ evento.descricao }}</p>
     </div>

@@ -3,14 +3,73 @@
 {% block title %}Remover Horário{% endblock %}
 
 {% block content %}
-<h2>Remover Horário</h2>
+{% load static %}
+{% block body %}
+<style>
+body {
+    background-color: white;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    overflow-x: hidden; 
+}
 
-<p>Tem certeza de que deseja remover o horário <strong>{{ horario.disciplina.nome }}</strong> de <strong>{{ horario.horario_inicio }}</strong> a <strong>{{ horario.horario_fim }}</strong> no dia {{ horario.get_dia_da_semana_display }}?</p>
+html, body {
+    width: 100%; 
+}
 
-<form method="post">
-    {% csrf_token %}
-    <button type="submit">Sim, remover</button>
-</form>
+button { 
+    font-size: min(18px, 4vw);
+    padding: min(10px, 2vw);
+    background-color: #DC3545;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+}
 
-<a href="{% url 'grade_horaria' %}">Cancelar</a>
+.icon-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: min(24px, 6vw);
+    color: black;
+}
+
+.confirmation-message {
+    font-size: min(15px, 4vw);
+    color: #8c8c8c;
+    margin-bottom: 20px;
+}
+</style>
+{% endblock %}
+<div class="disciplinas-add-container">
+    <!-- Título e Botão de Voltar -->
+    <div class="header-container">
+        <h1>Remover Horário</h1>
+        <div class="actions">
+            <a href="{% url 'grade_horaria' %}" class="icon-btn">
+                <i class="fa fa-arrow-left"></i>
+            </a>
+        </div>
+    </div>
+    <hr>
+
+    <!-- Mensagem de confirmação e ações -->
+    <div class="import-disciplinas-container-topico">
+        <p class="confirmation-message">
+            Tem certeza de que deseja remover o horário <strong>{{ horario.disciplina.nome }}</strong> 
+            de <strong>{{ horario.horario_inicio }}</strong> a <strong>{{ horario.horario_fim }}</strong> 
+            no dia {{ horario.get_dia_da_semana_display }}? Esta ação não pode ser desfeita.
+        </p>
+        <form method="post" class="topico-form">
+            {% csrf_token %}
+            <button type="submit" class="import-btn">
+                <i class="fa fa-trash"></i>
+                <span>Remover</span>
+            </button>
+        </form>
+    </div>
+</div>
 {% endblock %}
