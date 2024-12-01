@@ -84,36 +84,45 @@ html, body {
 </div>
 {% endif %}
 
+
 <script>
-// Inicializa o mapa com a posição inicial e zoom
-const map = L.map('map', {
-    center: [-23.555299, -46.729696], // Coordenadas centrais
-    zoom: 16.5, // Nível inicial de zoom
-    maxBounds: [
-        [-23.570, -46.740], // Coordenadas do canto sudoeste (mínimo)
-        [-23.530, -46.720]  // Coordenadas do canto nordeste (máximo)
-    ],
-    maxBoundsViscosity: 1.0, // Evita que o usuário mova fora dos limites
-    minZoom: 15, // Zoom mínimo permitido
-    maxZoom: 20  // Zoom máximo permitido
-});
-
-// Adiciona a camada de base do mapa
-const layer = L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager_labels_under/{z}/{x}/{y}{r}.png', {
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
-    subdomains: 'abcd',
-    maxZoom: 20
-});
-const marker = L.marker([-23.553273761874635, -46.729336977565005]).addTo(map);
-
-// Define o texto do popup
-marker.bindPopup(`
-    <b>Departamento de Engenharia</b><br>
-    Mecatrônica, Mecânica e Naval.<br>
-    <i>Coordenadas:</i> -23.55327, -46.72933
-`);
-// Adiciona a camada ao mapa
-layer.addTo(map);
-</script>
-
-{% endblock %}
+    // Inicializa o mapa com a posição inicial e zoom
+    const map = L.map('map', {
+        center: [-23.555299, -46.729696],
+        zoom: 16.5,
+        maxBounds: [
+            [-23.570, -46.740],
+            [-23.530, -46.720]
+        ],
+        maxBoundsViscosity: 1.0,
+        minZoom: 15,
+        maxZoom: 20
+    });
+    
+    // Adiciona a camada de base do mapa
+    const layer = L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager_labels_under/{z}/{x}/{y}{r}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+        subdomains: 'abcd',
+        maxZoom: 20
+    });
+    layer.addTo(map);
+    
+    // Adiciona marcadores para todos os prédios se latitude e longitude existirem
+    {% for predio in predios %}
+        {% if predio.latitude is not None and predio.longitude is not None %}
+            (function() {
+                // Substitui a vírgula por ponto para garantir que o valor seja um número válido
+                const lat = parseFloat("{{ predio.latitude|floatformat:6 }}".replace(',', '.'));
+                const lng = parseFloat("{{ predio.longitude|floatformat:6 }}".replace(',', '.'));
+                
+                const marker = L.marker([lat, lng]).addTo(map);
+                marker.bindPopup(`<b>{{ predio.nome|escapejs }}</b><br><i>Coordenadas:</i> ${lat}, ${lng}`);
+                console.log(`Adicionando marcador: ${lat}, ${lng} para {{ predio.nome|escapejs }}`);
+            })();
+        {% else %}
+            console.warn('Prédio sem coordenadas: {{ predio.nome|escapejs }}');
+        {% endif %}
+    {% endfor %}
+    </script>
+    
+    {% endblock %}

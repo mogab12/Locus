@@ -6,7 +6,7 @@ from django.db.models import Q
 from django.contrib import messages
 from .forms import CustomUserCreationForm, UserProfileForm, NovoTopicoForm, NovaPostagemForm
 from django.http import HttpResponseForbidden
-from .models import Disciplina, UserDiscipline, Topico, Postagem, CustomUser, Evento, Notificacao, Sala
+from .models import Disciplina, UserDiscipline, Topico, Postagem, CustomUser, Evento, Notificacao, Sala, Predio
 from django.core.exceptions import PermissionDenied
 from django.contrib.auth.models import User
 from .forms import TopicoForm, EventoForm, NotificationForm, SalaForm
@@ -64,10 +64,7 @@ def login_view(request):
             return render(request, 'core/login.html', {'error': 'Credenciais inválidas'})
     return render(request, 'core/login.html')
 
-@login_required
-def home(request):
-    aula_proxima = proxima_aula(request.user)
-    return render(request, 'core/home.html', {'aula_proxima': aula_proxima})
+
 
 @login_required
 def disciplinas(request):
@@ -717,3 +714,11 @@ def get_salas(request, predio_id):
     salas = Sala.objects.filter(predio_id=predio_id)
     salas_json = [{'id': s.id, 'nome': s.nome} for s in salas]
     return JsonResponse(salas_json, safe=False)
+
+
+@login_required
+def home(request):
+    aula_proxima = proxima_aula(request.user)
+    predios = Predio.objects.all()
+    
+    return render(request, 'core/home.html', {'aula_proxima': aula_proxima, 'predios': predios})
