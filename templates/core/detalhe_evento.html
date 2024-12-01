@@ -17,6 +17,38 @@ body {
 html, body {
     width: 100%; 
 }
+.icon_event_location {
+    position: absolute !important;
+    top: 87vw !important; /* Ajusta a posição no topo */
+    right: 14.8vw !important; /* Alinha ao lado do sininho */
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    cursor: pointer !important;
+    text-decoration: none !important;
+}
+.icon_event_location i {
+    font-size: 5.5vw !important;
+    color: #000;
+}
+.icon_event_edit {
+    position: absolute !important;
+    top: 9.5vw !important;
+    right: -10vw !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    cursor: pointer !important;
+    text-decoration: none !important;
+    margin-top: 0!important;
+}
+.icon_event_delete{
+    position: relative;
+    top: -1vw !important;
+    right: 4vw !important;
+
+}
+
 
 @media(min-width: 769px){
     .logo img{
@@ -144,8 +176,8 @@ html, body {
 
     .icon_event_edit {
         position: absolute !important;
-        top: 2vw !important;
-        right: 0vw !important;
+        top: 2.3vw !important;
+        right: -0.5vw !important;
         display: flex !important;
         justify-content: center !important;
         align-items: center !important;
@@ -156,8 +188,8 @@ html, body {
 
     .icon_event_delete {
         position: absolute !important;
-        top: 2vw !important;
-        right: 2vw !important;
+        top: 2.2vw !important;
+        right: 3.8vw !important;
         display: flex !important;
         justify-content: center !important;
         align-items: center !important;
@@ -183,6 +215,20 @@ html, body {
         cursor: pointer !important;
         text-decoration: none !important;
         font-size: 3vw !important;
+    }
+    .icon_event_location {
+        position: absolute !important;
+        top: 2.1vw !important; /* Ajusta a posição no topo */
+        right: 10.5vw !important; /* Alinha ao lado do sininho */
+        display: flex !important;
+        justify-content: center !important;
+        align-items: center !important;
+        cursor: pointer !important;
+        text-decoration: none !important;
+    }
+    .icon_event_location i {
+        font-size: 2.8vw !important;
+        color: #000;
     }
 }
 
@@ -252,9 +298,9 @@ html, body {
         <p style="margin-top: 2vw; color: grey; margin-left: 10vw; font-size: 3.5vw; margin-right: 10vw;">{{ evento.descricao }}</p>
     </div>
     {% if evento.latitude and evento.longitude %}
-    <button class="btn btn-primary" onclick="window.location.href='{% url 'ver_local_evento' evento.id %}'">
-        Ver Localização
-    </button>
+    <a href="{% url 'ver_local_evento' evento.id %}" class="icon_event_location">
+        <i class="fa fa-map-marker-alt"></i>
+    </a>
     {% endif %}
 </div>
 
