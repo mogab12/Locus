@@ -105,7 +105,15 @@ class Notificacao(models.Model):
 
     def __str__(self):
         return f"{self.titulo} - {self.criador.get_full_name()}"
-    
+
+class Salas(models.Model):
+    nome_sala = models.CharField(max_length=255)
+    posição_x = models.FloatField()
+    posição_y = models.FloatField()
+
+    def __str__(self):
+        return self.nome_sala
+
 class HorarioGrade(models.Model):
     usuario = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='horarios_grade')
     disciplina = models.ForeignKey('Disciplina', on_delete=models.CASCADE)
@@ -120,6 +128,7 @@ class HorarioGrade(models.Model):
     ])
     horario_inicio = models.TimeField()
     horario_fim = models.TimeField()
+    Sala = models.ForeignKey('Salas',on_delete=models.CASCADE,related_name='horarios_grade',default=2)
 
     def __str__(self):
         return f"{self.usuario} - {self.disciplina.nome} ({self.get_dia_da_semana_display()})"

@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
-from .models import CustomUser, CustomEmailValidator, Topico, Postagem, Evento, Disciplina, Notificacao
+from .models import CustomUser, CustomEmailValidator, Topico, Postagem, Evento, Disciplina, Notificacao, Salas
 import sqlite3
 
 class NovoTopicoForm(forms.ModelForm):
@@ -151,9 +151,15 @@ class NotificationForm(forms.ModelForm):
 from .models import HorarioGrade
 
 class HorarioGradeForm(forms.ModelForm):
+    sala = forms.ModelChoiceField(
+        queryset=Salas.objects.all(),
+        empty_label="Selecione uma sala",
+        widget=forms.Select(attrs={'class': 'form-control'}),
+        label="Sala"
+    )
     class Meta:
         model = HorarioGrade
-        fields = ['disciplina', 'dia_da_semana', 'horario_inicio', 'horario_fim']
+        fields = ['disciplina', 'dia_da_semana', 'horario_inicio', 'horario_fim','sala']
         widgets = {
             'horario_inicio': forms.TimeInput(format='%H:%M', attrs={'type': 'time'}),
             'horario_fim': forms.TimeInput(format='%H:%M', attrs={'type': 'time'}),

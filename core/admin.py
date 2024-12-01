@@ -1,6 +1,19 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from .models import CustomUser
+from .models import CustomUser, Salas
+
+
+
+class SalasAdmin(admin.ModelAdmin):
+    model = Salas
+    list_display = ['nome_sala', 'posição_x', 'posição_y']  
+    search_fields = ['nome_sala']  
+    list_filter = ['nome_sala']  
+    fieldsets = (
+        (None, {'fields': ('nome_sala',)}),
+        ('Posição no Mapa', {'fields': ('posição_x', 'posição_y')}),
+    )
+
 
 class CustomUserAdmin(UserAdmin):
     model = CustomUser
@@ -21,3 +34,4 @@ class CustomUserAdmin(UserAdmin):
     )
 
 admin.site.register(CustomUser, CustomUserAdmin)
+admin.site.register(Salas, SalasAdmin)

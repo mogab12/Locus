@@ -7,6 +7,7 @@ def proxima_aula_função(usuario):
     agora = timezone.localtime(timezone.now())
     #dia_atual = agora.weekday()
     dia_atual = 0
+    
     hora_atual = agora.time()
 
     aulas = HorarioGrade.objects.filter(usuario = usuario).order_by('dia_da_semana','horario_inicio')
