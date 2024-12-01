@@ -21,19 +21,27 @@
 <style>
     
     .text-overlay {
-      position: fixed ;
-      top: 20px; /* Ajuste a posição vertical */
-      left: 20px; /* Ajuste a posição horizontal */
-      z-index: 500; /* Garante que o texto fique sobre o mapa */
-      color: rgb(0, 0, 0); /* Cor do texto */
-      font-size: 24px; /* Tamanho do texto */
-      font-weight: bold; /* Deixe o texto em negrito */
+      position: relative ;
+      top: 20px; 
+      left: 20px; 
+      z-index: 500; 
+      color: rgb(0, 0, 0); 
+      
+      font-weight: bold; 
     }
 
 </style>
   
 <div class="map-container">
-    <h6 class="text-overlay">{{proxima_aula.Sala.nome_sala}}</h6>
+    
+    <ul>
+        <li><h2 class="text-overlay">{{proxima_aula.Sala.nome_sala}}</h2></li>
+        <li><h2 class="text-overlay">{{proxima_aula.Sala.posição_x}}</h2></li>
+        <li><h2 class="text-overlay">{{proxima_aula.Sala.posição_y}}</h2></li>
+    </ul>
+    
+    
+    
     <h1 class="text-overlay">Próxima aula: {{proxima_aula.disciplina}} / {{proxima_aula.dia_da_semana}} - {{proxima_aula.horario_inicio}}--{{proxima_aula.horario_fim}}</h1>
     
     

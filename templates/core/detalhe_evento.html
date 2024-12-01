@@ -17,6 +17,167 @@ body {
 html, body {
     width: 100%; 
 }
+
+@media(min-width: 769px){
+
+    .logo img{
+        display: none;
+    }
+    .container {
+        background-color: white;
+        margin-top: -14vw;
+        margin-bottom: min(20vw,150px); /* Adiciona margem inferior */
+        width: 50vw;
+        border-radius: 2.5vw; 
+        box-shadow: 0 1vw 2vw rgba(0, 0, 0, 0.2);
+        overflow: hidden;
+        text-align: center;
+        padding: 0; /* Ajustado para desktops */
+        position: relative; /* Permite que a margem seja aplicada */
+        transform: translateX(50%); /* Remove a transformação desnecessária */
+    }
+    .icon_event {
+        position: absolute !important; /* Permite posicionamento relativo ao contêiner pai */
+        top: 1vw !important; /* Posiciona no topo do contêiner */
+        right: 6vw !important; /* Posiciona à direita */
+        margin: 1vw !important; /* Adiciona um espaçamento opcional */
+        display: flex !important; /* Garante que os ícones sejam flexíveis */
+        gap: 1vw !important; /* Espaçamento entre os ícones */
+        justify-content: flex-end !important; /* Alinha os ícones no final */
+        font-size: 2vw !important   ;
+    }
+    .icon_event i{
+        font-size: 3vw !important;  
+    }
+
+    .header_event{
+        z-index: 200;
+        position: absolute;
+        width: 100%;
+        padding: 0;
+    }
+
+    .header_event button{
+        width: 4vw;
+        height: auto;
+        box-shadow: 0 min(2vw,8px) min(3vw,11px) rgba(0, 0, 0, 0.2), 
+                    0 min(1vw,4px) min(1.5vw,6px) rgba(0, 0, 0, 0.12);
+    }
+    .icon-btn{
+        margin-left: auto;
+        margin-right: min(5vw,60px) !important;
+        margin-top: min(5vw,60px) !important;
+    }
+    .actions .icon-btn {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        background-color: #000;
+        color: #fff;
+        border: none;
+        border-radius: 50%;
+        width: min(40px, 8vw);
+        height: min(40px, 8vw);
+        font-size: min(18px, 4vw);
+        cursor: pointer;
+        text-decoration: none;
+    }
+    .icon-btn{
+        position: fixed !important; /* Posiciona em relação à tela, não ao contêiner pai */
+        top: 0px !important; /* Distância do topo da tela */
+        right: 0px !important; /* Distância da direita da tela */
+        z-index: 999 !important; /* Garante que fique acima de outros elementos */
+        background: #000 !important; /* Cor de fundo opcional */
+        color: #fff !important; /* Cor do ícone */
+        border-radius: 50% !important; /* Formato circular */
+        width: min(40px, 8vw) !important; /* Tamanho dinâmico */
+        height: min(40px, 8vw) !important; /* Tamanho dinâmico */
+        display: flex !important;
+        justify-content: center !important;
+        align-items: center !important;
+        box-shadow: 0 min(2vw, 8px) min(3vw, 11px) rgba(0, 0, 0, 0.2), 
+                    0 min(1vw, 4px) min(1.5vw, 6px) rgba(0, 0, 0, 0.12) !important; /* Sombra */
+        cursor: pointer !important;
+        text-decoration: none !important;
+    }
+
+    .img_event{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 0;
+    }
+    .img_event img{
+        border: 2px solid transparent; 
+        box-shadow: 0 0 0 min(3px,1vw) #ccc;
+        width: 10vw !important; 
+        height: 10vw !important; 
+        border-radius: 50% !important; 
+        margin-bottom: 0 !important;
+        margin-left: -4vw !important;
+        margin-top: 7vw !important;
+    }
+
+    .text_event{
+        margin-top: 8vw !important;
+    }
+
+    .text_event p{
+        text-align: left;
+    }
+    .text_event p, a{
+        font-size: 1.5vw !important;
+        margin-left: 2vw;
+        margin-bottom: 1vw;
+        margin-top: 0;
+        margin-right: -5vw;
+    }
+    
+    .description {
+        margin-left: -4vw !important;
+        margin-right: -4vw !important;
+        margin-top: -8vw !important;
+        margin-bottom: 4vw !important;
+
+    }
+    .description p{
+        text-align: justify;
+        font-size: 2vw !important;
+    }
+
+    .icon_event_edit {
+        position: absolute !important; /* Permite posicionamento em relação ao contêiner pai */
+        top: 2vw !important; /* Posiciona no topo */
+        right: 0vw !important; /* Margem direita específica para o botão editar */
+        display: flex !important; /* Garante que o ícone seja flexível */
+        justify-content: center !important;
+        align-items: center !important;
+        cursor: pointer !important;
+        text-decoration: none !important;
+        margin-top: -2.4vw !important;
+
+    }
+
+    .icon_event_delete {
+        position: absolute !important; /* Permite posicionamento em relação ao contêiner pai */
+        top: 2vw !important; /* Posiciona no topo */
+        right: 2vw !important; /* Margem direita específica para o botão deletar */
+        display: flex !important; /* Garante que o ícone seja flexível */
+        justify-content: center !important;
+        align-items: center !important;
+        cursor: pointer !important;
+        text-decoration: none !important;
+        margin-right: 0vw !important;
+        margin-top: -12.9vw !important;
+    }
+
+    .icon_event_delete i,
+    .icon_event_edit i {
+        font-size: 3vw !important; /* Tamanho do ícone */
+        margin: 0 !important;
+    }
+}
+
 </style>
 {% endblock %}
 <div class="header_event">
@@ -37,10 +198,10 @@ html, body {
 <div class="container" style="display: flex; flex-direction: column; align-items: flex-start; text-align: left; gap: 0;">
     <div class="icon_event">
         {% if request.user == evento.criado_por %}
-        <a href="{% url 'editar_evento' evento.id %}">
+        <a href="{% url 'editar_evento' evento.id %}" class="icon_event_edit">
             <i class="fa fa-edit" style="font-size: 6vw; color: rgb(0, 0, 0);"></i>
         </a>
-        <form action="{% url 'deletar_evento' evento.id %}" method="post" style="display:inline;">
+        <form action="{% url 'deletar_evento' evento.id %}" method="post" style="display:inline;" class="icon_event_delete">
             {% csrf_token %}
             <button type="submit" class="tab" style="background: none; border: none; cursor: pointer; padding: 0; margin-top: 10.6vw;">
                 <i class="fa fa-trash" style="font-size: 6vw; color: rgb(0, 0, 0);"></i>
@@ -65,7 +226,7 @@ html, body {
     <div class="event_main_container" style="margin-bottom: 6vw;">
         <div class="img_event">
             {% if evento.criado_por.foto %}
-                <img src="{{ evento.criado_por.foto.url }}"  class="ent_img" style="width: 20vw; max-width: 80px; max-height: 80px; height: 20vw; border-radius: 50%; margin-bottom: 0">
+                <img src="{{ evento.criado_por.foto.url }}"  class="ent_img" style="width: 20vw; height: 20vw; border-radius: 50%; margin-bottom: 0">
             {% else %}
                 <img src="{% static 'defaultphoto.jpg' %}" class="ent_img_default" >
             {% endif %}
@@ -80,7 +241,7 @@ html, body {
             </p>
         </div>
     </div>
-    <div class="description" style=" display: flex; flex-direction: column; text-align: center; justify-content: space-between;">
+    <div class="description" style=" display: flex; flex-direction: column; text-align: center; justify-content: space-between; margin-bottom: 10vh;">
         <p class="p_event" style="margin-top: 4vw; color: black; font-size: 3.5vw; margin-left: 10vw;"><strong>Descrição do evento:</strong></p>
         <p  style="margin-top: 2vw; color: grey; margin-left: 10vw; font-size: 3.5vw; margin-right: 10vw;">{{ evento.descricao }}</p>
     </div>

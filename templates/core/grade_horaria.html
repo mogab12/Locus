@@ -3,28 +3,88 @@
 {% block title %}Minha Grade Horária{% endblock %}
 
 {% block content %}
-<h2>Minha Grade Horária</h2>
+    {% block body %}
+    <style>
+    body {
+        background-color: white;
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        overflow-x: hidden; 
+    }
 
-<a href="{% url 'adicionar_horario_grade' %}">Adicionar Disciplina à Grade</a>
+    html, body {
+        width: 100%; 
+    }
+    </style>
+    {% endblock %}
+<div class="disciplinas-add-container">
+    <!-- Título -->
+    <div class="header-container">
+        <h1>Grade Horária</h1>
+        <div class="actions">
+            <a href="{% url 'disciplinas' %}" class="icon-btn">
+                <i class="fa fa-arrow-left"></i>
+            </a>     
+            <a href="{% url 'adicionar_horario_grade' %}" class="icon-btn">
+              <i class="fa fa-plus"></i>
+          </a>   
+        </div>
+    </div>
+    <hr>
+    
 
-{% for dia, horarios in grade.items %}
-  <h3>{{ dia }}</h3>
-  {% if horarios %}
-    <ul>
-      {% for horario in horarios %}
-        <li>
-            <a href="{% url 'detalhe_disciplina' horario.disciplina.id %}">
-                {{ horario.disciplina.nome }}
-            </a>: {{ horario.horario_inicio }} - {{ horario.horario_fim }}
-            <a href="{% url 'editar_horario_grade' horario.id %}" class="editar-btn">Editar</a>
-            <a href="{% url 'remover_horario_grade' horario.id %}" class="remover-btn">Remover</a>
-        </li>
+    <!-- Grade Horária -->
+    <div class="professores-container">
+      {% with has_disciplinas=False %}
+      {% for dia, horarios in grade.items %}
+          {% if horarios|length > 0 %}
+              {% with has_disciplinas=True %}
+              {% endwith %}
+              <h3 style="font-size: min(20px, 6vw); margin-bottom: 1vw;">{{ dia }}</h3>
+              <ul class="disciplinas-add-list">
+                  {% for horario in horarios %}
+                      <li class="disciplina-add-item" style="display: flex; padding: 1vw; flex-direction: row;">
+                          <!-- Horário -->
+                          <div style="display: flex; flex-direction: row;">
+                              <div style="display: flex; flex-direction: column; flex: 1; text-align: left; font-weight: normal;">
+                                  <label style="padding: min(2vw,6px) min(4vw,15px) 0 min(2vw,6px); color: black; font-weight: normal; font-size: min(18px,6vw);">
+                                      {{ horario.horario_inicio }}
+                                  </label>
+                                  <label style="padding: 0 0 min(2vw,6px) min(2vw,6px); color: black; font-weight: normal; font-size: min(18px,6vw);">
+                                      {{ horario.horario_fim }}
+                                  </label>
+                              </div>
+                              <div style="display: flex; flex-direction: column; justify-content: center; align-items: flex-start; padding-right: min(4vw, 20px); height: 100%;">
+                                  <a href="{% url 'detalhe_disciplina' horario.disciplina.id %}" class="disciplina-nome" style="font-size: min(18px, 5vw); color: black;">
+                                      {{ horario.disciplina.nome }}
+                                  </a>
+                                  <a href="{% url 'detalhe_disciplina' horario.disciplina.id %}" class="disciplina-codigo" style="font-size: min(18px, 5vw); color: black; line-height: 1.2; font-size: min(4vw,15px); font-weight: lighter; color: #8c8c8c;">
+                                      Código: {{ horario.disciplina.codigo }}
+                                  </a>
+                              </div>
+                          </div>
+                          <!-- Ações -->
+                          <div style="flex: 1; display: flex; gap: 1vw; justify-content: flex-end;">
+                              <a href="{% url 'editar_horario_grade' horario.id %}" class="icon-btn">
+                                  <i class="fa fa-edit"></i>
+                              </a>
+                              <a href="{% url 'remover_horario_grade' horario.id %}" class="icon-btn remover-btn" style="color: red; margin-right: min(2vw,6px);">
+                                  <i class="fa fa-trash" style="font-size: min(16px,3.8vw);"></i>
+                              </a>
+                          </div>
+                      </li>
+                  {% endfor %}
+              </ul>
+          {% endif %}
       {% endfor %}
-    </ul>
-  {% else %}
-    <p>Nenhum horário neste dia.</p>
-  {% endif %}
-{% endfor %}
-
-
+      {% endwith %}
+      
+      {% if not has_disciplinas %}
+          <p style="font-size: min(18px, 4vw); color: #8c8c8c; text-align: center; margin-top: min(2vw,15px);">
+              Nenhuma disciplina foi encontrada na sua grade horária.
+          </p>
+      {% endif %}
+  </div>
+  
 {% endblock %}

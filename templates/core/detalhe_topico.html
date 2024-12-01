@@ -41,13 +41,13 @@ html, body {
 
     <!-- Informações do Tópico -->
     <div class="topico-info">
-        <p><strong>Descrição:</strong> {{ topico.descricao }}</p>
-        <p>
-            <a href="{% url 'view_profile' topico.criado_por.id %}">
+        <p style="font-size: min(4vw, 15px);"><strong>Descrição:</strong> {{ topico.descricao }}</p>
+        <p >
+            <a href="{% url 'view_profile' topico.criado_por.id %}"style="font-size: min(4vw, 15px);">
                 <strong>Criado por:</strong> {{ topico.criado_por.username }}
             </a>
         </p>
-        <p><strong>Data de Criação:</strong> {{ topico.data_criacao }}</p>
+        <p style="font-size: min(4vw, 15px);"><strong>Data de Criação:</strong> {{ topico.data_criacao }}</p>
     </div>
 
     <!-- Lista de Postagens -->
@@ -60,10 +60,10 @@ html, body {
                 <div class="postagem-conteudo">
                     <p class="disciplina-nome" style="font-size: min(18px, 4vw); ">{{ postagem.conteudo }}</p>
                     <div class="postagem-info">
-                        <span style="font-size: min(14px, 2.1vw);"><strong >Por:</strong> <a href="{% url 'view_profile' topico.criado_por.id %}" style="font-size: min(14px, 2.1vw); color: black; text-decoration: underline;">{{ postagem.criado_por.username }}</a></span>
-                        <span style="font-size: min(14px, 2.1vw);"><strong >Data:</strong> {{ postagem.data_criacao }}</span>
+                        <span style="font-size: min(14px, 3vw);"><strong >Por:</strong> <a href="{% url 'view_profile' topico.criado_por.id %}" style="font-size: min(14px, 3vw); color: black; text-decoration: underline;">{{ postagem.criado_por.username }}</a></span>
+                        <span style="font-size: min(14px, 3vw);"><strong >Data:</strong> {{ postagem.data_criacao }}</span>
                         {% if request.user.user_type == 'representante' or request.user.user_type == 'professor' %}
-                        <a href="{% url 'remover_postagem' postagem.id %}" class="icon-btn remover-btn" style="color: red;font-size: min(14px, 2.1vw);">
+                        <a href="{% url 'remover_postagem' postagem.id %}" class="icon-btn remover-btn" style="color: red;font-size: min(14px, 3vw);">
                             <i class="fa fa-trash"></i> Remover
                         </a>
                         {% endif %}

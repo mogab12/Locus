@@ -161,6 +161,13 @@ class HorarioGradeForm(forms.ModelForm):
         model = HorarioGrade
         fields = ['disciplina', 'dia_da_semana', 'horario_inicio', 'horario_fim','sala']
         widgets = {
-            'horario_inicio': forms.TimeInput(format='%H:%M', attrs={'type': 'time'}),
-            'horario_fim': forms.TimeInput(format='%H:%M', attrs={'type': 'time'}),
+            'horario_inicio': forms.TimeInput(format='%H:%M', attrs={'type': 'time', 'class': 'form-control'}),
+            'horario_fim': forms.TimeInput(format='%H:%M', attrs={'type': 'time', 'class': 'form-control'}),
         }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Adiciona classe CSS para os campos, sem sobrescrever widgets personalizados
+        for field_name, field in self.fields.items():
+            if not isinstance(field.widget, forms.TimeInput):  # Evita sobrescrever TimeInput
+                field.widget.attrs.update({"class": "form-control"})
