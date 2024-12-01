@@ -19,16 +19,17 @@
     }
     .banner-proxima-aula {
         position: absolute;
-        top: 10px;
-        left: 50px;
-        background-color: rgba(255, 255, 255, 0.8);
-        padding: 10px 10px 10px 20px;
+        top: min(10px,2vw);
+        left: min(10px,2vw);
+        background-color: rgba(255, 255, 255, 1);
+        padding: min(10px,2vw) min(20px,4vw) min(10px,2vw) min(20px,4vw);
         border-radius: 5px;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
         z-index: 1000;
         display: flex;
         align-items: center;
         cursor: pointer;
+        margin-right: min(2vw,10px);
         z-index: 600;
     }
     .faixa-vermelha {
@@ -43,14 +44,15 @@
     }
     .banner-conteudo {
         margin-left: 15px;
+        
     }
     .banner-conteudo h3 {
         margin: 0 0 5px 0;
-        font-size: 16px;
+        font-size: min(16px,5.5vw);
     }
     .banner-conteudo p {
         margin: 0;
-        font-size: 14px;
+        font-size: min(14px,5vw);
     }
 </style>
 {% endblock %}
