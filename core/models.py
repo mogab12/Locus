@@ -31,12 +31,29 @@ class CustomUser(AbstractUser):
         verbose_name = 'Usuário'
         verbose_name_plural = 'Usuários'
 
+class Predio(models.Model):
+    nome = models.CharField(max_length=100, unique=True)
+    latitude = models.DecimalField(max_digits=9, decimal_places=6)
+    longitude = models.DecimalField(max_digits=9, decimal_places=6)
+
+    def __str__(self):
+        return self.nome
+    
+
+class Sala(models.Model):
+    nome = models.CharField(max_length=50)
+    predio = models.ForeignKey(Predio, on_delete=models.CASCADE, related_name='salas')
+
+    def __str__(self):
+        return f"{self.nome} ({self.predio.nome})"
+
 class Disciplina(models.Model):
     nome = models.CharField(max_length=255)
     codigo = models.CharField(max_length=10)
     curso = models.CharField(max_length=255)
     semestre = models.CharField(max_length=10)
     tipo = models.CharField(max_length=50)
+    sala = models.ForeignKey(Sala, on_delete=models.SET_NULL, null=True, blank=True, related_name='disciplinas')
     professor_responsavel = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         null=True,
@@ -125,18 +142,3 @@ class HorarioGrade(models.Model):
         return f"{self.usuario} - {self.disciplina.nome} ({self.get_dia_da_semana_display()})"
     
 
-class Predio(models.Model):
-    nome = models.CharField(max_length=100, unique=True)
-    latitude = models.DecimalField(max_digits=9, decimal_places=6)
-    longitude = models.DecimalField(max_digits=9, decimal_places=6)
-
-    def __str__(self):
-        return self.nome
-    
-
-class Sala(models.Model):
-    nome = models.CharField(max_length=50)
-    predio = models.ForeignKey(Predio, on_delete=models.CASCADE, related_name='salas')
-
-    def __str__(self):
-        return f"{self.nome} ({self.predio.nome})"

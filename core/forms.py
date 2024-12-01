@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
-from .models import CustomUser, CustomEmailValidator, Topico, Postagem, Evento, Disciplina, Notificacao
+from .models import Sala, Predio, CustomUser, CustomEmailValidator, Topico, Postagem, Evento, Disciplina, Notificacao
 import sqlite3
 
 class NovoTopicoForm(forms.ModelForm):
@@ -165,3 +165,22 @@ class HorarioGradeForm(forms.ModelForm):
         for field_name, field in self.fields.items():
             if not isinstance(field.widget, forms.TimeInput):  # Evita sobrescrever TimeInput
                 field.widget.attrs.update({"class": "form-control"})
+
+from django import forms
+from .models import Sala, Predio
+
+class SalaForm(forms.Form):
+    predio = forms.ModelChoiceField(queryset=Predio.objects.all(), label="Prédio")
+    sala = forms.ModelChoiceField(queryset=Sala.objects.none(), label="Sala")
+
+    def __init__(self, *args, **kwargs):
+        super(SalaForm, self).__init__(*args, **kwargs)
+        if 'predio' in self.data:
+            try:
+                predio_id = int(self.data.get('predio'))
+                self.fields['sala'].queryset = Sala.objects.filter(predio_id=predio_id)
+            except (ValueError, TypeError):
+                # No caso de dados inválidos
+                self.fields['sala'].queryset = Sala.objects.none()
+        else:
+            self.fields['sala'].queryset = Sala.objects.none()

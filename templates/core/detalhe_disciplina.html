@@ -39,6 +39,11 @@ html, body {
         <p><strong>Turma:</strong> {{ disciplina.turma }}</p>
         <p><strong>Semestre:</strong> {{ disciplina.semestre }}</p>
         <p><strong>Tipo:</strong> {{ disciplina.tipo }}</p>
+        {% if disciplina.sala %}
+        <p><strong>Sala:</strong> {{ disciplina.sala.nome }} ({{ disciplina.sala.predio.nome }})</p>
+        {% else %}
+        <p><strong>Sala:</strong> Não atribuída</p>
+        {% endif %}
     </div>
 
     <!-- Professores Associados -->
@@ -47,7 +52,6 @@ html, body {
         <ul class="disciplinas-add-list">
             {% for professor in professores %}
             <li class="disciplina-detail-item">
-
                 <span>{{ professor.username }}</span>
                 <a href="{% url 'view_profile' professor.id %}" class="btn btn-secondary">
                     Ver Perfil
@@ -59,6 +63,16 @@ html, body {
             </li>
             {% endfor %}
         </ul>
+
+        <!-- Botão Adicionar Local visível apenas para professores associados -->
+        {% if request.user in professores %}
+        <div class="import-disciplinas-container">
+            <a href="{% url 'adicionar_local' disciplina.id %}" class="import-btn">
+                <i class="fa fa-map-marker"></i>
+                <span>Adicionar Local</span>
+            </a>
+        </div>
+        {% endif %}
     </div>
 
     <!-- Links adicionais -->

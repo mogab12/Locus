@@ -6,11 +6,11 @@ from django.db.models import Q
 from django.contrib import messages
 from .forms import CustomUserCreationForm, UserProfileForm, NovoTopicoForm, NovaPostagemForm
 from django.http import HttpResponseForbidden
-from .models import Disciplina, UserDiscipline, Topico, Postagem, CustomUser, Evento, Notificacao
+from .models import Disciplina, UserDiscipline, Topico, Postagem, CustomUser, Evento, Notificacao, Sala
 from django.core.exceptions import PermissionDenied
 from django.contrib.auth.models import User
-from .forms import TopicoForm, EventoForm, NotificationForm
-
+from .forms import TopicoForm, EventoForm, NotificationForm, SalaForm
+from django.http import JsonResponse
 
 
 
@@ -696,3 +696,24 @@ def proxima_aula(usuario):
             return horario
 
     return None
+
+@login_required
+def adicionar_local(request, disciplina_id):
+    disciplina = get_object_or_404(Disciplina, id=disciplina_id)
+
+    if request.method == "POST":
+        form = SalaForm(request.POST)
+        if form.is_valid():
+            disciplina.sala = form.cleaned_data['sala']
+            disciplina.save()
+            return redirect('detalhe_disciplina', disciplina_id=disciplina.id)
+    else:
+        form = SalaForm()
+
+    return render(request, 'core/adicionar_local.html', {'form': form, 'disciplina': disciplina})
+
+@login_required
+def get_salas(request, predio_id):
+    salas = Sala.objects.filter(predio_id=predio_id)
+    salas_json = [{'id': s.id, 'nome': s.nome} for s in salas]
+    return JsonResponse(salas_json, safe=False)
