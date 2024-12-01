@@ -120,8 +120,36 @@
                 });
                 
                 const marker = L.marker([lat, lng], { icon: icon }).addTo(map);
-                marker.bindPopup(`<b>{{ predio.nome|escapejs }}</b>`);
+                //marker.bindPopup(`<b>{{ predio.nome|escapejs }}</b>`);
 
+
+
+                //vendo se da o predio tem planta (a principio todos tem)
+                {% if predio.mapas.all %} 
+                    const linkMapa = `<a href="{% url 'mapa_detalhe' predio.mapas.first.id %}">Ver Mapa</a>`;
+                {% else %}
+                    const linkMapa = 'Mapa não disponível';
+                {% endif %}
+
+                // comando de criar link no pin (mudar para imagem se possível)
+                marker.bindPopup(`
+                    <b>{{ predio.nome|escapejs }}</b><br>
+                    ${linkMapa}
+                `);
+
+
+
+
+                
+
+
+                
+                
+                
+                
+                
+                
+                
                 if (isProximoPredio) {
                     proximaAulaMarker = marker;
                 }

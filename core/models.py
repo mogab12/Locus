@@ -4,6 +4,7 @@ from django.core.validators import EmailValidator
 from django.contrib.auth import get_user_model
 from django.conf import settings
 
+
 class CustomEmailValidator(EmailValidator):
     def validate_domain_part(self, domain_part):
         return domain_part.lower().endswith('usp.br')
@@ -146,3 +147,12 @@ class Interesse(models.Model):
     usuario = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     evento = models.ForeignKey(Evento, on_delete=models.CASCADE)
     data_interesse = models.DateTimeField(auto_now_add=True)
+
+class Mapas(models.Model):
+    nome = models.CharField(max_length=255)
+    planta= models.ImageField()
+    planta_2= models.ImageField(default=None)
+    predio = models.ForeignKey('Predio',on_delete=models.CASCADE,related_name='mapas')
+    def __str__(self):
+        return self.nome
+    

@@ -6,7 +6,7 @@ from django.db.models import Q
 from django.contrib import messages
 from .forms import CustomUserCreationForm, UserProfileForm, NovoTopicoForm, NovaPostagemForm
 from django.http import HttpResponseForbidden
-from .models import Disciplina, UserDiscipline, Topico, Postagem, CustomUser, Evento, Notificacao, Sala, Predio
+from .models import Disciplina, UserDiscipline, Topico, Postagem, CustomUser, Evento, Notificacao, Sala, Predio, Mapas
 from django.core.exceptions import PermissionDenied
 from django.contrib.auth.models import User
 from .forms import TopicoForm, EventoForm, NotificationForm, SalaForm
@@ -686,6 +686,7 @@ def editar_horario_grade(request, horario_id):
     return render(request, 'core/editar_horario_grade.html', {'form': form, 'horario': horario})
 
 import pytz
+
 from datetime import datetime,timedelta
 
 def proxima_aula(usuario):
@@ -746,9 +747,16 @@ def get_salas(request, predio_id):
 @login_required
 def home(request):
     aula_proxima = proxima_aula(request.user)
-    predios = Predio.objects.all()
     
-    return render(request, 'core/home.html', {'aula_proxima': aula_proxima, 'predios': predios})
+    predios = Predio.objects.prefetch_related('mapas').all()
+    
+    
+      
+    context={
+        'predios' :predios,
+        
+    }
+    return render(request, 'core/home.html', context)
 
 def ver_local_evento(request, evento_id):
     evento = get_object_or_404(Evento, id=evento_id)
@@ -764,3 +772,18 @@ def ver_local_evento(request, evento_id):
     }
 
     return render(request, 'core/ver_local_evento.html', context)
+
+def mapa_detalhe(request,mapa_id):
+    mapa = get_object_or_404(Mapas,id = mapa_id)
+    context = {
+        'mapa' : mapa
+
+    }
+    return render(request,'core/mapa_detalhe.html',context)
+
+def mudar_andar(request,mapa_id):
+    mapa = get_object_or_404(Mapas,id = mapa_id)
+    context = {
+        'mapa' : mapa
+    }
+    return render(request,'core/mudar_andar.html',context)

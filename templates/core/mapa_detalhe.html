@@ -1,0 +1,48 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Mapa {{Mapas.mapa_id}}{% endblock %}
+
+{% block content %}
+{% block body %}
+
+<style>
+body {
+    background-color: white;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    overflow-x: hidden; 
+}
+
+html, body {
+    width: 100%; 
+}
+</style>
+
+{% endblock %}
+
+<div class="Planta-Container">
+    <!-- Título -->
+    <div class="header-container">
+        
+        <h1>{{mapa.nome_mapa}}</h1>
+        
+        <div class="actions">
+        
+            <a href="{% url 'mudar_andar' mapa.id %}" class="icon-btn">
+                <i class="fas fa-plus-circle"></i>
+            </a>
+            
+        </div>
+    </div>
+    
+    <div class="Imagem-Planta">
+        <img src="{{ mapa.planta.url }}" alt = "{{mapa.predio.nome}} planta" style="width:100%; max-width:800px;">
+    </div>
+
+
+    <hr>
+     
+</div>
+<a href="{% url 'home' %}">Voltar</a>  
+{% endblock %}
