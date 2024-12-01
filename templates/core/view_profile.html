@@ -78,10 +78,10 @@ html, body {
         {% if profile_user.user_type == 'entidade'%}
         <div class="professores-container">
             <h3>Eventos Organizados</h3>
-            <ul class="eventos-add-list">
+            <ul class="disciplinas-add-list">
                 {% for evento in eventos %}
-                <li class="evento-detail-item">
-                    <a href="{% url 'detalhe_evento' evento.id %}" class="btn btn-link">
+                <li class="disciplina-detail-item">
+                    <a href="{% url 'detalhe_evento' evento.id %}" >
                         {{ evento.nome }} - {{ evento.data_inicio|date:'d/m/Y' }}
                     </a>
                 </li>
