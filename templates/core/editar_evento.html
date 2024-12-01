@@ -38,6 +38,9 @@ html, body {
                 {{ form.as_p }}
 
             </div>
+            <a href="{% url 'adicionar_local_evento' %}" class="icon-btn" style="font-size: min(4vw,18px); color: grey; margin-bottom: min(8vw,30px); margin-top: max(-2vw,-18px); text-decoration: underline;">
+                Selecionar local no mapa 
+            </a>
             <button type="submit" class="import-btn">
                 <i class="fa fa-save"></i>
                 <span>Salvar Alterações</span>
