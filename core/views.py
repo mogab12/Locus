@@ -390,6 +390,10 @@ def criar_evento(request):
     if request.user.user_type != 'entidade':
         return redirect('lista_eventos')  # Redireciona se o usuário não é uma entidade
 
+    # Recupera as coordenadas da sessão
+    latitude = request.session.pop('latitude', None)
+    longitude = request.session.pop('longitude', None)
+
     if request.method == 'POST':
         form = EventoForm(request.POST, request.FILES)
         if form.is_valid():
@@ -398,9 +402,25 @@ def criar_evento(request):
             evento.save()
             return redirect('lista_eventos')
     else:
-        form = EventoForm()
+        # Inicializa o formulário com as coordenadas da sessão, se disponíveis
+        form = EventoForm(initial={
+            'latitude': latitude,
+            'longitude': longitude
+        })
 
     return render(request, 'core/criar_evento.html', {'form': form})
+
+def adicionar_local_evento(request):
+    if request.method == 'POST':
+        latitude = request.POST.get('latitude')
+        longitude = request.POST.get('longitude')
+        
+        # Armazena as coordenadas na sessão
+        request.session['latitude'] = latitude
+        request.session['longitude'] = longitude
+        
+        return redirect('criar_evento')
+    return render(request, 'core/adicionar_local_evento.html')
 
 @login_required
 def detalhe_evento(request, evento_id):

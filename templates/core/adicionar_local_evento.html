@@ -1,0 +1,96 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Selecionar Local do Evento{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<style>
+    html, body {
+        height: 100%;
+        width: 100%;
+        margin: 0;
+        padding: 0;
+    }
+    #map {
+        width: 100vw;
+        height: 75vh; /* Altura ajustada para melhor posição do botão */
+        z-index: 600;
+    }
+    .container {
+        padding: 20px;
+        background-color: white;
+        margin: 0 auto;
+        max-width: 800px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        border-radius: 5px;
+        position: relative;
+    }
+    .save-location-btn {
+        display: inline-flex;
+        align-items: center;
+        padding: 10px 15px;
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        text-transform: uppercase;
+        position: relative;
+        margin-top: 10px; /* Espaçamento em relação ao mapa */
+        float: right; /* Alinha à direita para melhor visualização */
+        z-index: 700;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>Selecionar Local do Evento</h1>
+    <hr>
+    <div id="map"></div>
+    <form method="post">
+        {% csrf_token %}
+        <input type="hidden" name="latitude" id="latitude">
+        <input type="hidden" name="longitude" id="longitude">
+        <button type="submit" class="save-location-btn">
+            <i class="fa fa-save"></i>
+            <span>Salvar Local</span>
+        </button>
+    </form>
+</div>
+
+<script>
+    // Inicializa o mapa com a posição inicial e zoom
+    const map = L.map('map', {
+        center: [-23.555299, -46.729696], // Coordenadas iniciais
+        zoom: 16.5,
+        maxBounds: [
+            [-23.570, -46.740], // Limites máximos do mapa
+            [-23.530, -46.720]  // Limites mínimos do mapa
+        ],
+        maxBoundsViscosity: 1.0,
+        minZoom: 15, // Zoom mínimo permitido
+        maxZoom: 20  // Zoom máximo permitido
+    });
+
+    // Adiciona a camada de base do mapa
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager_labels_under/{z}/{x}/{y}{r}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+        subdomains: 'abcd',
+        maxZoom: 20
+    }).addTo(map);
+
+    let marker;
+
+    // Evento de clique no mapa
+    map.on('click', function(e) {
+        if (marker) {
+            map.removeLayer(marker); // Remove o marcador anterior se existir
+        }
+        marker = L.marker(e.latlng).addTo(map); // Adiciona um novo marcador no local clicado
+        document.getElementById('latitude').value = e.latlng.lat; // Atualiza o valor do campo latitude
+        document.getElementById('longitude').value = e.latlng.lng; // Atualiza o valor do campo longitude
+    });
+</script>
+{% endblock %}

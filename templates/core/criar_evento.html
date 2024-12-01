@@ -4,23 +4,64 @@
 
 {% block content %}
 {% load static %}
-{% block body %}
 <style>
 body {
-    background-color: white;
+    background-color: #f5f5f5; /* Cor de fundo geral, se necessário */
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
-    overflow-x: hidden; 
+    height: 100%;
 }
 
-html, body {
-    width: 100%; 
+.disciplinas-add-container {
+    padding: 20px;
+    background-color: white; /* Fundo branco para o conteúdo */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Adiciona uma leve sombra para destacar */
+    margin: 20px;
+    border-radius: 5px;
+}
+
+.header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.input-group {
+    display: flex;
+    align-items: center;
+}
+
+.input-group input {
+    flex-grow: 1;
+    margin-right: 5px;
+}
+
+.input-group a {
+    text-decoration: none;
+}
+
+.import-btn {
+    display: inline-flex;
+    align-items: center;
+    padding: 10px 15px;
+    background-color: #000;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-transform: uppercase;
+}
+
+.import-btn i {
+    margin-right: 5px;
 }
 </style>
-{% endblock %}
+
 <div class="disciplinas-add-container">
-    <!-- Título e Botão de Voltar -->
     <div class="header-container">
         <h1>Criar Novo Evento</h1>
         <div class="actions">
@@ -31,7 +72,6 @@ html, body {
     </div>
     <hr>
 
-    <!-- Formulário para criar evento -->
     <div class="import-disciplinas-container-topico">
         <form method="post" enctype="multipart/form-data" class="topico-form">
             {% csrf_token %}
@@ -53,7 +93,15 @@ html, body {
             </div>
             <div class="form-group">
                 <label for="local">Local:</label>
-                {{ form.local }}
+                <div class="input-group">
+                    {{ form.local }}
+                    <a href="{% url 'adicionar_local_evento' %}" class="icon-btn">
+                        <i class="fa fa-map-marker"></i> Selecionar no Mapa
+                    </a>
+                </div>
+                {% if form.initial.latitude and form.initial.longitude %}
+                <p>Local selecionado: Latitude {{ form.initial.latitude }}, Longitude {{ form.initial.longitude }}</p>
+                {% endif %}
             </div>
             <div class="form-group">
                 <label for="imagem">Imagem:</label>
@@ -63,6 +111,8 @@ html, body {
                 <i class="fa fa-plus"></i>
                 <span>Criar Evento</span>
             </button>
+            {{ form.latitude }}
+            {{ form.longitude }}
         </form>
     </div>
 </div>

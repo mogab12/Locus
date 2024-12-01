@@ -86,28 +86,9 @@ class Postagem(models.Model):
     topico = models.ForeignKey(Topico, related_name='postagens', on_delete=models.CASCADE)
     criado_por = models.ForeignKey(User, on_delete=models.CASCADE)
     data_criacao = models.DateTimeField(auto_now_add=True)
-
-class Evento(models.Model):
-    nome = models.CharField(max_length=255)
-    descricao = models.TextField()
-    data_inicio = models.DateTimeField()
-    data_fim = models.DateTimeField()
-    local = models.CharField(max_length=255)
-    criado_por = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
-        on_delete=models.CASCADE,
-        limit_choices_to={'user_type': 'entidade'}
-    )
-    imagem = models.ImageField(upload_to='eventos/', null=True, blank=True) 
-
-    def __str__(self):
-        return self.nome
     
 
-class Interesse(models.Model):
-    usuario = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
-    evento = models.ForeignKey(Evento, on_delete=models.CASCADE)
-    data_interesse = models.DateTimeField(auto_now_add=True)
+
 
 class Notificacao(models.Model):
     titulo = models.CharField(max_length=255)
@@ -142,3 +123,26 @@ class HorarioGrade(models.Model):
         return f"{self.usuario} - {self.disciplina.nome} ({self.get_dia_da_semana_display()})"
     
 
+class Evento(models.Model):
+    nome = models.CharField(max_length=255)
+    descricao = models.TextField()
+    data_inicio = models.DateTimeField()
+    data_fim = models.DateTimeField()
+    local = models.CharField(max_length=255, null=True, blank=True)  # Descrição textual do local
+    latitude = models.FloatField(null=True, blank=True)  # Coordenada latitude
+    longitude = models.FloatField(null=True, blank=True)  # Coordenada longitude
+    criado_por = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        limit_choices_to={'user_type': 'entidade'}
+    )
+    imagem = models.ImageField(upload_to='eventos/', null=True, blank=True)
+
+    def __str__(self):
+        return self.nome
+
+
+class Interesse(models.Model):
+    usuario = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    evento = models.ForeignKey(Evento, on_delete=models.CASCADE)
+    data_interesse = models.DateTimeField(auto_now_add=True)

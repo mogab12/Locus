@@ -122,10 +122,12 @@ class CustomUserCreationForm(UserCreationForm):
 class EventoForm(forms.ModelForm):
     class Meta:
         model = Evento
-        fields = ['nome', 'descricao', 'data_inicio', 'data_fim', 'local', 'imagem']
+        fields = ['nome', 'descricao', 'data_inicio', 'data_fim', 'local', 'imagem', 'latitude', 'longitude']
         widgets = {
             'data_inicio': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
             'data_fim': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
+            'latitude': forms.HiddenInput(),
+            'longitude': forms.HiddenInput(),
         }
 
 class NotificationForm(forms.ModelForm):
