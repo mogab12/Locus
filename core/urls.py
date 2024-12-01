@@ -15,6 +15,7 @@ urlpatterns = [
     path('eventos/<int:evento_id>/editar/', views.editar_evento, name='editar_evento'),
     path('eventos/<int:evento_id>/deletar/', views.deletar_evento, name='deletar_evento'),
     path('evento/<int:evento_id>/toggle/', views.toggle_interesse, name='toggle_interesse'),
+    path('evento/<int:evento_id>/ver-local/', views.ver_local_evento, name='ver_local_evento'),
     path('notificacoes/', views.notificacoes, name='notificacoes'),
     path('notificacoes/criar/', views.criar_notificacao, name='criar_notificacao'),
     path('notificacoes/minhas/', views.minhas_notificacoes, name='minhas_notificacoes'),

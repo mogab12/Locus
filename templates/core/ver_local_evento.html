@@ -1,0 +1,78 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Localização do Evento - {{ evento.nome }}{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<style>
+    html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+    }
+    #map-popup {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background-color: rgba(0, 0, 0, 0.7);
+        z-index: 1000;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    #map {
+        width: 90vw;
+        height: 90vh;
+        border-radius: 10px;
+        z-index: 100;
+        position: relative;
+    }
+    .close-btn {
+        position: absolute;
+        top: 20px;
+        right: 30px;
+        font-size: 24px;
+        color: white;
+        cursor: pointer;
+        z-index: 1200;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div id="map-popup">
+    <div class="close-btn" onclick="closeMap()">&times;</div>
+    <div id="map"></div>
+</div>
+
+<script>
+    function closeMap() {
+        window.history.back();  // Voltar para a página anterior
+    }
+
+    // Usa o filtro floatformat para garantir que os números sejam formatados corretamente
+    const latitude = parseFloat("{{ latitude|floatformat:6 }}".replace(',', '.'));
+    const longitude = parseFloat("{{ longitude|floatformat:6 }}".replace(',', '.'));
+
+    if (!isNaN(latitude) && !isNaN(longitude)) {
+        const map = L.map('map').setView([latitude, longitude], 16);
+
+        // Adiciona a camada de base do mapa
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager_labels_under/{z}/{x}/{y}{r}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+            subdomains: 'abcd',
+            maxZoom: 20
+        }).addTo(map);
+
+        // Adiciona um marcador no local do evento
+        L.marker([latitude, longitude]).addTo(map)
+            .bindPopup('<b>{{ evento.nome|escapejs }}</b><br>{{ evento.local|escapejs }}')
+            .openPopup();
+    } else {
+        alert('Coordenadas do evento não estão disponíveis.');
+    }
+</script>
+{% endblock %}

@@ -388,9 +388,10 @@ def lista_eventos(request):
 @login_required
 def criar_evento(request):
     if request.user.user_type != 'entidade':
-        return redirect('lista_eventos')  # Redireciona se o usuário não é uma entidade
+        return redirect('lista_eventos')
 
-    # Recupera as coordenadas da sessão
+    # Recupera dados do formulário da sessão se existirem
+    form_data = request.session.get('form_data', {})
     latitude = request.session.pop('latitude', None)
     longitude = request.session.pop('longitude', None)
 
@@ -400,13 +401,14 @@ def criar_evento(request):
             evento = form.save(commit=False)
             evento.criado_por = request.user
             evento.save()
+            # Limpa dados da sessão ao salvar
+            request.session.pop('form_data', None)
             return redirect('lista_eventos')
     else:
-        # Inicializa o formulário com as coordenadas da sessão, se disponíveis
-        form = EventoForm(initial={
-            'latitude': latitude,
-            'longitude': longitude
-        })
+        # Adiciona coordenadas à inicialização se existirem
+        if latitude and longitude:
+            form_data.update({'latitude': latitude, 'longitude': longitude})
+        form = EventoForm(initial=form_data)
 
     return render(request, 'core/criar_evento.html', {'form': form})
 
@@ -419,7 +421,12 @@ def adicionar_local_evento(request):
         request.session['latitude'] = latitude
         request.session['longitude'] = longitude
         
+        # Armazena dados do formulário na sessão
+        form_data = {key: request.POST.get(key) for key in request.POST if key != 'csrfmiddlewaretoken'}
+        request.session['form_data'] = form_data
+        
         return redirect('criar_evento')
+    
     return render(request, 'core/adicionar_local_evento.html')
 
 @login_required
@@ -742,3 +749,18 @@ def home(request):
     predios = Predio.objects.all()
     
     return render(request, 'core/home.html', {'aula_proxima': aula_proxima, 'predios': predios})
+
+def ver_local_evento(request, evento_id):
+    evento = get_object_or_404(Evento, id=evento_id)
+
+    if not evento.latitude or not evento.longitude:
+        # Redireciona ou exibe uma mensagem de erro apropriada se não houver coordenadas
+        return render(request, 'core/no_location.html', {'evento': evento})
+
+    context = {
+        'evento': evento,
+        'latitude': float(evento.latitude),  # Converte os valores para float se necessário
+        'longitude': float(evento.longitude),
+    }
+
+    return render(request, 'core/ver_local_evento.html', context)

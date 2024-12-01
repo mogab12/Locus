@@ -19,35 +19,33 @@ html, body {
 }
 
 @media(min-width: 769px){
-
     .logo img{
         display: none;
     }
     .container {
         background-color: white;
         margin-top: -14vw;
-        margin-bottom: min(20vw,150px); /* Adiciona margem inferior */
+        margin-bottom: min(20vw,150px);
         width: 50vw;
-        border-radius: 2.5vw; 
+        border-radius: 2.5vw;
         box-shadow: 0 1vw 2vw rgba(0, 0, 0, 0.2);
         overflow: hidden;
         text-align: center;
-        padding: 0; /* Ajustado para desktops */
-        position: relative; /* Permite que a margem seja aplicada */
-        transform: translateX(50%); /* Remove a transformação desnecessária */
+        padding: 0;
+        position: relative;
     }
     .icon_event {
-        position: absolute !important; /* Permite posicionamento relativo ao contêiner pai */
-        top: 1vw !important; /* Posiciona no topo do contêiner */
-        right: 6vw !important; /* Posiciona à direita */
-        margin: 1vw !important; /* Adiciona um espaçamento opcional */
-        display: flex !important; /* Garante que os ícones sejam flexíveis */
-        gap: 1vw !important; /* Espaçamento entre os ícones */
-        justify-content: flex-end !important; /* Alinha os ícones no final */
-        font-size: 2vw !important   ;
+        position: absolute !important;
+        top: 1vw !important;
+        right: 6vw !important;
+        margin: 1vw !important;
+        display: flex !important;
+        gap: 1vw !important;
+        justify-content: flex-end !important;
+        font-size: 2vw !important;
     }
     .icon_event i{
-        font-size: 3vw !important;  
+        font-size: 3vw !important;
     }
 
     .header_event{
@@ -83,20 +81,20 @@ html, body {
         text-decoration: none;
     }
     .icon-btn{
-        position: fixed !important; /* Posiciona em relação à tela, não ao contêiner pai */
-        top: 0px !important; /* Distância do topo da tela */
-        right: 0px !important; /* Distância da direita da tela */
-        z-index: 999 !important; /* Garante que fique acima de outros elementos */
-        background: #000 !important; /* Cor de fundo opcional */
-        color: #fff !important; /* Cor do ícone */
-        border-radius: 50% !important; /* Formato circular */
-        width: min(40px, 8vw) !important; /* Tamanho dinâmico */
-        height: min(40px, 8vw) !important; /* Tamanho dinâmico */
+        position: fixed !important;
+        top: 0px !important;
+        right: 0px !important;
+        z-index: 999 !important;
+        background: #000 !important;
+        color: #fff !important;
+        border-radius: 50% !important;
+        width: min(40px, 8vw) !important;
+        height: min(40px, 8vw) !important;
         display: flex !important;
         justify-content: center !important;
         align-items: center !important;
         box-shadow: 0 min(2vw, 8px) min(3vw, 11px) rgba(0, 0, 0, 0.2), 
-                    0 min(1vw, 4px) min(1.5vw, 6px) rgba(0, 0, 0, 0.12) !important; /* Sombra */
+                    0 min(1vw, 4px) min(1.5vw, 6px) rgba(0, 0, 0, 0.12) !important;
         cursor: pointer !important;
         text-decoration: none !important;
     }
@@ -138,7 +136,6 @@ html, body {
         margin-right: -4vw !important;
         margin-top: -8vw !important;
         margin-bottom: 4vw !important;
-
     }
     .description p{
         text-align: justify;
@@ -146,23 +143,22 @@ html, body {
     }
 
     .icon_event_edit {
-        position: absolute !important; /* Permite posicionamento em relação ao contêiner pai */
-        top: 2vw !important; /* Posiciona no topo */
-        right: 0vw !important; /* Margem direita específica para o botão editar */
-        display: flex !important; /* Garante que o ícone seja flexível */
+        position: absolute !important;
+        top: 2vw !important;
+        right: 0vw !important;
+        display: flex !important;
         justify-content: center !important;
         align-items: center !important;
         cursor: pointer !important;
         text-decoration: none !important;
         margin-top: -2.4vw !important;
-
     }
 
     .icon_event_delete {
-        position: absolute !important; /* Permite posicionamento em relação ao contêiner pai */
-        top: 2vw !important; /* Posiciona no topo */
-        right: 2vw !important; /* Margem direita específica para o botão deletar */
-        display: flex !important; /* Garante que o ícone seja flexível */
+        position: absolute !important;
+        top: 2vw !important;
+        right: 2vw !important;
+        display: flex !important;
         justify-content: center !important;
         align-items: center !important;
         cursor: pointer !important;
@@ -173,8 +169,20 @@ html, body {
 
     .icon_event_delete i,
     .icon_event_edit i {
-        font-size: 3vw !important; /* Tamanho do ícone */
+        font-size: 3vw !important;
         margin: 0 !important;
+    }
+
+    .icon_event_pin {
+        position: absolute !important;
+        top: 2vw !important;
+        right: 4vw !important;
+        display: flex !important;
+        justify-content: center !important;
+        align-items: center !important;
+        cursor: pointer !important;
+        text-decoration: none !important;
+        font-size: 3vw !important;
     }
 }
 
@@ -220,8 +228,6 @@ html, body {
         </form>
         {% endif %}
     </div>  
-
-
     
     <div class="event_main_container" style="margin-bottom: 6vw;">
         <div class="img_event">
@@ -231,7 +237,7 @@ html, body {
                 <img src="{% static 'defaultphoto.jpg' %}" class="ent_img_default" >
             {% endif %}
         </div>
-        <div class="text_event" >
+        <div class="text_event">
             <p class="p_event" style="color: black; font-weight: bold; font-size: 4vw;">{{ evento.nome }}</p>
             <p class="p_event">Início: {{ evento.data_inicio }}</p>
             <p class="p_event">Fim: {{ evento.data_fim }}</p>
@@ -241,10 +247,15 @@ html, body {
             </p>
         </div>
     </div>
-    <div class="description" style=" display: flex; flex-direction: column; text-align: center; justify-content: space-between; margin-bottom: 10vh;">
+    <div class="description" style="display: flex; flex-direction: column; text-align: center; justify-content: space-between; margin-bottom: 10vh;">
         <p class="p_event" style="margin-top: 4vw; color: black; font-size: 3.5vw; margin-left: 10vw;"><strong>Descrição do evento:</strong></p>
-        <p  style="margin-top: 2vw; color: grey; margin-left: 10vw; font-size: 3.5vw; margin-right: 10vw;">{{ evento.descricao }}</p>
+        <p style="margin-top: 2vw; color: grey; margin-left: 10vw; font-size: 3.5vw; margin-right: 10vw;">{{ evento.descricao }}</p>
     </div>
-
+    {% if evento.latitude and evento.longitude %}
+    <button class="btn btn-primary" onclick="window.location.href='{% url 'ver_local_evento' evento.id %}'">
+        Ver Localização
+    </button>
+    {% endif %}
 </div>
+
 {% endblock %}
