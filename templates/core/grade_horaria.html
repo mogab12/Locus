@@ -5,6 +5,8 @@
 {% block content %}
 <h2>Minha Grade Horária</h2>
 
+<a href="{% url 'adicionar_horario_grade' %}">Adicionar Disciplina à Grade</a>
+
 {% for dia, horarios in grade.items %}
   <h3>{{ dia }}</h3>
   {% if horarios %}
@@ -24,5 +26,5 @@
   {% endif %}
 {% endfor %}
 
-<a href="{% url 'adicionar_horario_grade' %}">Adicionar Disciplina à Grade</a>
+
 {% endblock %}

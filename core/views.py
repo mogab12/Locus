@@ -10,6 +10,7 @@ from .models import Disciplina, UserDiscipline, Topico, Postagem, CustomUser, Ev
 from django.core.exceptions import PermissionDenied
 from django.contrib.auth.models import User
 from .forms import TopicoForm, EventoForm, NotificationForm
+from calcula_prox_aula import proxima_aula_função
 
 
 
@@ -66,7 +67,15 @@ def login_view(request):
 
 @login_required
 def home(request):
-    return render(request, 'core/home.html')
+
+    proxima_aula= proxima_aula_função(request.user)
+    
+    context = {
+        'proxima_aula':proxima_aula,
+        
+    }
+
+    return render(request, 'core/home.html',context)
 
 @login_required
 def disciplinas(request):

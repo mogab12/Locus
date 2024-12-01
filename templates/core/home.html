@@ -12,7 +12,43 @@
 {% endblock %}
 
 {% block content %}
+
+
+
+
+<!-- Começo da Parte de Próxima Aula -->
+
+<style>
+    
+    .text-overlay {
+      position: fixed ;
+      top: 20px; /* Ajuste a posição vertical */
+      left: 20px; /* Ajuste a posição horizontal */
+      z-index: 500; /* Garante que o texto fique sobre o mapa */
+      color: rgb(0, 0, 0); /* Cor do texto */
+      font-size: 24px; /* Tamanho do texto */
+      font-weight: bold; /* Deixe o texto em negrito */
+    }
+
+</style>
+  
+<div class="map-container">
+
+    <h1 class="text-overlay">Próxima aula: {{proxima_aula.disciplina}} / {{proxima_aula.dia_da_semana}} - {{proxima_aula.horario_inicio}}--{{proxima_aula.horario_fim}}</h1>
+    
+    
+
+  
+  
+  
+  <div id="map"></div>
+</div>
+
+<!-- Fim da Parte de Próxima Aula -->
+  
+
 <div id="map"></div>
+
 
 <script>
     // Inicializa o mapa com a posição inicial e zoom
@@ -34,6 +70,8 @@
         subdomains: 'abcd',
         maxZoom: 20
     });
+
+
     const marker = L.marker([-23.553273761874635, -46.729336977565005]).addTo(map);
 
     // Define o texto do popup
@@ -45,5 +83,7 @@
     // Adiciona a camada ao mapa
     layer.addTo(map);
 </script>
+
+
 
 {% endblock %}
