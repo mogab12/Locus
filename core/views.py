@@ -66,7 +66,8 @@ def login_view(request):
 
 @login_required
 def home(request):
-    return render(request, 'core/home.html')
+    aula_proxima = proxima_aula(request.user)
+    return render(request, 'core/home.html', {'aula_proxima': aula_proxima})
 
 @login_required
 def disciplinas(request):
@@ -659,3 +660,39 @@ def editar_horario_grade(request, horario_id):
         form.fields['disciplina'].queryset = Disciplina.objects.filter(userdiscipline__user=request.user)
 
     return render(request, 'core/editar_horario_grade.html', {'form': form, 'horario': horario})
+
+import pytz
+from datetime import datetime,timedelta
+
+def proxima_aula(usuario):
+    # Obtém o horário atual no fuso horário de São Paulo
+    agora = datetime.now(pytz.timezone('America/Sao_Paulo'))
+    # Mapeia os dias da semana para suas abreviações
+    dias_abreviados = {
+        'Monday': 'SEG',
+        'Tuesday': 'TER',
+        'Wednesday': 'QUA',
+        'Thursday': 'QUI',
+        'Friday': 'SEX',
+        'Saturday': 'SAB',
+        'Sunday': 'DOM'
+    }
+    # Obtém a abreviação do dia atual
+    dia_atual = dias_abreviados[agora.strftime('%A')]
+    hora_atual = agora.time()
+
+    # Definindo a janela de 10 minutos antes e depois do início da aula
+    janela_inicio = timedelta(minutes=10)
+
+    # Filtra os horários do dia atual
+    horarios_do_dia = usuario.horarios_grade.filter(dia_da_semana=dia_atual)
+
+    for horario in horarios_do_dia:
+        inicio = (datetime.combine(datetime.today(), horario.horario_inicio) - janela_inicio).time()
+        fim_aviso = (datetime.combine(datetime.today(), horario.horario_inicio) + janela_inicio).time()
+
+        # Verifica se a hora atual está dentro da janela
+        if inicio <= hora_atual <= fim_aviso:
+            return horario
+
+    return None

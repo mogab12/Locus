@@ -9,41 +9,111 @@
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
     integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
     crossorigin=""></script>
+<style>
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+#map {
+    width: 100vw;
+    height: 100vh;
+    position: relative;
+    z-index: 0; /* Certifique-se de que o mapa está abaixo do banner */
+}
+
+.banner-proxima-aula {
+    position: absolute;
+    top: 10px; /* Ajuste para colocar o banner mais para baixo */
+    left: 50px;
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 10px 10px 10px 20px; /* Espaçamento para incluir a faixa vermelha */
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    z-index: 1000; /* Certifique-se de que o banner está acima do mapa */
+    display: flex;
+    align-items: center;
+}
+
+.faixa-vermelha {
+    width: 5px; /* Largura da faixa vermelha */
+    height: 100%;
+    background-color: red;
+    position: absolute;
+    left: 0;
+    top: 0;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+}
+
+.banner-conteudo {
+    margin-left: 15px; /* Espaçamento entre a faixa e o conteúdo do banner */
+}
+
+.banner-conteudo h3 {
+    margin: 0 0 5px 0;
+    font-size: 16px;
+}
+
+.banner-conteudo p {
+    margin: 0;
+    font-size: 14px;
+}
+</style>
 {% endblock %}
 
 {% block content %}
 <div id="map"></div>
 
+{% if aula_proxima %}
+<div class="banner-proxima-aula">
+    <div class="faixa-vermelha"></div>
+    <div class="banner-conteudo">
+        <h3>Próxima Aula</h3>
+        <p><strong>Disciplina:</strong> {{ aula_proxima.disciplina.nome }}</p>
+        <p><strong>Horário:</strong> {{ aula_proxima.horario_inicio }} - {{ aula_proxima.horario_fim }}</p>
+        <p><strong>Sala:</strong> 
+            {% if aula_proxima.disciplina.sala %}
+                {{ aula_proxima.disciplina.sala.nome }}
+            {% else %}
+                N/A
+            {% endif %}
+        </p>
+    </div>
+</div>
+{% endif %}
+
 <script>
-    // Inicializa o mapa com a posição inicial e zoom
-    const map = L.map('map', {
-        center: [-23.555299, -46.729696], // Coordenadas centrais
-        zoom: 16.5, // Nível inicial de zoom
-        maxBounds: [
-            [-23.570, -46.740], // Coordenadas do canto sudoeste (mínimo)
-            [-23.530, -46.720]  // Coordenadas do canto nordeste (máximo)
-        ],
-        maxBoundsViscosity: 1.0, // Evita que o usuário mova fora dos limites
-        minZoom: 15, // Zoom mínimo permitido
-        maxZoom: 20  // Zoom máximo permitido
-    });
+// Inicializa o mapa com a posição inicial e zoom
+const map = L.map('map', {
+    center: [-23.555299, -46.729696], // Coordenadas centrais
+    zoom: 16.5, // Nível inicial de zoom
+    maxBounds: [
+        [-23.570, -46.740], // Coordenadas do canto sudoeste (mínimo)
+        [-23.530, -46.720]  // Coordenadas do canto nordeste (máximo)
+    ],
+    maxBoundsViscosity: 1.0, // Evita que o usuário mova fora dos limites
+    minZoom: 15, // Zoom mínimo permitido
+    maxZoom: 20  // Zoom máximo permitido
+});
 
-    // Adiciona a camada de base do mapa
-    const layer = L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager_labels_under/{z}/{x}/{y}{r}.png', {
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
-        subdomains: 'abcd',
-        maxZoom: 20
-    });
-    const marker = L.marker([-23.553273761874635, -46.729336977565005]).addTo(map);
+// Adiciona a camada de base do mapa
+const layer = L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager_labels_under/{z}/{x}/{y}{r}.png', {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+    subdomains: 'abcd',
+    maxZoom: 20
+});
+const marker = L.marker([-23.553273761874635, -46.729336977565005]).addTo(map);
 
-    // Define o texto do popup
-    marker.bindPopup(`
-        <b>Departamento de Engenharia</b><br>
-        Mecatrônica, Mecânica e Naval.<br>
-        <i>Coordenadas:</i> -23.55327, -46.72933
-    `);
-    // Adiciona a camada ao mapa
-    layer.addTo(map);
+// Define o texto do popup
+marker.bindPopup(`
+    <b>Departamento de Engenharia</b><br>
+    Mecatrônica, Mecânica e Naval.<br>
+    <i>Coordenadas:</i> -23.55327, -46.72933
+`);
+// Adiciona a camada ao mapa
+layer.addTo(map);
 </script>
 
 {% endblock %}
