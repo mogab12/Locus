@@ -1,48 +1,87 @@
 {% extends 'core/base.html' %}
 
-{% block title %}Mapa {{Mapas.mapa_id}}{% endblock %}
+{% block title %}Mapa do Prédio{% endblock %}
 
 {% block content %}
-{% block body %}
-
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <style>
-body {
-    background-color: white;
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    overflow-x: hidden; 
-}
-
-html, body {
-    width: 100%; 
-}
+    html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+    }
+    #map {
+        width: 100vw;
+        height: 100vh;
+        position: relative;
+    }
 </style>
 
-{% endblock %}
+<div id="map"></div>
 
-<div class="Planta-Container">
-    <!-- Título -->
-    <div class="header-container">
-        
-        <h1>{{mapa.nome_mapa}}</h1>
-        
-        <div class="actions">
-        
-            <a href="{% url 'mudar_andar' mapa.id %}" class="icon-btn">
-                <i class="fas fa-plus-circle"></i>
-            </a>
-            
-        </div>
-    </div>
+<script>
+       
+    const imageUrl = "{{ mapa.planta.url }}";  
+    const imageBounds = [[0,0], [891,789]]; 
     
-    <div class="Imagem-Planta">
-        <img src="{{ mapa.planta.url }}" alt = "{{mapa.predio.nome}} planta" style="width:100%; max-width:800px;">
-    </div>
+    const map = L.map('map',{
+        crs: L.CRS.Simple,
+        maxBounds: imageBounds,
+        minZoom:-1,
+        maxZoom:2,
+        zoomControl: false
+    });
 
+    L.imageOverlay(imageUrl,imageBounds).addTo(map);
+    map.setView([300,400],0);
+    
 
-    <hr>
-     
-</div>
-<a href="{% url 'home' %}">Voltar</a>  
+    const icon = L.icon({
+        iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-icon.png', 
+        iconSize: [32, 32],  
+        iconAnchor: [16, 32],  
+        popupAnchor: [0, -32]  
+    });
+        
+    const destino = [250,600]; 
+    
+    let destinoPin= L.marker(destino, { icon: icon }).addTo(map);
+  
+    let caminho = [];
+
+   
+    map.on('click', function (e) {
+        let clique = e.latlng; 
+        let xclique = clique.lat;
+        let yclique = clique.lng;
+
+        L.marker([xclique, yclique],{icon: icon}).addTo(map);
+            
+        
+        calcularCaminho([xclique,yclique], destino);
+    });
+
+    
+    function calcularCaminho(começo_xy, destino_xy) {
+        
+        caminho = [começo_xy, destino_xy];
+
+       
+        if (window.caminhoPolyline) {
+            map.removeLayer(window.caminhoPolyline);
+        }
+
+       
+        window.caminhoPolyline = L.polyline(caminho, {
+            color: 'red',
+            dashArray: '5, 10', 
+            weight: 4,
+        }).addTo(map);
+
+        
+        map.fitBounds(window.caminhoPolyline.getBounds());
+    }
+</script>
+
 {% endblock %}
