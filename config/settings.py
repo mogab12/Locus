@@ -27,7 +27,9 @@ SECRET_KEY = 'django-insecure-xa0*538w*8cas^+0c9$w-atngd9ex7j+dwlhb4c84(8cl#npet
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    '.onrender.com'
+    'locus-2.onrender.com',
+    '127.0.0.1',
+    'localhost'
 ]
 
 
@@ -121,9 +123,6 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-STATIC_URL = '/static/'
-STATICFILES_DIRS = [ os.path.join(BASE_DIR, 'media'), ]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
@@ -134,6 +133,11 @@ LOGIN_URL = '/login/'
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/login/'
 
+# Static files
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')  # Diretório onde os arquivos estáticos serão coletados
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]  # Diretório contendo arquivos estáticos do sistema
 
+# Media files (uploads de usuários)
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')  # Diretório para uploads
