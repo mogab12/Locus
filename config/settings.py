@@ -24,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-xa0*538w*8cas^+0c9$w-atngd9ex7j+dwlhb4c84(8cl#npet'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG =  False
+DEBUG =  True
 
 ALLOWED_HOSTS = [
     'locus-2.onrender.com',
@@ -47,6 +47,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -137,6 +138,7 @@ LOGOUT_REDIRECT_URL = '/login/'
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')  # Diretório onde os arquivos estáticos serão coletados
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]  # Diretório contendo arquivos estáticos do sistema
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 # Media files (uploads de usuários)
 MEDIA_URL = '/media/'
