@@ -772,14 +772,18 @@ def ver_local_evento(request, evento_id):
 
 def mapa_detalhe(request,mapa_id):
     mapa = get_object_or_404(Mapas,id = mapa_id)
+    aula_proxima = proxima_aula(request.user)
     context = {
-        'mapa' : mapa
+        'mapa' : mapa,
+        'aula_proxima' : aula_proxima,
     }
     return render(request,'core/mapa_detalhe.html',context)
 
 def mudar_andar(request,mapa_id):
     mapa = get_object_or_404(Mapas,id = mapa_id)
+    aula_proxima = proxima_aula(request.user)
     context = {
-        'mapa' : mapa
+        'mapa' : mapa,
+        'aula_proxima' : aula_proxima,
     }
     return render(request,'core/mudar_andar.html',context)

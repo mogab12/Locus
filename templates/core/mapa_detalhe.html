@@ -64,32 +64,53 @@
     map.setView([0,400],0);
 
 
-    const icon = L.icon({
-        iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-icon.png', 
-        iconSize: [32, 32],  
-        iconAnchor: [16, 32],  
-        popupAnchor: [0, -32]  
-    });
+    const icon = L.divIcon({
+                    className: 'custom-icon',
+                    html: `<i style="color:${'red'}" class="fas fa-map-marker-alt fa-2x"></i>`,
+                    iconSize: [25, 41],
+                    iconAnchor: [12, 41],
+                    popupAnchor: [1, -34]
+                });
 
-    const destino = [250,600]; 
+    // Obtendo as coordenadas da próxima aula
+    
+    
+    {% if aula_proxima %}
+        const posX = {{ aula_proxima.disciplina.sala.pos_x }};
+        const posY = {{ aula_proxima.disciplina.sala.pos_y }};
+        const destino = [posX, posY]; // Utilizando um array para as coordenadas
+    {% endif %}
+    // Verificando se Andar é igual a 1
+    {% if aula_proxima.disciplina.sala.Andar == 1 %}
+        // Criando o marcador no mapa
+        let destinoPin = L.marker(destino, { icon: icon }).addTo(map);
+    {% endif %}
+        
 
-    let destinoPin= L.marker(destino, { icon: icon }).addTo(map);
+
+
+
+
+
+
+
+
 
     let caminho = [];
 
 
 
-    map.on('click', function (e) {
-        let clique = e.latlng; 
-        let xclique = clique.lat;
-        let yclique = clique.lng;
+   // map.on('click', function (e) {
+     //   let clique = e.latlng; 
+      //  let xclique = clique.lat;
+       // let yclique = clique.lng;
 
-        let cliquePin = L.marker([xclique, yclique],{icon: icon}).addTo(map);
+       // let cliquePin = L.marker([xclique, yclique],{icon: icon}).addTo(map);
 
 
 
-        calcularCaminho([xclique,yclique], destino);
-    });
+       // calcularCaminho([xclique,yclique], destino);
+   // });
 
 
     function calcularCaminho(começo_xy, destino_xy) {
