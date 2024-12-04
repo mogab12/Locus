@@ -45,6 +45,7 @@ def register(request):
         if form.is_valid():
             user = form.save()
             login(request, user)
+            messages.success(request, 'Registro realizado com sucesso!')
             return redirect('home')
     else:
         form = CustomUserCreationForm()
@@ -54,16 +55,18 @@ def login_view(request):
     if request.user.is_authenticated:
         return redirect('home')
     if request.method == 'POST':
-        username = request.POST['username']
-        password = request.POST['password']
-        user = authenticate(request, username=username, password=password)
-        if user is not None:
-            login(request, user)
-            return redirect('home')
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        if username and password:
+            user = authenticate(request, username=username, password=password)
+            if user is not None:
+                login(request, user)
+                return redirect('home')
+            else:
+                messages.error(request, 'Credenciais inválidas')
         else:
-            return render(request, 'core/login.html', {'error': 'Credenciais inválidas'})
+            messages.error(request, 'Por favor, preencha todos os campos')
     return render(request, 'core/login.html')
-
 
 
 @login_required
