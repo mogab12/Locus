@@ -43,7 +43,10 @@ class Predio(models.Model):
 class Sala(models.Model):
     nome = models.CharField(max_length=50)
     predio = models.ForeignKey(Predio, on_delete=models.CASCADE, related_name='salas')
-
+    pos_x = models.IntegerField(default=400)
+    pos_y = models.IntegerField(default=200)
+    Andar = models.IntegerField(default=1)
+    
     def __str__(self):
         return f"{self.nome} ({self.predio.nome})"
 
@@ -146,3 +149,12 @@ class Interesse(models.Model):
     usuario = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     evento = models.ForeignKey(Evento, on_delete=models.CASCADE)
     data_interesse = models.DateTimeField(auto_now_add=True)
+
+
+class Mapas(models.Model):
+    nome = models.CharField(max_length=255)
+    planta= models.ImageField()
+    planta_2= models.ImageField(default=None)
+    predio = models.ForeignKey('Predio',on_delete=models.CASCADE,related_name='mapas')
+    def __str__(self):
+        return self.nome

@@ -6,7 +6,7 @@ from django.db.models import Q
 from django.contrib import messages
 from .forms import CustomUserCreationForm, UserProfileForm, NovoTopicoForm, NovaPostagemForm
 from django.http import HttpResponseForbidden
-from .models import Disciplina, UserDiscipline, Topico, Postagem, CustomUser, Evento, Notificacao, Sala, Predio
+from .models import Disciplina, UserDiscipline, Topico, Postagem, CustomUser, Evento, Notificacao, Sala, Predio, Mapas
 from django.core.exceptions import PermissionDenied
 from django.contrib.auth.models import User
 from .forms import TopicoForm, EventoForm, NotificationForm, SalaForm
@@ -45,6 +45,7 @@ def register(request):
         if form.is_valid():
             user = form.save()
             login(request, user)
+            messages.success(request, 'Registro realizado com sucesso!')
             return redirect('home')
     else:
         form = CustomUserCreationForm()
@@ -54,16 +55,18 @@ def login_view(request):
     if request.user.is_authenticated:
         return redirect('home')
     if request.method == 'POST':
-        username = request.POST['username']
-        password = request.POST['password']
-        user = authenticate(request, username=username, password=password)
-        if user is not None:
-            login(request, user)
-            return redirect('home')
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        if username and password:
+            user = authenticate(request, username=username, password=password)
+            if user is not None:
+                login(request, user)
+                return redirect('home')
+            else:
+                messages.error(request, 'Credenciais inválidas')
         else:
-            return render(request, 'core/login.html', {'error': 'Credenciais inválidas'})
+            messages.error(request, 'Por favor, preencha todos os campos')
     return render(request, 'core/login.html')
-
 
 
 @login_required
@@ -764,3 +767,23 @@ def ver_local_evento(request, evento_id):
     }
 
     return render(request, 'core/ver_local_evento.html', context)
+
+
+
+def mapa_detalhe(request,mapa_id):
+    mapa = get_object_or_404(Mapas,id = mapa_id)
+    aula_proxima = proxima_aula(request.user)
+    context = {
+        'mapa' : mapa,
+        'aula_proxima' : aula_proxima,
+    }
+    return render(request,'core/mapa_detalhe.html',context)
+
+def mudar_andar(request,mapa_id):
+    mapa = get_object_or_404(Mapas,id = mapa_id)
+    aula_proxima = proxima_aula(request.user)
+    context = {
+        'mapa' : mapa,
+        'aula_proxima' : aula_proxima,
+    }
+    return render(request,'core/mudar_andar.html',context)
