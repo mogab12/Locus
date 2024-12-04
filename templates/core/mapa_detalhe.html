@@ -3,9 +3,9 @@
 {% block title %}Mapa do Prédio{% endblock %}
 
 {% block content %}
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <style>
+
+    
     html, body {
         height: 100%;
         margin: 0;
@@ -17,6 +17,33 @@
         position: relative;
     }
 </style>
+
+
+
+
+
+
+
+<div class="header-container">
+    <h1>Mapa {{mapa.nome_mapa}}</h1>
+    <div class="actions">
+        <a href="{% url 'mudar_andar' mapa.id %}" class="icon-btn">
+            <i class="fas fa-plus-circle"></i>
+        </a>
+        
+    </div>
+</div>
+<hr>
+
+
+
+
+
+
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
 
 <div id="map"></div>
 
@@ -34,7 +61,7 @@
     });
 
     L.imageOverlay(imageUrl,imageBounds).addTo(map);
-    map.setView([300,400],0);
+    map.setView([0,400],0);
     
 
     const icon = L.icon({
@@ -51,13 +78,15 @@
     let caminho = [];
 
    
+
     map.on('click', function (e) {
         let clique = e.latlng; 
         let xclique = clique.lat;
         let yclique = clique.lng;
 
-        L.marker([xclique, yclique],{icon: icon}).addTo(map);
-            
+        let cliquePin = L.marker([xclique, yclique],{icon: icon}).addTo(map);
+        
+        
         
         calcularCaminho([xclique,yclique], destino);
     });
