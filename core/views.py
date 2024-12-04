@@ -6,7 +6,7 @@ from django.db.models import Q
 from django.contrib import messages
 from .forms import CustomUserCreationForm, UserProfileForm, NovoTopicoForm, NovaPostagemForm
 from django.http import HttpResponseForbidden
-from .models import Disciplina, UserDiscipline, Topico, Postagem, CustomUser, Evento, Notificacao, Sala, Predio
+from .models import Disciplina, UserDiscipline, Topico, Postagem, CustomUser, Evento, Notificacao, Sala, Predio, Mapas
 from django.core.exceptions import PermissionDenied
 from django.contrib.auth.models import User
 from .forms import TopicoForm, EventoForm, NotificationForm, SalaForm
@@ -764,3 +764,19 @@ def ver_local_evento(request, evento_id):
     }
 
     return render(request, 'core/ver_local_evento.html', context)
+
+
+
+def mapa_detalhe(request,mapa_id):
+    mapa = get_object_or_404(Mapas,id = mapa_id)
+    context = {
+        'mapa' : mapa
+    }
+    return render(request,'core/mapa_detalhe.html',context)
+
+def mudar_andar(request,mapa_id):
+    mapa = get_object_or_404(Mapas,id = mapa_id)
+    context = {
+        'mapa' : mapa
+    }
+    return render(request,'core/mudar_andar.html',context)
